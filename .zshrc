@@ -115,4 +115,4 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 [[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
-export API_KEY="4~UDcDNhmZgYVe3oR766Jk1Ew7WCyWNJv4X4ajPMhgqByuCFbbN94ThjjuQZWArii5"
+export "
