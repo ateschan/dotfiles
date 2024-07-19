@@ -1,0 +1,47 @@
+window {
+margin: 1px;
+border: 3px solid #AB6161;
+background-color: #595959;
+}
+
+#input {
+
+outline: none;
+border: none;
+color: #E3E2E2;
+background-color: rgba(39,46,51,0.8);
+
+}
+
+#inner-box {
+text-align: center;
+border: none;
+background-color: rgba(39,46,51,0.8);
+}
+
+#outer-box {
+border: 3px solid #B16286;
+background-color: rgba(39,46,51,0.8);
+}
+
+#scroll {
+margin: 0px;
+border: none;
+}
+
+#text {
+color: #E3E2E2;
+margin: 5px;
+border: none;
+
+}
+
+#entry:selected {
+text-align: center;
+    border: solid #03c03c 2px;
+    background-color: rgba(20, 130, 20, 0.5);
+}
+
+*{
+font-family: "Terminus";
+}
