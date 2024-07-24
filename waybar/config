@@ -60,7 +60,7 @@
         // Connected to AC
         "format": " {capacity}%", // Icon: bolt
         // Not connected to AC
-        "format-discharging": "{icon}  {capacity}%",
+        "format-discharging": "{icon} {capacity}%",
         "format-icons": [
             "", // Icon: battery-full
             "", // Icon: battery-three-quarters
@@ -104,7 +104,7 @@
 
     "memory": {
         "interval": 5,
-        "format": " {}%", // Icon: memory
+        "format": " {}%", // Icon: memory
         "states": {
             "warning": 70,
             "critical": 90
@@ -147,8 +147,8 @@
 
     "pulseaudio": {
         //"scroll-step": 1,
-        "format": "{icon}  {volume}%",
-        "format-bluetooth": "{icon}  {volume}%",
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "{icon} {volume}%",
         "format-muted": "",
         "format-icons": {
             "headphones": "",

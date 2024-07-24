@@ -72,9 +72,9 @@
 #tray {
     padding-left: 6px;
     padding-right: 6px;
-    border: solid #03c03c 2px;
+    border: solid #c61c16 2px;
     margin: 2px;
-    background-color: rgba(40, 109, 40, .6);
+    background-color: rgba(128, 25, 25, .6);
 }
 
 
@@ -181,10 +181,10 @@
     padding-left: 10px;
     padding-right: 10px;
     color: white;
-    border: solid #03c03c 2px;
+    border: solid #c61c16 2px;
     margin: 2px;
 
-    background-color: rgba(40, 109, 40, .6);
+    background-color: rgba(128, 25, 25, .6);
 }
 
 #workspaces button {
@@ -194,24 +194,24 @@
     padding-left: 10px;
     padding-right: 10px;
     color: white;
-    border: solid #03c03c 2px;
+    border: solid #c61c16 2px;
     margin: 2px;
 
-    background-color: rgba(40, 109, 40, .6);
+    background-color: rgba(128, 25, 25, .6);
 }
 
 #workspaces button.active {
-    border-color: #03c03c;
+    border-color: #873533;
     color: white;
-    background-color: #c9545d;
+    background-color: #eb0000;
 }
 
 #workspaces button.urgent {
     border-color: #c9545d;
-    color: white;
+    color: #bd2815;
 }
 
 *{
-  font-family: terminus;
-  font-size: 14px;
+  font-family: Terminus;
+  font-size: 15px;
 }
