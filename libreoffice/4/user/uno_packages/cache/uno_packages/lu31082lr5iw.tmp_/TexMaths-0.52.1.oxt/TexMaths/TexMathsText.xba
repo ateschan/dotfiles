@@ -1,0 +1,1276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="TexMathsText" script:language="StarBasic" script:moduleType="normal">&apos;
+&apos;    TexMathsText
+&apos;
+&apos;	 Copyright (C) 2012-2023 Roland Baudin (roland65@free.fr)
+&apos;    Based on the work of Geoffroy Piroux (gpiroux@gmail.com)
+&apos;
+&apos;    This program is free software; you can redistribute it and/or modify
+&apos;    it under the terms of the GNU General Public License as published by
+&apos;    the Free Software Foundation; either version 2 of the License, or
+&apos;    (at your option) any later version.
+&apos;
+&apos;    This program is distributed in the hope that it will be useful,
+&apos;    but WITHOUT ANY WARRANTY; without even the implied warranty of
+&apos;    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+&apos;    GNU General Public License for more details.
+&apos;
+&apos;    You should have received a copy of the GNU General Public License
+&apos;    along with this program; if not, write to the Free Software
+&apos;    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+&apos;
+&apos; 	 Macros used to create the text equation
+
+
+&apos; Force variable declaration
+Option Explicit
+
+
+&apos; Maximum stack size
+Private Const MAX_STACK_SIZE = 5
+
+
+&apos; Font scaling factor for subscript or superscript positions
+Private Const FONT_SCALING_FACTOR = 0.58
+
+
+&apos; Stack
+Private iStack as Integer, stackPrevPosition as String, stackPrevState as String
+Private StackFont(MAX_STACK_SIZE) as String, StackPosition(MAX_STACK_SIZE) as String
+Private StackSlant(MAX_STACK_SIZE) as String, StackWeight(MAX_STACK_SIZE) as String
+Private StackHeight(MAX_STACK_SIZE) as Integer, StackUnderline(MAX_STACK_SIZE) as String
+
+
+&apos; TeX commands
+Private NbCategory(0) as Integer
+Private Command(234, 3) as String, Category(0) as String
+
+
+&apos; Main subroutine
+Sub Main()
+	
+	&apos; Set TexMaths configuration
+	SetConfig()
+	
+	&apos; Check program paths
+	CheckProgramPaths()
+		
+	&apos; Exit if configuration was not saved
+	Dim oSystemInfo as Variant
+	oSystemInfo = GetConfigAccess(&quot;/ooo.ext.texmaths.Registry/SystemInfo&quot;, TRUE)
+	If oSystemInfo.ConfigSaved = &quot;&quot; Then Exit Sub
+
+	Dim oFileAccess as Variant, oTextStream as Variant
+	Dim URL as String, indFilePath as String	
+	Dim pkgFontPath as String, fontFileName as String
+	Dim localFontDir as String, localFontPath as String
+
+	&apos; Indicator file path
+	indFilePath = glb_UserPath &amp; &quot;fonts-installed-&quot; &amp; GetTexMathversion() &amp; &quot;.txt&quot;
+
+	&apos; Open service file and an output stream
+	oFileAccess = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+
+	&apos; Install TexMaths fonts in Windows if not already done
+	&apos; In Windows, installing the fonts takes a long time, and the session must be restarted
+	If getGUIType() = 1 Then
+
+		&apos; User local font directory and TexMaths-Symbols.ttf font path	
+		Dim pos as Integer
+		pos = InStr(glb_UserPath, &quot;/Roaming&quot;)	
+		localFontDir = ConvertFromUrl( Left(glb_UserPath, pos - 1) ) &amp; &quot;\Local\Microsoft\Windows\Fonts\&quot;
+		fontFileName = &quot;TexMaths-Symbols.ttf&quot;		
+		localFontPath = localFontDir &amp; fontFileName
+
+		&apos; Install TexMaths fonts if indicator file does not exist in TexMaths user directory
+		&apos; or TexMaths-Symbols.ttf file does not exist in user local font directory
+		If  ( Not oFileAccess.exists(indFilePath) ) Or ( Not oFileAccess.exists(localFontPath) ) Then 
+			
+			&apos; Copy install script to TexMaths user directory
+			Dim scriptPath as String
+			scriptPath = glb_UserPath &amp; &quot;instfont-&quot; &amp; GetTexMathversion() &amp; &quot;.bat&quot;
+			oFileAccess.copy(glb_PkgPath &amp; &quot;scripts/instfont.bat&quot;, scriptPath)
+
+			&apos; Create user local font directory if it doesn&apos;t exist
+			If Not oFileAccess.exists(localFontDir) Then MkDir(localFontDir)
+				
+			&apos; Shell command
+			Dim shellCommand as String
+			shellCommand = ConvertToURL(scriptPath)
+	
+			&apos; Pkg font path		
+			pkgFontPath = glb_PkgPath &amp; &quot;fonts/&quot;
+						
+			&apos; Warn the user
+			MsgBox( _(&quot;In Text Mode, TexMaths fonts have to be installed for the local user.&quot;) _
+			        &amp; chr(10) &amp; chr(10) _
+			        &amp; _(&quot;This operation may take a long time, please wait...&quot;), 48, &quot;TexMaths&quot; )
+   		
+	   		&apos; Execute the command
+	   		Shell( shellCommand, 2, pkgFontPath, TRUE )
+
+			&apos; Create indicator file 
+			URL = ConvertToURL(indFilePath)
+			oTextStream  = createUnoService(&quot;com.sun.star.io.TextOutputStream&quot;)
+			oTextStream.setOutputStream(oFileAccess.openFileWrite(URL))
+			oTextStream.writeString( &quot;OK&quot; )
+			oTextStream.closeOutput()
+			
+			&apos; Ask the user to restart the session		
+			MsgBox( _(&quot;Fonts have been installed. Please restart your Windows session to be sure the fonts will be available in TexMaths...&quot;), 48, &quot;TexMaths&quot; )
+			Exit Sub
+			
+		End If
+		
+	&apos; Install TexMaths fonts in Linux or MacOSX if not already done
+	&apos; In Linux or MacOSX there is no delay when installing fonts,
+	&apos; but LibreOffice has to be restarted before using the fonts
+	Else
+		
+		&apos; User local font directory and TexMaths-Symbols.ttf font path
+		If GetUname() = &quot;Darwin&quot; Then
+			
+			&apos; MacOS X
+       		localFontDir = Environ(&quot;HOME&quot;) &amp; &quot;/Library/Fonts/&quot;
+		
+		Else
+			
+			&apos; Linux
+			localFontDir = Environ(&quot;HOME&quot;) &amp; &quot;/.local/share/fonts/&quot;
+			
+		End If
+		
+		fontFileName = &quot;TexMaths-Symbols.ttf&quot;
+		localFontPath = localFontDir &amp; fontFileName
+
+		&apos; Install TexMaths fonts if indicator file does not exist in TexMaths user directory
+		&apos; or TexMaths-Symbols.ttf file does not exist in user local font directory
+		If  ( Not oFileAccess.exists(indFilePath) ) Or ( Not oFileAccess.exists(localFontPath) ) Then 
+				
+			&apos; Create user local font directory if it doesn&apos;t exist
+			If Not oFileAccess.exists(localFontDir) Then MkDir(localFontDir)
+							
+			&apos; Copy TexMaths fonts
+			fontFileName = &quot;TexMaths-Symbols.ttf&quot;
+			pkgFontPath = glb_PkgPath &amp; &quot;fonts/&quot; &amp; fontFileName
+			localFontPath = localFontDir &amp; fontFileName
+		
+			oFileAccess.copy(pkgFontPath, localFontPath)
+			
+			fontFileName = &quot;TexMaths-BB.ttf&quot;
+			pkgFontPath = glb_PkgPath &amp; &quot;fonts/&quot; &amp; fontFileName
+			localFontPath = localFontDir &amp; fontFileName
+			oFileAccess.copy(pkgFontPath, localFontPath)
+			
+			fontFileName = &quot;TexMaths-Cal.ttf&quot;
+			pkgFontPath = glb_PkgPath &amp; &quot;fonts/&quot; &amp; fontFileName
+			localFontPath = localFontDir &amp; fontFileName
+			oFileAccess.copy(pkgFontPath, localFontPath)
+				
+			fontFileName = &quot;TexMaths-Scr.ttf&quot;
+			pkgFontPath = glb_PkgPath &amp; &quot;fonts/&quot; &amp; fontFileName
+			localFontPath = localFontDir &amp; fontFileName
+			oFileAccess.copy(pkgFontPath, localFontPath)
+
+			fontFileName = &quot;TexMaths-Frak.ttf&quot;
+			pkgFontPath = glb_PkgPath &amp; &quot;fonts/&quot; &amp; fontFileName
+			localFontPath = localFontDir &amp; fontFileName
+			oFileAccess.copy(pkgFontPath, localFontPath)
+
+			fontFileName = &quot;TexMaths-Rm.ttf&quot;
+			pkgFontPath = glb_PkgPath &amp; &quot;fonts/&quot; &amp; fontFileName
+			localFontPath = localFontDir &amp; fontFileName
+			oFileAccess.copy(pkgFontPath, localFontPath)
+
+			&apos; Create indicator file 
+			URL = ConvertToURL(indFilePath)
+			oTextStream  = createUnoService(&quot;com.sun.star.io.TextOutputStream&quot;)
+			oTextStream.setOutputStream(oFileAccess.openFileWrite(URL))
+			oTextStream.writeString( &quot;OK&quot; )
+			oTextStream.closeOutput()
+			
+			&apos; Ask for restarting LibreOffice
+			Dim ret as Long
+			ret = MsgBox( _(&quot;In Text Mode, TexMaths fonts have to be installed for the local user.&quot;) _
+			              &amp; chr(10) &amp; chr(10) _
+			              &amp; _(&quot;To use these fonts in TexMaths Text, LibreOffice has to be restarted.&quot;) _
+			              &amp; chr(10) &amp; chr(10) _
+			              &amp; _(&quot;Restart LibreOffice now?&quot;), 1 + 48 + 256, &quot;TexMaths&quot; )
+			
+			&apos; OK was clicked
+			If ret = 1 Then RestartLO() Else Exit Sub
+			
+			Exit Sub
+		
+		End If
+ 
+ 	End If
+	
+	&apos; Get editor font name
+	glb_EditorFontName = oSystemInfo.EditorFontName
+
+	&apos; Get editor font size
+	glb_EditorFontSize = oSystemInfo.EditorFontSize
+
+	&apos; Get show symbols option
+	If oSystemInfo.ShowSymbols = &quot;TRUE&quot; Then glb_ShowSymbols = TRUE Else glb_ShowSymbols = FALSE
+
+	&apos; Get show app too old option
+	If oSystemInfo.ShowAppTooOld = &quot;TRUE&quot; Then glb_ShowAppTooOld = TRUE Else glb_ShowAppTooOld = FALSE
+
+	&apos; Get the current document and controller
+ 	Dim oDoc as Variant, oDocCtrl as Variant
+ 	oDoc = ThisComponent
+	oDocCtrl = oDoc.getCurrentController()
+	
+	Dim oSelection as Variant, oShape as Variant
+	Dim implementationName as String
+	
+	&apos; Writer document
+	If GetDocumentType(oDoc) = &quot;swriter&quot; Then
+
+		&apos; If we are in Writer preview mode, just silently exit
+		If oDoc.getCurrentController.getFrame.LayoutManager.isElementVisible ( &quot;private:resource/toolbar/previewobjectbar&quot; ) Then Exit Sub
+
+		&apos; In Writer, selection can be null
+		If Not isNull(oDocCtrl.selection()) Then
+
+			&apos; Selection
+			oSelection = oDocCtrl.selection()
+
+			&apos; If there is something selected
+			&apos; In Writer, even if nothing is selected oSelection is not empty (selected text is &quot;&quot; in that case)
+			If Not isEmpty(oSelection) Then
+			
+				&apos; Implementation name
+				implementationName = oSelection.getImplementationName()
+	
+				&apos; Text equation can only be inserted in a shape collection
+				If  implementationName &lt;&gt; &quot;com.sun.star.drawing.SvxShapeCollection&quot; Then
+			
+					MsgBox( _(&quot;Please place the cursor in the text or inside a text box and call the macro again...&quot;), 0, &quot;TexMaths&quot; )
+			  		Exit Sub
+			  		
+			  	End If
+							
+				&apos; For a shape collection, cursor must be in the text box
+				If implementationName = &quot;com.sun.star.drawing.SvxShapeCollection&quot; Then
+				
+					If Not IsCursorInTextBox(oDoc) Then
+
+						MsgBox( _(&quot;Please place the cursor in the text or inside a text box and call the macro again...&quot;), 0, &quot;TexMaths&quot; )
+				  		Exit Sub
+				  	
+				  	End If
+					     				
+      			End If
+				
+			End If
+
+		&apos; Selection is null
+		Else
+		
+			MsgBox( _(&quot;Please place the cursor in the text or inside a text box and call the macro again...&quot;), 0, &quot;TexMaths&quot; )
+	 		Exit Sub
+		
+		End If
+		
+	&apos; Impress or Draw document
+	ElseIf GetDocumentType(oDoc) = &quot;simpress&quot; Or GetDocumentType(oDoc) = &quot;sdraw&quot; Then
+	
+		&apos; If there is something selected
+		If Not isEmpty(oDocCtrl.getSelection()) Then
+	    	
+			&apos; Not in a text box
+			If Not IsCursorInTextBox(oDoc) Then
+
+				MsgBox( _(&quot;Please place the cursor inside a text box or click on an empty zone and call the macro again...&quot;), 0, &quot;TexMaths&quot; )
+		  		Exit Sub
+		  	
+		  	End If
+	    	
+		&apos; Nothing selected		
+		Else
+	
+			MsgBox( _(&quot;Please place the cursor inside a text box or click on an empty zone and call the macro again...&quot;), 0, &quot;TexMaths&quot; )
+	 		Exit Sub
+	 		
+	 	End If
+		 		 	
+	&apos; Other document type
+	Else
+	
+		MsgBox( GetDocumentType(oDoc) &amp; _(&quot;: document type not supported by TexMaths&quot;), 0, &quot;TexMaths&quot; )
+		Exit Sub
+	
+	End If
+	
+	&apos; These variables are not used in a text equation
+	Dim equationSize as String, equationType as String, equationFormat as String
+	Dim equationDPI as String, equationTransp as String, equationName as String
+	equationSize = &quot;&quot;
+	equationType = &quot;&quot;
+	equationFormat = &quot;&quot;
+	equationDPI = &quot;&quot;
+	equationTransp = &quot;&quot;
+	equationName = &quot;&quot;
+
+	&apos; Initialize LaTeX code
+	Dim equationCode as String
+	equationCode = &quot;&quot;
+
+	&apos; Open the dialog box for text equations
+	TexMathsDialog(equationSize, equationType, equationCode, equationFormat, equationDPI, equationTransp, equationName, FALSE)
+
+End Sub
+
+
+&apos; This is the core macro for text equations, it is called by the dialog box
+&apos; Return -1 if an error has occurred, else return 0
+Function MakeTextEquation(equationCode as String) as Integer
+
+	Dim oTextCursor as Variant
+	Dim docFontName as String, docFontHeight as Integer, docFontSlant as Integer
+	Dim docFontWeight as Integer, docFontUnderline as Integer
+	Dim ret as Integer
+
+	&apos; First, test if there is some LateX code
+	If equationCode = &quot;&quot; Then 
+
+		MsgBox( _(&quot;Please enter an equation...&quot;), 0, &quot;TexMaths&quot; )
+		MakeTextEquation = -1
+		Exit Function
+
+	End If
+	
+    &apos; Initialize array of commands
+    InitCommands()
+
+	&apos; Current document and controller
+ 	Dim oDoc as Variant, oDocCtrl as Variant
+	oDoc = ThisComponent
+	oDocCtrl = oDoc.getCurrentController()
+	
+	&apos; Selected object
+	Dim oSelection as Variant
+	Dim implementationName as String
+	oSelection = oDocCtrl.getSelection()
+	implementationName = oSelection.getImplementationName()
+
+ 	&apos; Regular text in Writer
+ 	If implementationName = &quot;SwXTextRanges&quot; Then
+ 				
+		MsgBox( _(&quot;Please place the cursor in the text or inside a text box and call the macro again...&quot;), 0, &quot;TexMaths&quot; )
+  		Exit Function
+  		
+	&apos; Text box in Writer, Draw or Impress
+	Else
+	
+		&apos; Shape or collection of shapes
+		If implementationName = &quot;com.sun.star.drawing.SvxShapeCollection&quot; Then
+
+			Dim oShape as Variant, oShapeText as Variant
+			oShape = oSelection.getByIndex(0)
+
+			&apos; Special case of tables in Impress or Draw
+			If GetDocumentType(oDoc) &lt;&gt; &quot;swriter&quot; And oShape.getImplementationName() &lt;&gt; &quot;SvxShapeText&quot; Then
+			
+				MsgBox( _(&quot;Please place the cursor inside a text box or click on an empty zone and call the macro again...&quot;), 0, &quot;TexMaths&quot; )
+		  		Exit Function
+		  		
+		  	End If
+			
+			oTextCursor = oShape.Text.createTextCursor()
+			oTextCursor.goRight(0, FALSE)
+
+		&apos; Selected text 
+		ElseIf implementationName = &quot;SvxUnoTextCursor&quot; Then
+		
+			oTextCursor = oSelection.Text.createTextCursor()
+
+		&apos; Should not happen
+		Else
+			
+			MsgBox( _(&quot;Error: unknown graphic object type&quot;) &amp; implementationName, 48, &quot;TexMaths&quot; )
+	 		MakeTextEquation = -1
+			Exit Function
+			
+		End If
+		
+		&apos; Save font settings
+		docFontName = oTextCursor.charFontName
+		docFontHeight = oTextCursor.charHeight
+		docFontSlant = oTextCursor.charPosture
+		docFontWeight = oTextCursor.charWeight
+		docFontUnderline = oTextCursor.charUnderline
+				
+		&apos; Convert LaTeX code to text and insert it
+		ret = LatexToText(equationCode, docFontHeight)
+		
+		If ret = -1 Then
+
+			MakeTextEquation = -1
+			Exit Function
+
+		End If
+ 
+		&apos; Restore font settings
+		RestoreFont(docFontName, docFontHeight, docFontWeight, docFontSlant, docFontUnderline, stackPrevPosition)
+	
+	End If		
+
+	&apos; Push LaTeX code to history
+	PushToHistory(equationCode, glb_History, glb_nHistory)
+
+	&apos; No error
+	MakeTextEquation = 0
+
+End Function
+
+
+&apos; Push to stack
+Function PushToStack(position as String) as Integer
+
+	iStack = iStack + 1
+	
+	&apos; Error
+	if iStack &gt; MAX_STACK_SIZE Then
+	
+		MsgBox( _(&quot;Error: maximum stack level attained&quot;) &amp; chr(10) &amp; chr(10) &amp;_
+		         _(&quot;Please decrease the stack level and try again...&quot;), 48, &quot;TexMaths&quot; )
+		
+		PushToStack = -1
+  		
+  		Exit Function
+  	
+  	End If  			
+		
+	StackHeight(iStack) = StackHeight(iStack - 1)
+	StackFont(iStack) = StackFont(iStack - 1)
+	StackSlant(iStack) = StackSlant(iStack - 1)
+	StackWeight(iStack) = StackWeight(iStack - 1)
+	StackUnderline(iStack) = StackUnderline(iStack - 1)
+
+	If position = &quot;&quot; Then StackPosition(iStack) = StackPosition(iStack - 1) Else StackPosition(iStack) = position	
+	
+	&apos; Success
+	PushToStack = 0
+	
+End Function 
+
+
+&apos; Pop from stack
+Sub PopFromStack()
+
+	iStack = iStack - 1
+
+	If iStack &lt; 1 Then MsgBox( _(&quot;Error: stack nesting failed... iStack &lt; 0&quot;), 48, &quot;TexMaths&quot; )
+	
+End Sub
+
+
+&apos; Parser routine
+Function LatexToText(equationCode as String, iFontHeight as Integer) as Integer
+
+	Dim ret as Integer
+	
+	&apos; Initialisation of the stack
+	StackHeight(0) = iFontHeight
+	StackFont(0) = &quot;&quot;
+	StackPosition(0) = &quot;&quot;
+	StackSlant(0) = &quot;&quot;
+	StackWeight(0) = &quot;&quot;
+	StackUnderline(0) = &quot;&quot;
+	iStack = 0
+	ret = PushToStack(&quot;&quot;)
+	
+	If ret = -1 Then
+	
+		LatexToText = -1
+		Exit Function
+		
+	End If
+
+	Dim length as Integer, ln as Integer, i as Integer, j as Integer
+	Dim ch as String, ch2 as String, str as String
+	i = 1
+	str = &quot;&quot;
+	length = Len(equationCode)
+	
+	Do While i &lt;= length
+		
+		ch = Mid(equationCode, i, 1)
+    	ch2 = Mid(equationCode, i + 1, 1)
+    		
+    	Select Case ch
+
+  			&apos; Grab the macro name
+      		Case &quot;\&quot;
+    			
+    			EmitString(str)
+    			i = DecodeLatex(i, equationCode)
+    		
+    		Case &quot;^&quot;, &quot;_&quot;
+    			
+    			EmitString(str)
+    			ret = PushToStack(ch)
+    			
+   				If ret = -1 Then
+
+					LatexToText = -1
+					Exit Function
+
+				End If
+    			
+				i = i + 1
+				
+				If ch2 &lt;&gt; &quot;{&quot; Then
+				
+					If ch2 = &quot;\&quot; Then
+				
+						ln = TexLen(i, equationCode)
+						EmitAtom(Mid(equationCode, i, ln))
+						i = i + ln - 1
+				
+					Else
+				
+						EmitString(ch2)
+				
+					End If
+				
+					PopFromStack()
+				
+				End If
+
+			Case &quot;{&quot;
+				
+				EmitString(str)
+
+				ret = PushToStack(&quot;&quot;)
+
+   				If ret = -1 Then
+
+					LatexToText = -1
+					Exit Function
+
+				End If
+				
+			Case &quot;}&quot;
+				
+				EmitString(str)
+				PopFromStack()
+    			
+    		Case Else
+    			
+    			str = str &amp; ch    		
+    	
+    	End Select
+    	
+    	i = i + 1
+    
+    Loop
+    
+    If Length(str) &gt; 0 Then EmitString(str)
+    
+End Function
+
+
+&apos; Obtain character code
+Function DecodeLatex(i as Integer, equationCode as String) as Integer
+	
+	Dim str as String, str2 as String
+	Dim ln as Integer
+	
+	ln = TexLen(i, equationCode)
+	str = Mid(equationCode, i, ln)       &apos; TeX expression
+	str2 = Mid(equationCode, i + ln, 1)  &apos; Following char
+	
+	Select Case str
+
+		&apos; Insert spaces
+		Case &quot;\,&quot;, &quot;\;&quot;, &quot;\quad&quot;, &quot;\qquad&quot;
+
+			InsertSpace(str)			
+
+		&apos; Normal dots
+		Case &quot;\dots&quot;
+			InsertCharTextBox(&quot;...&quot;, &quot;TexMaths Symbols&quot;)
+				
+		&apos; Brackets
+		Case &quot;\{&quot;, &quot;\}&quot;
+
+			InsertCharTextBox(Mid(str, 2), &quot;TexMaths Roman&quot;)
+
+		&apos; Set text attributes
+		Case &quot;\text&quot;, &quot;\textrm&quot;, &quot;\textit&quot;, &quot;\textbf&quot;, _
+		     &quot;\Huge&quot;, &quot;\huge&quot;, &quot;\Large&quot;, &quot;\large&quot;, &quot;\small&quot;, &quot;\tiny&quot;, _
+		     &quot;\italic&quot;, &quot;\bold&quot;, &quot;\underline&quot; 
+			
+			If str2 = &quot;{&quot; or str2 = &quot; &quot; Then ln = ln + 1
+			If str2 = &quot;{&quot; Then PushToStack(&quot;&quot;)
+			
+			If str = &quot;\text&quot;  Or str = &quot;\textrm&quot; Then StackFont(iStack) = &quot;TexMaths Roman&quot;
+
+			If str = &quot;\textit&quot; Then
+				
+				StackFont(iStack) = &quot;TexMaths Roman&quot;
+				StackSlant(iStack) = &quot;\italic&quot;
+			
+			End If
+
+			If str = &quot;\textbf&quot; Then
+				
+				StackFont(iStack) = &quot;TexMaths Roman&quot;
+				StackWeight(iStack) = &quot;\bold&quot;
+			
+			End If
+
+			If str = &quot;\Huge&quot;  Then StackHeight(iStack) = 2.5  * StackHeight(iStack - 1)
+			If str = &quot;\huge&quot;  Then StackHeight(iStack) = 2    * StackHeight(iStack - 1)
+			If str = &quot;\Large&quot; Then StackHeight(iStack) = 1.5  * StackHeight(iStack - 1)
+			If str = &quot;\large&quot; Then StackHeight(iStack) = 1.25 * StackHeight(iStack - 1)
+			If str = &quot;\small&quot; Then StackHeight(iStack) = 0.75 * StackHeight(iStack - 1)
+			If str = &quot;\tiny&quot;  Then StackHeight(iStack) = 0.5  * StackHeight(iStack - 1)
+			
+			If str = &quot;\italic&quot;    Then StackSlant(iStack)  = &quot;\italic&quot;
+			If str = &quot;\bold&quot;      Then StackWeight(iStack) = &quot;\bold&quot;
+			If str = &quot;\underline&quot; Then StackUnderline(iStack) = &quot;\underline&quot;
+
+		&apos; Special fonts
+		Case &quot;\mathbb&quot;
+
+			StackFont(iStack) = &quot;TexMaths BlackBoard&quot;
+		
+		Case &quot;\mathcal&quot;
+
+			StackFont(iStack) = &quot;TexMaths Calligraphic&quot;
+
+		Case &quot;\mathscr&quot;
+
+			StackFont(iStack) = &quot;TexMaths Script&quot;
+
+		Case &quot;\mathfrak&quot;
+
+			StackFont(iStack) = &quot;TexMaths Fraktur&quot;
+
+		&apos; Functions
+		Case &quot;\arccos&quot;, &quot;\arcsin&quot;, &quot;\arctan&quot;,&quot;\arg&quot;, &quot;\cos&quot;, &quot;\cosh&quot;, &quot;\cot&quot;, &quot;\coth&quot;, &quot;\csc&quot;, &quot;\deg&quot;, _
+		     &quot;\det&quot;, &quot;\dim&quot;, &quot;\exp&quot;, &quot;\gcd&quot;, &quot;\hom&quot;, &quot;\inf&quot;, &quot;\ker&quot;, &quot;\lg&quot;, &quot;\lim&quot;, _
+		     &quot;\lim inf&quot;, &quot;\lim sup&quot;, &quot;ln&quot;, &quot;\log&quot;, &quot;\max&quot;, &quot;\min&quot;, &quot;\Pr&quot;, &quot;\sec&quot;, _
+		     &quot;\sin&quot;, &quot;\sinh&quot;, &quot;\sup&quot;, &quot;\tan&quot;, &quot;\tanh&quot;
+
+			InsertCharTextBox(Mid(str, 2), &quot;TexMaths Roman&quot;)
+		
+		&apos; Some commands need to be ignored
+		Case &quot;\left&quot;, &quot;\right&quot;
+		
+			&apos; Do nothing		
+		
+		Case Else
+
+			EmitAtom(str)
+	
+	End Select
+
+	DecodeLatex = i + ln - 1
+
+End Function
+
+
+&apos; Return the length of the TeX command
+&apos; Return 0 if not a TeX command
+Function TexLen(i as Integer, equationCode as String) as Integer
+	
+	Dim ch as String
+	Dim j as Integer
+	
+	If Mid(equationCode, i, 1) &lt;&gt; &quot;\&quot; Then 
+
+		TexLen = 0
+		Exit Function
+
+	End If
+
+	&apos; Space \, or \;
+	If Mid(equationCode, i + 1, 1) = &quot;,&quot; or Mid(equationCode, i + 1, 1) = &quot;;&quot; Then
+		
+		TexLen = 2
+		Exit Function
+	
+	End If
+	
+	&apos; \{ or \}
+	If Mid(equationCode, i + 1, 1) = &quot;{&quot; or Mid(equationCode, i + 1, 1) = &quot;}&quot; Then
+		
+		TexLen = 2
+		Exit Function
+	
+	End If
+
+	j = i + 1 
+	
+	Do While j &lt;= len(equationCode)
+		
+		ch = Mid(equationCode, j, 1)
+
+		If (&quot;A&quot; &lt;= ch And ch &lt;= &quot;Z&quot;) Or (&quot;a&quot; &lt;= ch And ch &lt;= &quot;z&quot;) Then j = j + 1 Else Exit Do
+
+	Loop
+	
+	TexLen = j-i
+
+End Function
+
+
+&apos; Insert space in document
+Sub InsertSpace(str as String)
+
+	If str = &quot;\,&quot; Then
+	
+		InsertCharTextBox(&quot; &quot;, &quot;TexMaths Symbols&quot;)
+	
+	ElseIf str = &quot;\;&quot; Then
+	
+		InsertCharTextBox(&quot;  &quot;, &quot;TexMaths Symbols&quot;)
+
+	ElseIf str = &quot;\quad&quot; Then
+
+		InsertCharTextBox(&quot;      &quot;, &quot;TexMaths Symbols&quot;)
+		
+	ElseIf str = &quot;\qquad&quot; Then
+	
+		InsertCharTextBox(&quot;             &quot;, &quot;TexMaths Symbols&quot;)
+
+	End If	
+		
+End Sub
+
+
+&apos; Emit a character or a LaTeX command
+Sub EmitAtom(str as String)
+
+	Dim ch as String, fontName as String
+	Dim j as Integer
+	
+	j = CommandId(str)
+
+	If j = -1 Then
+	
+		InsertCharTextBox(Mid(str, 2), &quot;TexMaths Symbols&quot;)		
+		Exit Sub
+	
+	End If
+	
+	ch = Command(j, 1)
+	fontName = Command(j, 2)
+
+	InsertCharTextBox(ch, fontName)
+	
+End Sub
+
+
+&apos; Emit a String in the current font
+Sub EmitString(str as String)
+
+	Dim font as String
+	Dim i as Integer
+	
+	If str = &quot;&quot; Then Exit Sub
+	
+	font = StackFont(iStack)
+
+	If font = &quot;&quot; Then
+
+		i = 1
+
+		Dim ch as String
+		Do While i &lt;= Len(str)
+			
+			ch = Mid(str, i, 1)
+			EmitChar(ch)
+    		i = i + 1 
+    	
+    	Loop
+    
+ 	&apos; If the font is defined
+	Else
+    
+    	InsertCharTextBox(str, &quot;&quot;)
+		
+    End If
+
+	&apos; Reinit String     
+    str = &quot;&quot;
+
+End Sub
+
+
+&apos; Emit a character
+Sub EmitChar(ch as String)
+
+	If Len(ch) &gt; 1 Then
+
+		MsgBox( _(&quot;Error: EmitChar() failed, char length &gt; 1&quot;), 48, &quot;TexMaths&quot; )
+		Exit Sub
+
+	End If
+	
+	If ( (&quot;a&quot; &lt;= ch And ch &lt;= &quot;z&quot;) Or (&quot;A&quot; &lt;= ch And ch &lt;= &quot;Z&quot;) ) Then 
+	
+		InsertCharTextBox(ch, &quot;TexMaths Symbols&quot;)
+		
+    ElseIf (ch = &quot;-&quot;) Then
+
+		InsertCharTextBox(chr(8722), &quot;TexMaths Symbols&quot;)
+		
+ 	ElseIf (ch = &quot; &quot;) Then
+
+ 		InsertCharTextBox(&quot; &quot;, &quot;TexMaths Symbols&quot;)	
+
+    Else 
+ 		
+ 		InsertCharTextBox(ch, &quot;TexMaths Symbols&quot;)
+
+    End If
+
+End Sub
+
+
+&apos; Insert a character in the document (for text box in Writer, Impress or Draw)
+Sub InsertCharTextBox(ch as String, fontName as String)
+
+ 	&apos; Current document
+ 	Dim oDoc as Variant
+ 	oDoc = ThisComponent.CurrentController.Frame
+	
+	&apos; Dispatcher
+	Dim oDispatcher as Variant
+	oDispatcher = createUnoService( &quot;com.sun.star.frame.DispatchHelper&quot; )
+
+	&apos; Initialize state for subscript or superscript
+	If (StackPosition(iStack) = &quot;&quot;) Then stackPrevState = &quot;&quot; Else stackPrevState = stackPrevState &amp; ch
+
+	&apos; Set font name and height
+	If fontName = &quot;&quot; Then fontName = StackFont(iStack)
+
+	oDispatcher.executeDispatch(oDoc, &quot;.uno:CharFontName&quot;, &quot;&quot;, 0, _
+                                Array( MakePropertyValue(&quot;CharFontName.StyleName&quot;, &quot;&quot;), _
+                                       MakePropertyValue(&quot;CharFontName.Pitch&quot;, 2), _
+                                       MakePropertyValue(&quot;CharFontName.CharSet&quot;, -1), _
+                                       MakePropertyValue(&quot;CharFontName.Family&quot;, 0), _
+                                       MakePropertyValue(&quot;CharFontName.FamilyName&quot;, fontName) ) )
+
+	oDispatcher.executeDispatch(oDoc, &quot;.uno:FontHeight&quot;, &quot;&quot;, 0, _
+                                Array( MakePropertyValue(&quot;FontHeight.Height&quot;, StackHeight(iStack)), _
+                                       MakePropertyValue(&quot;FontHeight.Prop&quot;, 100), _
+                                       MakePropertyValue(&quot;FontHeight.Diff&quot;, 0) ) )
+	
+	Dim value as Boolean
+
+	&apos; Bold state
+	If StackWeight(iStack) = &quot;\bold&quot; Then value = TRUE Else value = FALSE
+
+	oDispatcher.executeDispatch(oDoc, &quot;.uno:Bold&quot;, &quot;&quot;, 0, _
+		                        Array( MakePropertyValue(&quot;Bold&quot;, value) ) )	
+
+	&apos; Italic state
+	If StackSlant(iStack) = &quot;\italic&quot; Then value = TRUE Else value = FALSE
+
+	oDispatcher.executeDispatch(oDoc, &quot;.uno:Italic&quot;, &quot;&quot;, 0, _
+		                        Array( MakePropertyValue(&quot;Italic&quot;, value) ) )	
+	
+	&apos; Underline	state
+	Dim style as Integer
+	If StackUnderline(iStack) = &quot;\underline&quot; Then style = 1 Else style = 0
+
+	oDispatcher.executeDispatch(oDoc, &quot;.uno:Underline&quot;, &quot;&quot;, 0, _
+		                        Array( MakePropertyValue(&quot;Underline.LineStyle&quot;, style), _
+		                               MakePropertyValue(&quot;Underline.HasColor&quot;, FALSE), _
+		                               MakePropertyValue(&quot;Underline.Color&quot;, -1) ) )
+
+	&apos; Actual position is normal and previous position is superscript
+	If (StackPosition(iStack) = &quot;&quot; And stackPrevPosition = &quot;^&quot;) Then
+
+		oDispatcher.executeDispatch(oDoc, &quot;.uno:SuperScript&quot;, &quot;&quot;, 0, Array())
+		stackPrevPosition = &quot;&quot;
+	
+	End If
+	
+	&apos; Actual position is superscript and previous position is normal
+	If StackPosition(iStack) = &quot;^&quot; And stackPrevPosition = &quot;&quot; Then
+		
+		oDispatcher.executeDispatch(oDoc, &quot;.uno:SuperScript&quot;, &quot;&quot;, 0, Array())
+		stackPrevPosition = &quot;^&quot;
+	
+	End If
+		
+	&apos; Actual position is normal and previous position is subscript
+	If (StackPosition(iStack) = &quot;&quot; And stackPrevPosition = &quot;_&quot;) Then
+
+		oDispatcher.executeDispatch(oDoc, &quot;.uno:SubScript&quot;, &quot;&quot;, 0, Array())
+		stackPrevPosition = &quot;&quot;
+	
+	End If
+
+	&apos; Actual position is subscript and previous position is normal
+	If StackPosition(iStack) = &quot;_&quot; And stackPrevPosition = &quot;&quot; Then
+		
+		oDispatcher.executeDispatch(oDoc, &quot;.uno:SubScript&quot;, &quot;&quot;, 0, Array())
+		stackPrevPosition = &quot;_&quot;
+	
+	End If
+
+	Dim str as String, width as Integer
+		
+	&apos; Actual position is superscript and previous position is subscript
+	If StackPosition(iStack) = &quot;^&quot; And stackPrevPosition = &quot;_&quot; Then
+		
+		&apos; Case where before it was a subscript position
+		If Len(stackPrevState) &gt; 1 Then
+							
+			&apos; String width (in pixels)
+			str = Left(stackPrevState, Len(stackPrevState) - 1) &amp; &quot; &quot;	
+			width = GetTextWidth(str, fontName, StackHeight(iStack), FONT_SCALING_FACTOR)
+				
+			oDispatcher.executeDispatch(oDoc, &quot;.uno:SuperScript&quot;, &quot;&quot;, 0, Array())
+
+			&apos; Set superscript escapement (doesn&apos;t work in Impress)
+			&apos;oDispatcher.executeDispatch(oDoc, &quot;.uno:Escapement&quot;, &quot;&quot;, 0, _
+			&apos;                            Array( MakePropertyValue(&quot;Escapement.Escapement&quot;, 50), _
+			&apos;                                   MakePropertyValue(&quot;Escapement.Height&quot;, 58), _
+			&apos;                                   MakePropertyValue(&quot;Escapement.Auto&quot;, FALSE) ) )
+
+			&apos; Set negative character spacing
+			oDispatcher.executeDispatch(oDoc, &quot;.uno:Spacing&quot;, &quot;&quot;, 0, _
+			                            Array( MakePropertyValue(&quot;Spacing&quot;, -width) ) )
+
+		
+			oDispatcher.executeDispatch(oDoc, &quot;.uno:InsertSymbol&quot;, &quot;&quot;, 0, _
+                                        Array( MakePropertyValue(&quot;Symbols&quot;, &quot; &quot; &amp; ch), _
+                                               MakePropertyValue(&quot;FontName&quot;, fontName) ) )
+	
+			oDispatcher.executeDispatch(oDoc, &quot;.uno:Spacing&quot;, &quot;&quot;, 0, _
+			                            Array( MakePropertyValue(&quot;Spacing&quot;, 0) ) )
+
+			&apos; Update previous position	
+			stackPrevPosition = &quot;^&quot;
+		
+			Exit Sub
+
+		&apos; Case where before it was a normal or superscript position
+		Else
+		
+			oDispatcher.executeDispatch(oDoc, &quot;.uno:SuperScript&quot;, &quot;&quot;, 0, Array())
+			stackPrevPosition = &quot;^&quot;
+		
+		End If
+	
+	End If
+
+	&apos; Actual position is subscript and previous position is superscript
+	If StackPosition(iStack) = &quot;_&quot; And stackPrevPosition = &quot;^&quot; Then
+		
+		&apos; Case where before it was a superscript position
+		If Len(stackPrevState) &gt; 1 Then
+			
+			&apos; String width (in pixels)
+			str = Left(stackPrevState, Len(stackPrevState) - 1) &amp; &quot; &quot;
+			width = GetTextWidth(str, fontName, StackHeight(iStack), FONT_SCALING_FACTOR)
+						
+			&apos; Set negative character spacing
+			oDispatcher.executeDispatch(oDoc, &quot;.uno:SubScript&quot;, &quot;&quot;, 0, Array())
+	
+			oDispatcher.executeDispatch(oDoc, &quot;.uno:Spacing&quot;, &quot;&quot;, 0, _
+                                        Array( MakePropertyValue(&quot;Spacing&quot;, -width) ) )			
+	
+			oDispatcher.executeDispatch(oDoc, &quot;.uno:InsertSymbol&quot;, &quot;&quot;, 0, _
+			                            Array( MakePropertyValue(&quot;Symbols&quot;, &quot; &quot; &amp; ch), _
+			                                   MakePropertyValue(&quot;FontName&quot;, fontName) ) )
+		
+			oDispatcher.executeDispatch(oDoc, &quot;.uno:Spacing&quot;, &quot;&quot;, 0, _
+			                            Array( MakePropertyValue(&quot;Spacing&quot;, 0) ) )
+
+			&apos; Update previous position	
+			stackPrevPosition = &quot;_&quot;
+				
+			Exit Sub
+		
+		&apos; Case where before it was a normal or subscript position
+		Else
+		
+			oDispatcher.executeDispatch(oDoc, &quot;.uno:SubScript&quot;, &quot;&quot;, 0, Array())
+			stackPrevPosition = &quot;_&quot;
+		
+		End If
+
+	End If
+
+	&apos; Insert character
+	oDispatcher.executeDispatch(oDoc, &quot;.uno:InsertSymbol&quot;, &quot;&quot;, 0, _
+	                            Array( MakePropertyValue(&quot;Symbols&quot;, ch), _
+	                                   MakePropertyValue(&quot;FontName&quot;, fontName) ) )
+	
+End Sub
+
+
+&apos; Restore font settings
+Sub RestoreFont(fontName as String, iHeight as Integer, iWeight as Integer, iSlant as Integer, iUnderline as Integer, position as String)
+
+	Dim oDispatcher as Variant
+	oDispatcher = createUnoService( &quot;com.sun.star.frame.DispatchHelper&quot; )
+
+ 	Dim oDoc as Variant
+ 	oDoc = ThisComponent.CurrentController.Frame
+
+	&apos; Restore font
+	oDispatcher.executeDispatch(oDoc, &quot;.uno:CharFontName&quot;, &quot;&quot;, 0, _
+                                Array( MakePropertyValue(&quot;CharFontName.StyleName&quot;, &quot;&quot;), _
+                                	   MakePropertyValue(&quot;CharFontName.Pitch&quot;, 2), _
+                                	   MakePropertyValue(&quot;CharFontName.CharSet&quot;, -1), _
+                                	   MakePropertyValue(&quot;CharFontName.Family&quot;, 0), _
+                                	   MakePropertyValue(&quot;CharFontName.FamilyName&quot;, fontName) ) )
+	
+	&apos; Restore height
+	oDispatcher.executeDispatch(oDoc, &quot;.uno:FontHeight&quot;, &quot;&quot;, 0, _
+                                Array( MakePropertyValue(&quot;FontHeight.Height&quot;, iHeight), _
+                                       MakePropertyValue(&quot;FontHeight.Prop&quot;, 100), _
+                                       MakePropertyValue(&quot;FontHeight.Diff&quot;, 0) ) )
+
+	Dim value as Boolean
+	
+	&apos; Restore bold state
+	If iWeight = 150 Then value = TRUE Else value = FALSE
+
+	oDispatcher.executeDispatch(oDoc, &quot;.uno:Bold&quot;, &quot;&quot;, 0, _
+	                            Array( MakePropertyValue(&quot;Bold&quot;, value) ) )
+
+	&apos; Restore italic state
+	If iSlant = 2 Then value = TRUE Else value = FALSE
+	
+	oDispatcher.executeDispatch(oDoc, &quot;.uno:Italic&quot;, &quot;&quot;, 0, _
+	                            Array( MakePropertyValue(&quot;Italic&quot;, value) ) )
+
+	&apos; Restore underline state
+	Dim style as Integer
+	If iUnderline = 2 Then style = 1 Else style = 0
+	
+	oDispatcher.executeDispatch(oDoc, &quot;.uno:Underline&quot;, &quot;&quot;, 0, _
+	                            Array( MakePropertyValue(&quot;Underline.LineStyle&quot;, style), _
+	                                   MakePropertyValue(&quot;Underline.HasColor&quot;, FALSE), _
+	                                   MakePropertyValue(&quot;Underline.Color&quot;, -1) ) )
+	                                   
+	&apos; Restore position
+	If position = &quot;^&quot; Then oDispatcher.executeDispatch(oDoc, &quot;.uno:SuperScript&quot;, &quot;&quot;, 0, Array())
+		
+	If position = &quot;_&quot; Then	oDispatcher.executeDispatch(oDoc, &quot;.uno:SubScript&quot;, &quot;&quot;, 0, Array())
+	
+	&apos; Insert space after equation
+	oDispatcher.executeDispatch(oDoc, &quot;.uno:InsertSymbol&quot;, &quot;&quot;, 0, _
+                               Array( MakePropertyValue(&quot;Symbols&quot;, &quot; &quot;), _
+                             	      MakePropertyValue(&quot;FontName&quot;, fontName) ) )
+	
+End Sub
+
+
+&apos; Search from the end to make sure that commands can be redefined
+Function CommandId(name as String) as Integer
+	
+	Dim j as Integer
+	
+	For j = NbCategory(0) - 1 To 0 Step -1
+
+		If Command(j, 0) = name Then Exit For
+
+	Next j
+	
+	CommandId = j
+
+End Function
+
+
+&apos; Create new TeX commands from a data array
+Sub NewCharCommands(categoryName as String, fontName as String, data as Variant)
+
+	Dim i as Integer
+
+	For i = LBound(data) To UBound(data) Step 2
+
+		NewCommand(categoryName, &quot;\&quot; &amp; data(i), chr(data(i + 1)), fontName)
+
+	Next i
+
+End Sub
+
+
+&apos; Create a new TeX command
+Sub NewCommand(categoryName as String, texCommand as String, ch as String, fontName as String)
+
+	Dim iCat as Integer
+
+	&apos; iCat is the index of the category
+	For iCat = LBound(Category) To UBound(Category)
+
+		If Category(iCat) = categoryName Then Exit For
+
+	Next iCat
+	
+	&apos; Initialize new category
+	If iCat &gt; UBound(Category) And categoryName &lt;&gt; &quot;&quot; Then
+
+		Redim Preserve Category(iCat)
+		Redim Preserve NbCategory(iCat)
+		Category(iCat) = categoryName
+		NbCategory(iCat) = 0
+
+	End If 
+
+	Command(NbCategory(0), 0) = texCommand
+	Command(NbCategory(0), 1) = ch
+	Command(NbCategory(0), 2) = fontName
+	Command(NbCategory(0), 3) = categoryName
+
+	&apos; Increment the counter for category... except for All
+	If categoryName &lt;&gt; &quot;&quot; Then NbCategory(iCat) = NbCategory(iCat) + 1
+
+	NbCategory(0) = NbCategory(0) + 1
+
+End Sub
+
+
+&apos; Create the array containing the commands and populate the command space
+Sub InitCommands()
+
+	Dim i as Integer
+	
+	Category(0) = &quot;All&quot;
+	NbCategory(0) = 0
+
+	&apos; Alphabets (lowercase greek and some misc symbols)
+	Call NewCharCommands(&quot;Greek1&quot; ,&quot;TexMaths Symbols&quot;, _
+		Array(&quot;alpha&quot;, 945, &quot;beta&quot;, 946, &quot;gamma&quot;, 947, &quot;delta&quot;, 948, &quot;epsilon&quot;, 1013, _
+              &quot;varepsilon&quot;, 949, &quot;zeta&quot;, 950, &quot;eta&quot;, 951, &quot;theta&quot;, 952, &quot;vartheta&quot;, 977, _
+              &quot;iota&quot;, 953, &quot;kappa&quot;, 954, &quot;lambda&quot;, 955, &quot;mu&quot;, 956, &quot;nu&quot;, 957, _
+              &quot;xi&quot;, 958, &quot;pi&quot;, 960, &quot;varpi&quot;, 982, &quot;rho&quot;, 961, &quot;varrho&quot;, 1009, _
+              &quot;sigma&quot;, 963, &quot;varsigma&quot;, 962, &quot;tau&quot;, 964, &quot;upsilon&quot;, 965, &quot;phi&quot;, 966, _
+              &quot;varphi&quot;, 981, &quot;chi&quot;, 967, &quot;psi&quot;, 968, &quot;omega&quot;, 969, &quot;partial&quot;, 8706, _
+              &quot;imath&quot;, 305, &quot;jmath&quot;, 567, &quot;ell&quot;, 8467, &quot;flat&quot;, 9837, &quot;natural&quot;, 9838, _
+              &quot;sharp&quot;, 9839, &quot;wp&quot;, 8472))
+	
+	&apos; Alphabets (uppercase greek)
+	Call NewCharCommands(&quot;Greek2&quot;, &quot;TexMaths Symbols&quot;,_
+		Array(&quot;Gamma&quot;, 915, &quot;Delta&quot;, 8710, &quot;Theta&quot;, 920, &quot;Lambda&quot;, 923, &quot;Xi&quot;, 926, _
+		      &quot;Pi&quot;, 928, &quot;Sigma&quot;, 931, &quot;Upsilon&quot;, 933, &quot;Phi&quot;, 934, _
+              &quot;Psi&quot;, 936, &quot;Omega&quot;, 8486))
+
+	&apos; Symbols
+	Call NewCharCommands(&quot;Symbols&quot;, &quot;TexMaths Symbols&quot;,_
+		Array(&quot;sqrt&quot;, 8730, &quot;sum&quot;, 8721, &quot;prod&quot;, 8719, &quot;coprod&quot;, 8720, &quot;int&quot;, 8747, &quot;oint&quot;, 8750, &quot;iint&quot;, 8748, _
+		      &quot;iiint&quot;, 8749, &quot;nabla&quot;, 8711, &quot;biguplus&quot;, 10756, &quot;bigcap&quot;, 8898, &quot;bigcup&quot;, 8899, &quot;bigoplus&quot;, 10753, _
+		      &quot;bigotimes&quot;, 10754, &quot;bigodot&quot;, 10752, &quot;bigvee&quot;, 8897, &quot;bigsqcup&quot;, 10758, &quot;angle&quot;, 8736, &quot;infty&quot;, 8734, _
+		      &quot;forall&quot;, 8704, &quot;exists&quot;, 8707, &quot;nexists&quot;, 8708, &quot;digamma&quot;, 988, &quot;aleph&quot;, 8501, &quot;beth&quot;, 8502, _
+		      &quot;daleth&quot;, 8504, &quot;gimel&quot;, 8503, &quot;Im&quot;, 8465, &quot;Re&quot;, 8476, &quot;vdots&quot;, 8942, &quot;cdots&quot;,  8943, &quot;ddots&quot;, 8944)) 
+
+	&apos; Arrows
+	Call NewCharCommands(&quot;Arrows&quot;, &quot;TexMaths Symbols&quot;,_
+		Array(&quot;leftarrow&quot;, 8592, &quot;Leftarrow&quot;, 8656, &quot;rightarrow&quot;, 8594, &quot;Rightarrow&quot;, 8658, &quot;leftrightarrow&quot;, 8596, _
+		      &quot;Leftrightarrow&quot;, 8660, &quot;longleftarrow&quot;, 10229, &quot;Longleftarrow&quot;, 10232, &quot;longrightarrow&quot;, 10230, _
+		      &quot;Longrightarrow&quot;, 10233, &quot;longleftrightarrow&quot;, 10231, &quot;Longleftrightarrow&quot;, 10234, &quot;uparrow&quot;, 8593, _
+		      &quot;uparrow&quot;, 8657, &quot;downarrow&quot;, 8595, &quot;Downarrow&quot;, 8659, &quot;updownarrow&quot;, 8597, &quot;Updownarrow&quot;, 8661, _
+		      &quot;mapsto&quot;, 8614, &quot;hookleftarrow&quot;, 8617, &quot;leftharpoonup&quot;, 8636, &quot;leftharpoondown&quot;, 8637, _
+		      &quot;leftrightharpoons&quot;, 8651, &quot;rightleftharpoons&quot;, 8652, &quot;longmapsto&quot;, 10236, &quot;hookrightarrow&quot;, 8618, _
+		      &quot;rightharpoonup&quot;, 8640, &quot;rightharpoondown&quot;, 8641, &quot;leadsto&quot;, 8669, &quot;nearrow&quot;, 8599, &quot;nwarrow&quot;, 8598, _
+		      &quot;searrow&quot;, 8600, &quot;swarrow&quot;, 8601, &quot;rightleftarrows&quot;, 8644, &quot;nRightarrow&quot;, 8655, &quot;nLeftarrow&quot;, 8653, _
+		      &quot;nLeftrightarrow&quot;, 8654, &quot;circlearrowleft&quot;, 8634, &quot;circlearrowright&quot;, 8635, &quot;curvearrowleft&quot;, 8630, _
+		      &quot;curvearrowright&quot;, 8631))  
+	
+	&apos; Relations
+	Call NewCharCommands(&quot;Relations&quot;, &quot;TexMaths Symbols&quot;,_
+		Array(&quot;le&quot;, 8804, &quot;ge&quot;, 8805, &quot;equiv&quot;, 8801, &quot;models&quot;, 8872, &quot;prec&quot;, 8826, &quot;succ&quot;, 8827, &quot;simeq&quot;, 8764, _
+	          &quot;perp&quot;, 8869, &quot;preceq&quot;, 8828, &quot;succeq&quot;, 8829, &quot;sim&quot;, 8771, &quot;mid&quot;, 8739, &quot;ll&quot;, 8810, &quot;gg&quot;, 8811, _
+              &quot;asymp&quot;, 8781, &quot;parallel&quot;, 8741, &quot;nparallel&quot;, 8742, &quot;subset&quot;, 8834, &quot;supset&quot;, 8835, &quot;nsubset&quot;, 8836, _
+              &quot;approx&quot;, 8776, &quot;bowtie&quot;, 8904, &quot;subseteq&quot;, 8838, &quot;supseteq&quot;, 8839, &quot;cong&quot;, 8773, &quot;Join&quot;, 10781, _
+              &quot;sqsubset&quot;, 8847, &quot;sqsupset&quot;, 8848, &quot;ne&quot;, 8800, &quot;smile&quot;, 8995, &quot;sqsubseteq&quot;, 8849, &quot;sqsupseteq&quot;, 8850, _
+              &quot;doteq&quot;, 8784, &quot;frown&quot;, 8994,&quot;in&quot;, 8712, &quot;notin&quot;, 8713, &quot;ni&quot;, 8715, &quot;vdash&quot;, 8866, &quot;dashv&quot;, 8867, _
+              &quot;propto&quot;, 8733, &quot;triangleq&quot;, 8796))
+	
+	&apos; Operations
+	Call NewCharCommands(&quot;Operations&quot;, &quot;TexMaths Symbols&quot;,_
+		Array(&quot;pm&quot;, 177, &quot;mp&quot;, 8723, &quot;times&quot;, 215, &quot;div&quot;, 247, &quot;ast&quot;,  8727, &quot;star&quot;, 8902, &quot;circ&quot;, 8728, _
+		      &quot;bullet&quot;, 8729, &quot;cdot&quot;, 8901, &quot;cap&quot;, 8745, &quot;cup&quot;, 8746, &quot;uplus&quot;, 8846, &quot;sqcap&quot;, 8851, &quot;sqcup&quot;, 8852, _
+		      &quot;vee&quot;, 8744, &quot;wedge&quot;, 8743, &quot;setminus&quot;, 8726, &quot;wr&quot;, 8768, &quot;diamond&quot;, 8900, &quot;bigtriangleup&quot;, 9651, _
+		      &quot;bigtriangledown&quot;, 9661, &quot;triangleleft&quot;, 9657, &quot;triangleright&quot;, 9667, &quot;lhd&quot;, 9655, &quot;rhd&quot;,  9665, _
+		      &quot;unlhd&quot;, 8884, &quot;unrhd&quot;, 8885, &quot;oplus&quot;, 8853, &quot;ominus&quot;, 8854, &quot;otimes&quot;, 8855, &quot;oslash&quot;, 8856, &quot;odot&quot;, 8857, _
+		      &quot;boxplus&quot;, 8862, &quot;boxminus&quot;, 8863, &quot;boxtimes&quot;, 8864, &quot;boxdot&quot;, 8865, _
+		      &quot;bigcirc&quot;, 9711, &quot;dagger&quot;, 8224, &quot;ddagger&quot;, 8225, &quot;amalg&quot;, 10815))
+
+	&apos; Misc
+	Call NewCharCommands(&quot;Misc&quot;, &quot;TexMaths Symbols&quot;,_
+		Array(&quot;eth&quot;, 240, &quot;clubsuit&quot;, 9827, &quot;diamondsuit&quot;, 9826, &quot;heartsuit&quot;, 9825, &quot;spadesuit&quot;, 9824, &quot;varnothing&quot;, 8960, _
+		      &quot;bigstar&quot;, 9733, &quot;diagdown&quot;, 10189, &quot;diagup&quot;, 10187, &quot;Diamond&quot;, 9674, &quot;Finv&quot;, 8498, &quot;Game&quot;, 8513, &quot;hbar&quot;, 295, _
+		      &quot;hslash&quot;, 8463, &quot;mho&quot;, 8487, &quot;prime&quot;, 8242, &quot;square&quot;, 9633, &quot;surd&quot;, 8730, &quot;measuredangle&quot;, 8737, &quot;sphericalangle&quot;, 8738, _
+		      &quot;complement&quot;, 8705, &quot;triangledown&quot;, 9663, &quot;triangle&quot;, 9651, &quot;vartriangle&quot;, 9653, &quot;blacklozenge&quot;, 9670, &quot;blacksquare&quot;, 9632, _
+		      &quot;blacktriangle&quot;, 9652, &quot;blacktriangledown&quot;, 9662, &quot;backprime&quot;, 8245, &quot;S&quot;, 167, &quot;copyright&quot;, 169, &quot;emptyset&quot;, 8709))
+
+End Sub
+
+
+&apos; Helper function used to print all commands for text equations
+&apos; Create a Calc document with all symbol shapes and their name
+Sub PrintCommands()
+
+	Dim i as Integer, j as Integer, n as Integer
+	Dim oldCat as String, newCat as String
+	Dim oCursor as Variant
+	
+	If NbCategory(0) = 0 Then InitCommands()
+
+	Dim oCalc as Variant, oSheet as Variant
+	oCalc = StarDesktop.loadComponentFromURL(&quot;private:factory/scalc&quot;, &quot;_blank&quot;, 0, Array())
+	oSheet = oCalc.getSheets().getByIndex(0)
+	
+	i = 0 &apos; Index symbol
+	j = 0 &apos; Column
+	n = 0 &apos; Row
+	oldCat = &quot;&quot;
+	
+	Do While i &lt;= NbCategory(0)
+	
+		newCat = Command(i, 3)
+	
+		If newCat = oldCat Then
+			
+			&apos; Tex command
+			oCursor = oSheet.getCellByPosition(j, n).getText().createTextCursor()
+			oCursor.charHeight = &quot;10&quot;
+			oCursor.setString(Command(i, 0))	
+			
+			&apos; Expression
+			oCursor = oSheet.getCellByPosition(j + 1, n).getText().createTextCursor()
+			oCursor.charHeight = &quot;13&quot;
+			oCursor.charfontName = Command(i, 2)
+			oCursor.setString(Command(i, 1))
+			i = i + 1
+		
+		Else
+		
+			oldCat = newCat
+			oCursor = oSheet.getCellByPosition(j, n).getText().createTextCursor()
+			oCursor.charHeight = &quot;12&quot;
+			oCursor.setString(Command(i, 3))				
+		
+		End If
+				
+		n = n + 1
+		If n &gt; 29 Then 
+
+			n = 0
+			j = j + 2
+
+		End If 		
+	
+	Loop
+
+End Sub
+
+</script:module>

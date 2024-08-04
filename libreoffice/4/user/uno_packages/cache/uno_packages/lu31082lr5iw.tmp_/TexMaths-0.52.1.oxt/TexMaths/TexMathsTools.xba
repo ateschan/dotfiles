@@ -1,0 +1,2184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="TexMathsTools" script:language="StarBasic">&apos;
+&apos;    TexMathsTools
+&apos;
+&apos;	 Copyright (C) 2012-2023 Roland Baudin (roland65@free.fr)
+&apos;    Based on the work of Geoffroy Piroux (gpiroux@gmail.com)
+&apos;
+&apos;    This program is free software; you can redistribute it and/or modify
+&apos;    it under the terms of the GNU General Public License as published by
+&apos;    the Free Software Foundation; either version 2 of the License, or
+&apos;    (at your option) any later version.
+&apos;
+&apos;    This program is distributed in the hope that it will be useful,
+&apos;    but WITHOUT ANY WARRANTY; without even the implied warranty of
+&apos;    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+&apos;    GNU General Public License for more details.
+&apos;
+&apos;    You should have received a copy of the GNU General Public License
+&apos;    along with this program; if not, write to the Free Software
+&apos;    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+&apos;
+&apos;	 Various general macros
+
+
+&apos; Force variable declaration
+Option Explicit
+
+
+&apos; Get TexMaths version
+Function GetTexMathversion() as String
+
+	&apos; Get a list of all installed extensions
+	Dim oPackageInfoProvider as Variant, list as Variant
+	oPackageInfoProvider = GetDefaultContext.getByName(&quot;/singletons/com.sun.star.deployment.PackageInformationProvider&quot;)
+	list = oPackageInfoProvider.getExtensionList()
+
+	&apos; Get TexMaths version from the list
+	Dim version as String
+	Dim i as Integer
+	For i = 0 to UBound(list(), 1)
+
+		If list(i)(0) = &quot;org.roland65.texmaths&quot; Then
+
+			version = list(i)(1)
+			Exit For
+
+		End If
+
+	Next i
+
+	GetTexMathversion = version
+
+End Function
+
+
+&apos; Get application name (LibreOffice or OpenOffice)
+&apos; Based on the following post on the OpenOffice forum
+&apos; https://forum.openoffice.org/en/forum/viewtopic.php?t=103346
+Function GetAppName() as String
+
+	Dim configprovider as String
+	configprovider = &quot;com.sun.star.configuration.ConfigurationProvider&quot;
+
+	Dim configaccess as String
+	configaccess = &quot;com.sun.star.configuration.ConfigurationAccess&quot;
+	
+	Dim oConfigProvider as Variant, oSettings as Variant
+	
+	oConfigProvider = createUnoService(configprovider)
+
+	oSettings = oConfigProvider.createInstanceWithArguments(configaccess, Array( MakePropertyValue(&quot;nodepath&quot;, _
+	                                                                             &quot;/org.openoffice.Setup/Product&quot;) ) )
+
+	GetAppName = oSettings.getByName(&quot;ooName&quot;)
+
+End Function
+
+
+&apos; Get LibreOffice or OpenOffice version (i.e. major version number, ex: 6.2)
+Function GetAppVersion() as String
+
+	Dim configprovider as String
+	configprovider = &quot;com.sun.star.configuration.ConfigurationProvider&quot;
+
+	Dim configaccess as String
+	configaccess = &quot;com.sun.star.configuration.ConfigurationAccess&quot;
+
+	Dim oConfigProvider as Variant, oSettings as Variant
+
+	oConfigProvider = createUnoService(configprovider)
+	
+	oSettings = oConfigProvider.createInstanceWithArguments(configaccess, Array( MakePropertyValue(&quot;nodepath&quot;, _
+	                                                                             &quot;/org.openoffice.Setup/Product&quot;) ) )
+
+	GetAppVersion = oSettings.getByName(&quot;ooSetupVersion&quot;)
+
+End Function
+
+
+&apos; Get LibreOffice or OpenOffice About version (i.e. complete version number, ex: 6.2.4.1)
+Function GetAppAboutVersion() as String
+
+	Dim configprovider as String
+	configprovider = &quot;com.sun.star.configuration.ConfigurationProvider&quot;
+
+	Dim configaccess as String
+	configaccess = &quot;com.sun.star.configuration.ConfigurationAccess&quot;
+
+	Dim oConfigProvider as Variant, oSettings as Variant
+
+	oSettings = oConfigProvider.createInstanceWithArguments(configaccess, Array( MakePropertyValue(&quot;nodepath&quot;, _
+	                                                                    &quot;/org.openoffice.Setup/Product&quot;) ) )
+	GetAppAboutVersion = oNode.getByName(&quot;ooSetupVersionAboutBox&quot;)
+ 
+End Function
+
+
+&apos; Check application version and warn the user if it is too old
+Sub CheckAppVersion()
+
+	If GetAppName() = &quot;LibreOffice&quot; Then
+	
+		If Val( GetAppVersion() ) &lt; 7.4 Then
+		
+			MsgBox( _(&quot;Your version of LibreOffice is too old, TexMaths might not work properly.&quot;) &amp; chr(10) &amp; chr(10) &amp;_
+			        _(&quot;Please upgrade to a newer version of LibreOffice...&quot;), 48, &quot;TexMaths&quot; )
+			
+		End If
+	
+	Else
+	
+		If Val( GetAppVersion() ) &lt; 4.1 Then
+		
+			MsgBox( _(&quot;Your version of OpenOffice is too old, TexMaths might not work properly.&quot;) &amp; chr(10) &amp; chr(10) &amp;_
+			        _(&quot;Please upgrade to a newer version of OpenOffice...&quot;), 48, &quot;TexMaths&quot; )
+			
+		End If
+	
+	End If
+
+End Sub
+
+
+&apos; Get the script directory path depending on the system
+Function GetScriptDir() as String
+
+	&apos; Windows
+	If getGUIType() = 1 Then
+
+		GetScriptDir = ConvertFromURL( glb_UserPath )
+		
+ 	&apos; Linux or MacOSX
+ 	Else
+	
+		GetScriptDir = glb_UserPath
+	
+	End If
+
+End Function
+
+
+&apos; Get the base directory of a file given by its URL
+&apos; The return base directory is a path, not and URL
+&apos; Adapted from a function by ThierryM 
+Function GetBaseDir(filePath as String) as String
+
+	If filePath = &quot;&quot; Then
+
+		GetBaseDir = &quot;&quot;
+	
+	Else
+	
+		Dim URL as String	
+		URL = ConvertToURL(filePath)
+	
+		Dim pos as Integer
+		pos = len(URL)
+		While mid(URL, pos, 1) &lt;&gt; &quot;/&quot;
+			pos = pos - 1
+		Wend
+		
+		GetBaseDir = ConvertFromURL(mid(URL, 1, pos))
+	
+	End If
+
+End Function
+
+
+&apos; Get the script file path depending on the system
+Function GetScriptPath() as String
+
+	If getGUIType() = 1 Then &apos; Windows
+		
+		GetScriptPath = GetScriptDir() &amp; &quot;TexMaths-&quot; &amp; GetTexMathversion() &amp; &quot;.bat&quot;
+		
+	Else &apos; Linux or MacOSX
+
+		GetScriptPath = GetScriptDir() &amp; &quot;TexMaths-&quot; &amp; GetTexMathversion() &amp; &quot;.sh&quot;
+
+	End If
+
+End Function
+
+
+
+&apos; Execute the Unix command &apos;uname&apos; and return the result into a String
+&apos; On Mac OS X, this should return the String &quot;Darwin&quot;
+Function GetUname() as String
+
+	Dim msg as String, filePath as String
+
+	&apos; Execute the uname command
+	filePath =  ConvertFromURL(glb_TmpPath) &amp; &quot;tmpuname.txt&quot;	
+	Shell( &quot;sh -c&quot;, 2,  &quot;&apos;&quot; &amp; &quot;uname &gt; &quot; &amp; &quot;&quot;&quot;&quot; &amp; filePath &amp; &quot;&quot;&quot;&quot; &amp; &quot;&apos;&quot;, TRUE )
+
+	&apos; File does not exist 
+	If Not FileExists( filePath ) Then
+
+		MsgBox( _(&quot;Error: can&apos;t find file &quot;) &amp; filePath, 48, &quot;TexMaths&quot; )
+		Exit Function
+
+	End If
+	
+	&apos; Read first line of file
+	msg = &quot;&quot;
+	Dim iNumber as Integer
+	Dim strline as String
+	iNumber = Freefile()
+	Open filePath For Input as iNumber
+
+		If Not EOF(iNumber) Then
+ 
+  			Line Input #iNumber, strline
+			msg = strline
+
+		End If
+
+	Close #iNumber
+
+	&apos; Output the result
+	GetUname = msg
+
+End Function
+
+
+&apos; Return TRUE if dvisvgm supports XeLaTeX
+&apos; Return FALSE if dvisvgm doesn&apos;t support XeLaTeX
+Function dvisvgmSupportsXelatex() as Boolean
+
+	Dim msg as String, filePath as String, cmd as String
+	Dim oSystemInfo as Variant
+	oSystemInfo = GetConfigAccess( &quot;/ooo.ext.texmaths.Registry/SystemInfo&quot;, TRUE)	
+
+	&apos; Check if dvisvgm exists
+	If Not FileExists(oSystemInfo.DvisvgmPath) Then
+
+		dvisvgmSupportsXelatex = FALSE
+		Exit Function
+
+	End If
+
+	&apos; File path
+	filePath =  ConvertFromURL(glb_TmpPath) &amp; &quot;tmpcmd.txt&quot;	
+
+	&apos; Command to execute
+	cmd =  oSystemInfo.DvisvgmPath
+
+	&apos; Windows
+	If getGUIType() = 1 Then
+
+		&apos; Open service file and an output stream
+		Dim URL as String, str as String	
+		Dim oFileAccess as Variant, oTextStream as Variant
+		oFileAccess = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+		oTextStream = createUnoService(&quot;com.sun.star.io.TextOutputStream&quot;)
+		
+		&apos; Generate the script &quot;version-XX.bat&quot; if it doesn&apos;t exist yet
+		&apos; This script is used to know the version of a given program
+		Dim scriptName as String
+		scriptName = GetScriptDir() &amp; &quot;version-&quot; &amp; GetTexMathversion() &amp; &quot;.bat&quot;
+		
+		If Not FileExists(scriptName ) Then
+
+			URL = ConvertToURL( scriptName )		
+			str = &quot;@echo off&quot;  &amp; chr(10) &amp;_
+			chr(10) &amp;_
+			&quot;rem This script is part of the TexMaths package&quot; &amp; chr(10) &amp;_
+			&quot;rem http://roland65.free.fr/texmaths&quot; &amp; chr(10) &amp;_
+			&quot;rem&quot; &amp; chr(10) &amp;_
+			&quot;rem Roland Baudin (roland65@free.fr)&quot; &amp; chr(10) &amp;_
+			chr(10) &amp;_
+			&quot;&quot;&quot;&quot; &amp; cmd &amp; &quot;&quot;&quot;&quot; &amp; &quot; --version &gt; &quot; &amp; &quot;&quot;&quot;&quot; &amp; filePath &amp; &quot;&quot;&quot;&quot; &amp; chr(10)
+			oTextStream.setOutputStream(oFileAccess.openFileWrite(URL))
+			oTextStream.writeString( str )
+			oTextStream.closeOutput()
+
+		End If
+		 
+		&apos; Execute the command
+		Shell(ConvertToURL( scriptName ), 2, &quot;&quot;, TRUE)
+
+	&apos; Linux or MacOS X
+	Else
+		
+		&apos; Execute the command
+		Shell( &quot;sh -c&quot;, 2,  &quot;&apos;&quot; &amp; &quot;&quot;&quot;&quot; &amp; cmd &amp; &quot;&quot;&quot;&quot; &amp; &quot; --version &gt; &quot; &amp; &quot;&quot;&quot;&quot; &amp; filePath &amp; &quot;&quot;&quot;&quot; &amp; &quot;&apos;&quot;, TRUE )
+
+	End If
+
+	&apos; Output file does not exist 
+	If Not FileExists( filePath ) Then
+
+		MsgBox( _(&quot;Error: can&apos;t find file &quot;) &amp; filePath, 0, &quot;TexMaths&quot; )
+		Exit Function
+
+	End If
+	
+	&apos; Read first line of output file
+	msg = &quot;&quot;
+	Dim iNumber as Integer
+	Dim strline as String
+	iNumber = Freefile()
+	Open filePath For Input as iNumber
+
+		If Not EOF(iNumber) Then
+
+  			Line Input #iNumber, strline
+			msg = strline
+
+		End If
+
+	Close #iNumber
+
+	&apos; Extract version number as &quot;x.y.z&quot;
+	Dim version as String
+
+	&apos; In some versions of dvisvgm the version String is &quot;dvisvgm (TeX Live) x.y.z&quot;
+	If len(msg) &gt; 20 Then	
+
+		version = mid(msg, 19)
+
+	&apos; In other versions it&apos;s &quot;dvisvgm x.y.z&quot;
+	Else
+
+		version = mid(msg, 8)
+
+	End If
+
+	&apos; Get the major and minor version numbers
+	Dim SplittedVersion() as String,  major as Integer, minor as Integer
+	SplittedVersion = split(version, &quot;.&quot;, 3)
+	major = SplittedVersion(0)
+	minor = SplittedVersion(1)
+
+	&apos; Get result
+	Dim res as Boolean : res = FALSE
+	If major &gt;=2 Then
+
+		res = TRUE
+
+	Else
+
+		If minor &gt;= 16 Then res = TRUE
+
+	End If
+
+	&apos; Return result
+	dvisvgmSupportsXelatex = res
+
+End Function
+
+
+&apos; Remove spaces in String
+Function RemoveSpaces( ByVal str as String ) as String
+	
+	Dim result as String
+	Dim c as String
+	Dim i as Integer
+	
+	result = &quot;&quot;
+   	For i = 1 To Len( str )
+
+      ch = Mid( str, i, 1 )
+      If c &lt;&gt; &quot; &quot; Then result = result &amp; c
+
+   Next
+   RemoveSpaces = result
+
+End Function
+
+
+&apos; Replace newline characters (chr(10)) with &quot;§&quot;
+Function EncodeNewline( ByVal str as String ) as String
+	
+	Dim result as String
+	Dim c as String
+	Dim i as Integer
+	
+	result = &quot;&quot;
+   	For i = 1 To Len( str )	  
+
+   	  c = Mid( str, i, 1 )
+      If c = chr(10) Then c = &quot;§&quot;
+	  result = result &amp; c
+
+   Next
+   EncodeNewline = result
+
+End Function
+
+
+&apos; Replace &quot;§&quot; characters with newline (chr(10))
+Function DecodeNewline( ByVal str as String ) as String
+	
+	Dim result as String
+	Dim c as String
+	Dim i as Integer
+	
+	result = &quot;&quot;
+   	For i = 1 To Len( str )
+
+   	  c = Mid( str, i, 1 )
+      If c = &quot;§&quot; Then c = chr(10)
+	  result = result &amp; c
+
+   Next
+   DecodeNewline = result
+
+End Function
+
+
+
+&apos; Read program path from the system path
+Function ReadPgmPath(pgm as String) as String
+
+	Dim filePath as String, shellCommand as String, shellArg as String, tmpPath as String
+
+	&apos; Windows
+	If getGUIType() = 1 Then
+   			
+   		&apos; Create the script &quot;which-XX.bat&quot; if it doesn&apos;t exist yet
+   		&apos; This script is used to know if a program is in the system path
+   		Dim scriptPath as String
+   		scriptPath = GetScriptDir() &amp; &quot;which-&quot; &amp; GetTexMathversion() &amp; &quot;.bat&quot;
+   		
+   		If Not FileExists( scriptPath ) Then
+			
+			&apos; Open service file
+			Dim oFileAccess as Variant
+			oFileAccess = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+			
+			&apos; Copy the script from the pkg dir
+			oFileAccess.copy(glb_PkgPath &amp; &quot;scripts/which.bat&quot;, scriptPath)
+		 
+		End If
+
+		&apos; Shell command
+		shellCommand = ConvertToURL( scriptPath )
+				
+		&apos; Tmp file path
+		tmpPath =  ConvertToURL( GetScriptDir() &amp; &quot;tmppath.txt&quot; )
+
+		&apos; Shell argument
+		shellArg = pgm &amp; &quot; &quot; &amp; tmpPath
+
+   		&apos; Execute the command
+   		Shell( shellCommand, 2, shellArg, TRUE )
+   		
+	&apos; Linux or MacOSX
+	Else
+	
+		&apos; Tmp file path
+		tmpPath =  ConvertFromURL(glb_TmpPath) &amp; &quot;tmppath.txt&quot;
+
+		&apos; Execute the which command
+		Shell( &quot;sh -c&quot;, 2,  &quot;&apos;&quot; &amp; &quot;which &quot; &amp; pgm &amp; &quot;&gt; &quot; &amp; &quot;&quot;&quot;&quot; &amp; tmpPath &amp; &quot;&quot;&quot;&quot; &amp; &quot;&apos;&quot;, TRUE )
+
+		&apos; In MacOSX, the MacTeX path is probably not set, so try the two most common paths i.e. /Library/TeX/texbin/ and /usr/local/bin/
+		If GetUname() = &quot;Darwin&quot; And FileLen( tmpPath ) = 0 Then
+	
+			Dim pgmpath as String
+			pgmpath = &quot;/Library/TeX/texbin/&quot; &amp; pgm
+			Shell( &quot;sh -c&quot;, 2,  &quot;&apos;&quot; &amp; &quot;which &quot; &amp; pgmpath &amp; &quot;&gt; &quot; &amp; &quot;&quot;&quot;&quot; &amp; tmpPath &amp; &quot;&quot;&quot;&quot; &amp; &quot;&apos;&quot;, TRUE )
+			
+			If FileLen( tmpPath ) = 0 Then
+
+				pgmpath = &quot;/usr/local/bin/&quot; &amp; pgm
+				Shell( &quot;sh -c&quot;, 2,  &quot;&apos;&quot; &amp; &quot;which &quot; &amp; pgmpath &amp; &quot;&gt; &quot; &amp; &quot;&quot;&quot;&quot; &amp; tmpPath &amp; &quot;&quot;&quot;&quot; &amp; &quot;&apos;&quot;, TRUE )
+
+			End If
+		
+		End If
+
+	End If
+
+	&apos; Tmp file does not exist 
+	If Not FileExists( tmpPath ) Then
+
+		MsgBox( _(&quot;Error: can&apos;t find file &quot;) &amp; tmpPath, 48, &quot;TexMaths&quot; )
+		Exit Function
+
+	End If
+	
+	&apos; Read first line of tmp file
+	filePath = &quot;&quot;
+	Dim iNumber as Integer
+	Dim strline as String
+	iNumber = Freefile()
+	Open tmpPath For Input as iNumber
+
+		If Not EOF(iNumber) Then
+
+  			Line Input #iNumber, strline
+			filePath = strline
+
+		End If
+
+	Close #iNumber
+
+	&apos; Return program path
+	If filePath = &quot;&quot; Then ReadPgmPath = &quot;&quot; Else ReadPgmPath = filePath
+	
+End Function
+
+
+&apos; Read a text file
+&apos; The path variable must be terminated by a path separator
+Function ReadTextFile(file as String, path as String) as String
+
+	Dim msg as String, filePath as String
+	 
+	filePath = ConvertToURL( path &amp; file )
+	If Not FileExists( filePath ) Then
+
+		MsgBox( _(&quot;Error: can&apos;t find file &quot;) &amp; file, 48, &quot;TexMaths&quot; )
+		Exit Function
+
+	End If
+	
+	Dim iNumber as Integer
+	Dim strline as String
+	iNumber = Freefile()
+	msg = &quot;&quot;
+	Open filePath For Input as iNumber
+ 	While Not EOF(iNumber)
+
+  		Line Input #iNumber, strline
+		msg = msg &amp; strline &amp; chr(10)
+
+	Wend
+	Close #iNumber
+
+	ReadTextFile = msg
+
+End Function
+
+
+&apos; Read a text file encoded in UTF-8
+&apos; The path variable must be terminated by a path separator
+Function ReadTextFileUtf8( file as String , path as String) as String
+
+	Dim msg as String, filePath as String
+	 
+	filePath = ConvertToURL( path &amp; file )
+	If Not FileExists( filePath ) Then
+
+		MsgBox( _(&quot;Error: can&apos;t find file &quot;) &amp; file, 48, &quot;TexMaths&quot; )
+		Exit Function
+
+	End If
+
+	Dim oTextFile as Variant, oFileAccess as Variant, oFileStream as Variant
+	Dim str as String
+
+	oFileAccess = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+	oFileStream = oFileAccess.openFileRead(filePath)
+	oTextFile = createUnoService(&quot;com.sun.star.io.TextInputStream&quot;)
+	oTextFile.InputStream = oFileStream
+
+	msg = &quot;&quot;
+	Do While Not oTextFile.IsEOF
+
+  		str = oTextFile.readLine
+		msg = msg &amp; str &amp; chr(10)
+
+	Loop
+
+	oFileStream.closeInput
+	oTextFile.closeInput
+
+	ReadTextFileUtf8 = msg
+
+End Function
+
+
+&apos; Import graphic from URL into the clipboard
+&apos; Inspired from OOoForums DannyB&apos;s code
+&apos; Return TRUE if success, else return FALSE
+Function ImportGraphicIntoClipboard(URL as String, equationFormat as String, equationDPI as String, equationTransp as String, equationCode as String) as Boolean
+
+	Dim strline as String
+	Dim str1() as String
+	Dim str2 as String, str3 as String
+	Dim baseURL as String
+	Dim X as String, Y as String, W as String, H as String
+	Dim width as String, height as String
+	Dim pos1 as Integer, pos2 as Integer
+	Dim URL_ as String
+	Dim iNumber as Integer
+	Dim iNumber_ as Integer
+
+	&apos; Initialize return code to success
+	ImportGraphicIntoClipboard = TRUE
+
+	&apos; LibreOffice (or OpenOffice) version
+	Dim version as String
+	version = GetAppVersion()
+
+	&apos; URL base name (i.e. without extension)
+	str1 = Split(URL, &quot;.svg&quot;)
+	baseURL = str1(0)
+
+	&apos; Copy the URL of the image file
+	URL_ = URL
+
+	&apos; If SVG image, then add an opaque rectangle below the image to improve selection usability
+	If equationFormat = &quot;svg&quot; Then
+
+		&apos; URL of the output file
+		URL_ = baseURL &amp; &quot;_.svg&quot;
+
+		&apos; Read and write image file at the same time
+		iNumber = Freefile()
+		iNumber_ = Freefile() + 1
+		strline = &quot;&quot;
+
+		If FileExists(URL) Then
+		
+			&apos; Get image transparency
+			Dim opacity as String
+	
+			If equationTransp = &quot;TRUE&quot; Then	opacity = &quot;0&quot; Else opacity = &quot;1&quot;
+	
+			Open URL For Input as iNumber
+			Open URL_ For Output as iNumber_
+
+			Do While not Eof(iNumber)
+
+				Line Input #iNumber, strline		
+									
+				&apos; &lt;svg&gt; line
+				If InStr(strline, &quot;&lt;svg&quot;) Then
+											
+					&apos; Check viewBox
+					If InStr(strline, &quot;viewBox&quot;) = 0 Or InStr(strline, &quot;viewBox=&apos;0 0 0 0&apos;&quot;) &lt;&gt; 0 Then
+					
+						ErrorDialog( _(&quot;LaTeX code was successfully compiled but equation image is empty, please check the equation syntax...&quot;) )
+						ImportGraphicIntoClipboard = FALSE
+						Exit Function
+																
+					End If	
+							
+					&apos; Get width
+					pos1 = InStr(strline, &quot;width&quot;) + 7
+					pos2 = InStr(pos1, strline, &quot;pt&quot;)		
+					width = Mid(strline, pos1, pos2 - pos1)
+
+					&apos; Get height
+					pos1 = InStr(strline, &quot;height&quot;) + 8
+					pos2 = InStr(pos1, strline, &quot;pt&quot;)		
+					height = Mid(strline, pos1, pos2 - pos1)
+
+					&apos; Get viewbox coordinates
+					pos1 = InStr(strline, &quot;viewBox&quot;) + 9
+					pos2 = InStr(pos1, strline, &quot;&apos;&quot;)			
+					str2 = Mid(strline, pos1, pos2 - pos1)
+					str1 = Split(str2, &quot; &quot;)				
+					X = str1(0)
+					Y = str1(1)
+					W = str1(2)
+					H = str1(3)	
+
+					&apos; Write the &lt;svg&gt; line
+					pos1 = InStr(strline, &quot;width&quot;)
+					str3 = Mid(strline, 1, pos1 - 1)
+					str2 = str3 &amp; &quot;width=&apos;&quot; &amp; width &amp; &quot;pt&apos; height=&apos;&quot; &amp; height &amp; &quot;pt&apos; viewBox=&apos;&quot; &amp; X &amp; &quot; &quot; &amp; Y &amp; &quot; &quot; &amp; W &amp; &quot; &quot; &amp; H &amp; &quot;&apos;&gt;&quot;
+					Print #iNumber_, str2
+
+					&apos; Shrink the added rectangle a bit to be sure it is invisible
+					&apos; and only write to the file if the rectangle has non zero size 
+					If Val(W) &gt; 1.0 And Val(H) &gt; 1.0 Then
+						
+						&apos; Shrinked rectangle coordinates				
+						X = LTrim( Str(Val(X) + 0.5) ) &apos; LTrim() removes leading spaces
+						Y = LTrim( Str(Val(Y) + 0.5) )
+						W = LTrim( Str(Val(W) - 1.0) )
+						H = LTrim( Str(Val(H) - 1.0) )
+														
+						&apos; Write the rectangle
+						str2 =  &quot;&lt;rect fill=&quot;&quot;#ffffff&quot;&quot; x=&quot;&quot;&quot; &amp; X &amp; &quot;&quot;&quot; y=&quot;&quot;&quot; &amp; Y &amp; &quot;&quot;&quot; width=&quot;&quot;&quot; &amp; W &amp; &quot;&quot;&quot; height=&quot;&quot;&quot; &amp; H &amp; &quot;&quot;&quot; style=&quot;&quot;fill-opacity:&quot; &amp; opacity &amp;  &quot;&quot;&quot;/&gt;&quot;
+						Print #iNumber_, str2
+					
+					End If
+				
+				&apos; Other lines
+				Else
+				
+					&apos; Recopy the line
+					Print #iNumber_, strline
+				
+				End If
+
+			Loop
+
+			Close #iNumber
+			Close #iNumber_
+
+		&apos; File not found
+		Else
+
+			MsgBox( _(&quot;Error: can&apos;t find file &quot;) &amp; URL, 48, &quot;TexMaths&quot;)
+
+			ImportGraphicIntoClipboard = FALSE
+			Exit Function
+
+		End If
+
+	End If
+
+	&apos; Import the graphics from URL_ into a new draw document
+	Dim oDrawDoc as Variant, oDrawDocCtrl as Variant
+
+	oDrawDoc = StarDesktop.loadComponentFromURL( URL_, &quot;_blank&quot;, 0, Array( MakePropertyValue(&quot;Hidden&quot;, TRUE) ) )
+	oDrawDocCtrl = oDrawDoc.getCurrentController()
+
+	&apos; Get the draw page
+	Dim oDrawPage as Variant, oImportShape as Variant
+	oDrawPage = oDrawDoc.DrawPages(0)
+	
+	&apos; Get the shape
+    oImportShape = oDrawPage(0) 
+
+	Dim oImageSize as Variant, oShapeSize as Variant			
+	oShapeSize = createUnoStruct(&quot;com.sun.star.awt.Size&quot;)
+
+	&apos; If PNG format, scale the image obtained from the dvipng external program
+	If equationFormat = &quot;png&quot; Then
+		
+		&apos; Get actual image size, in pixels
+		oImageSize = oImportShape.Graphic.SizePixel()
+		
+		&apos; Set image size
+		oShapeSize.Width = (oImageSize.Width * 35) * (72 / Val(equationDPI))
+		oShapeSize.Height = (oImageSize.Height * 35) * (72 / Val(equationDPI))
+		oImportShape.setSize(oShapeSize)
+
+	End If	
+
+	Dim oDispatcher as Variant
+	oDispatcher = createUnoService( &quot;com.sun.star.frame.DispatchHelper&quot; )
+
+	&apos; SVG image
+	If equationFormat = &quot;svg&quot; Then
+			
+		&apos; Select the shape
+		oDrawDocCtrl.select(oImportShape)
+
+		&apos; Old trick, not needed anymore since LibreOffice 24.2
+		
+		&apos; Convert to curve or contour otherwise SVG graphics will be blurry when exporting to MS Office
+		&apos; This trick also allows to change colors using LibreOffice&apos;s UI
+		&apos; oDispatcher.executeDispatch( oDrawDocCtrl.Frame, &quot;.uno:ChangeBezier&quot;, &quot;&quot;, 0, Array() )	   &apos; Curve	
+		&apos; oDispatcher.executeDispatch( oDrawDocCtrl.Frame, &quot;.uno:convert_to_contour&quot;, &quot;&quot;, 0, Array() ) &apos; Contour
+			
+	&apos; PNG format
+	Else
+
+		&apos; Select the shape
+		oDrawDocCtrl.select(oImportShape)
+		
+	End If
+
+	&apos; Copy the image to clipboard and close the Draw document
+	oDispatcher.executeDispatch( oDrawDocCtrl.Frame, &quot;.uno:Copy&quot;, &quot;&quot;, 0, Array() )
+	oDrawDoc.close(True)
+	oDrawDoc.dispose()
+	
+End Function
+
+
+&apos; Read LaTeX attributes (parameters and text of the LaTeX equation) of the object
+&apos; Can read old TexMaths (pre v0.39) or ooolatex attributes
+Function ReadAttributes( oShape as Variant ) as String
+
+	Dim str as String
+	Dim oAttributes as Variant
+	Dim isDef as Boolean
+
+    &apos; Get graphic object User Defined Attributes, if they are defined
+    On Error Resume Next
+    
+    oAttributes = oShape.UserDefinedAttributes()
+ 
+	If UBound( oAttributes.getElementNames() ) = -1 Then isDef = FALSE Else isDef = TRUE
+     
+    On Error GoTo 0 &apos; Restore the error handler
+    
+   	
+	&apos; Not an old TexMaths equation nor an ooolatex equation
+	If isDef = FALSE Then
+	
+   			&apos; Read the image title
+	   		str = oShape.Title
+		
+			&apos; Attributes are stored in the image description
+			If str = &quot;TexMaths&quot; Then ReadAttributes = oShape.Description Else ReadAttributes = &quot;&quot; &apos; Not a TexMaths equation
+				
+			Exit Function
+				
+	&apos; Maybe an old TexMaths or an oolatex equation
+	Else
+	
+	   	&apos; Old TexMaths equation
+	   	If oAttributes.hasByName(&quot;TexMathsArgs&quot;) Then
+	   	
+	   		str = oAttributes.getByName(&quot;TexMathsArgs&quot;).Value   	
+	   		
+	   	&apos; ooolatex equation
+	   	ElseIf oAttributes.hasByName(&quot;OOoLatexArgs&quot;) Then
+
+			str = oAttributes.getByName(&quot;OOoLatexArgs&quot;).Value
+	   		   	
+	   	&apos; Not an equation
+	   	Else
+	   	
+			str = &quot;&quot;
+					   	
+	   	End If
+	   
+		ReadAttributes = str
+   		Exit Function
+
+	
+	End If
+
+End Function
+
+
+&apos; Write the LaTeX attributes (parameters and text of the LaTeX equation)
+&apos; into the object title and description
+Sub SetAttributes( oShape as Variant, equationSize as Integer, equationType as String, equationCode as String, equationFormat as String, equationDPI as String, equationTransp as String, equationName as String)
+
+	oShape.Title = &quot;TexMaths&quot;
+	oShape.Description = equationSize &amp; &quot;§&quot; &amp; equationType &amp; &quot;§&quot; &amp; equationCode &amp; &quot;§&quot; &amp; equationFormat &amp; &quot;§&quot; &amp; equationDPI &amp; &quot;§&quot; &amp; equationTransp &amp; &quot;§&quot; &amp; equationName
+
+End Sub
+
+
+&apos; Get the image size from the .dat file
+Function GetImageSize() as com.sun.star.awt.Size
+
+	Dim filePath as String
+	Dim iNumber as Integer
+	Dim strline1 as String, strline2 as String
+
+	&apos; Initializations
+	iNumber = Freefile
+	strline1 = &quot;&quot;
+	strline2 = &quot;&quot;
+	filePath = glb_TmpPath &amp; &quot;tmpfile.dat&quot;
+
+	&apos; Read the .dat file
+	If FileExists(filePath) Then
+		
+		Open filePath For Input as iNumber
+
+			Line Input #iNumber, strline1
+			Line Input #iNumber, strline2
+
+		Close #iNumber
+
+		Dim str1() as String, str2() as String
+		Dim height as Double, width as Double, depth as Double
+
+		&apos; Image format is SVG
+		If glb_Format = &quot;svg&quot; Then
+			
+			&apos; Get the image width and height in mm
+			str1 = Split(strline2, &quot;(&quot;)
+			str2 = Split(str1(1), &quot;mm&quot;)
+			width = Val(str2(0))
+			str1 = Split(strline2, &quot;x&quot;)
+			str2 = Split(str1(2), &quot;mm&quot;)
+			height = Val(str2(0))
+
+			&apos; Convert image width and height to twips
+			width = width * 100
+			height = height * 100
+
+		&apos; Image format is PNG
+		Else
+	
+			&apos; Get the image depth, height and in mm
+			str1 = Split(line2, &quot;=&quot;)
+			str2 = Split(str1(1), &quot; &quot;)
+			depth = Val(str2(0))
+			
+			str1 = Split(line2, &quot;=&quot;)
+			str2 = Split(str1(2), &quot; &quot;)
+			height = Val(str2(0))
+	
+			str1 = Split(line2, &quot;=&quot;)
+			str2 = Split(str1(3), &quot; &quot;)
+			width = Val(str2(0))
+
+			&apos; Compute width and height (total height) in twips
+			height = depth + height
+			width = width * 2.54 / Val(glb_GraphicDPI) * 1000
+			height = height * 2.54 / Val(glb_GraphicDPI) * 1000
+
+		End If
+	
+		&apos; Return image size		
+		Dim oSize as Variant			
+		oSize = createUnoStruct(&quot;com.sun.star.awt.Size&quot;)
+		oSize.Width = width
+		oSize.Height = height	
+		GetImageSize = oSize
+
+	&apos; File not found
+	Else
+
+		MsgBox( _(&quot;Error: can&apos;t find file &quot;) &amp; filePath, 48, &quot;TexMaths&quot; )
+		Exit Function
+
+	End If
+	
+End Function
+
+
+&apos; Get the vertical shift of the image according to the baseline position
+&apos; Return 0 if an error has occurred
+Function GetVertShift() as Double
+
+	Dim filePath as String
+	Dim str1() as String, str2() as String
+	Dim iNumber as Integer
+	Dim strline1 as String, strline2 as String
+		
+	&apos; Read the file that contains depth and height
+	iNumber = Freefile
+	strline1 = &quot;&quot;
+	strline2 = &quot;&quot;
+	
+	filePath = glb_TmpPath &amp; &quot;tmpfile.bsl&quot;
+	If FileExists(filePath) Then
+	
+		Open filePath For Input as iNumber
+
+			Line Input #iNumber, strline1
+			Line Input #iNumber, strline2
+
+		Close #iNumber
+		
+		&apos; Get the depth and height
+		Dim depth as Double, height as Double
+		str1 = Split(strline1, &quot;=&quot;)
+		str2 = Split(str1(1), &quot;pt&quot;)
+		depth = Val(str2(0))
+		str1 = Split(strline2, &quot;=&quot;)
+		str2 = Split(str1(1), &quot;pt&quot;)
+		height = Val(str2(0))
+		
+		&apos; An error has occurred
+		If depth + height = 0 Then
+			
+			ErrorDialog( _(&quot;LaTeX code was successfully compiled but equation image is empty, please check the equation syntax...&quot;) )
+			GetVertShift = 0
+		
+		Else
+	
+			&apos; Compute vertical shift and return value
+			GetVertShift = height / (depth + height)
+		
+		End If
+		
+	&apos; File not found
+	Else
+
+		MsgBox( _(&quot;Error: can&apos;t find file &quot;) &amp; filePath, 48, &quot;TexMaths&quot; )
+		Exit Function
+	
+	End If
+	
+End Function
+
+
+&apos; Display error on screen from file in temp directory 
+Sub PrintError(fileName as String)
+
+	Dim iNumber as Integer
+	Dim msg as String, strline as String
+	If Not FileExists(glb_TmpPath &amp; fileName) Then
+
+		MsgBox( _(&quot;Error: the file &quot;) &amp; glb_TmpPath &amp; fileName &amp; _(&quot; doesn&apos;t exist...&quot;), 48, &quot;TexMaths&quot; )
+		Exit Sub
+
+	End If
+
+	iNumber = Freefile
+	Open glb_TmpPath &amp; fileName For Input as iNumber
+ 	While Not EOF(iNumber)
+
+  		Line Input #iNumber, strline
+		msg = msg &amp; strline &amp; chr(10)
+
+	Wend
+	Close #iNumber
+	
+	If msg = &quot;&quot; Then msg = _(&quot;Error: please check your TexMaths configuration...&quot;)
+	ErrorDialog(msg)
+	
+End Sub
+
+
+&apos; Display file on screen from temp directory 
+Sub PrintFile(fileName as String, title as String)
+
+	Dim iNumber as Integer
+	Dim msg as String, strline as String
+	If Not FileExists(glb_TmpPath &amp; fileName) Then
+
+		MsgBox( _(&quot;Error: the file &quot;) &amp; glb_TmpPath &amp; fileName &amp; _(&quot; doesn&apos;t exist...&quot;), 48, &quot;TexMaths&quot; )
+		Exit Sub
+
+	End If
+
+	iNumber = Freefile
+	Open glb_TmpPath &amp; fileName For Input as iNumber
+ 	While Not EOF(iNumber)
+  		Line Input #iNumber, strline
+		msg = msg &amp; strline &amp; chr(10)
+	Wend
+	Close #iNumber
+	
+	If msg = &quot;&quot; Then msg = _(&quot;Error: please check your TexMaths configuration...&quot;)
+	MessageDialog(msg, title)
+	
+End Sub
+
+
+&apos; Convert decimal into two digits hexadecimal number as String
+Function Hex2( value as Integer) as String
+
+	Dim hex1 as String
+	If value = 0 Then 
+
+		Hex2 = &quot;00&quot; 
+		Exit Function
+
+	End If
+
+	hex1 = Hex( value )
+	If Len( hex1 ) = 1 Then hex1 = &quot;0&quot; &amp; hex1
+	
+	Hex2 = hex1
+
+End Function
+
+
+&apos; Display given message in the status bar
+Sub DisplayStatus(msg as String)
+
+	glb_Status = msg
+
+End Sub
+
+
+&apos; Add a slash if necessary
+Function CheckPath(path as String) as String
+
+	If Right(path,1) = &quot;/&quot; Then CheckPath = path Else CheckPath = path &amp; &quot;/&quot;
+
+End Function
+
+
+&apos; Check if file exists and if not, displays an error message
+Function CheckFile(URL as String, errorMsg as String) as Boolean
+
+	If FileExists(URL) Then
+
+		CheckFile = FALSE
+
+	Else
+
+		If errorMsg = &quot;TexMaths&quot; Then errorMsg = _(&quot;Can&apos;t find &quot;) &amp; URL &amp; chr(10) &amp; _(&quot;Please check your installation...&quot;)
+		MsgBox(errorMsg, 48, &quot;TexMaths&quot;)
+		CheckFile = TRUE
+
+	End If
+
+End Function
+
+
+&apos; Return TRUE if string str doesn&apos;t contains character ch
+Function StringNotContains(str as String, ch as String ) as Boolean
+
+	StringNotContains = TRUE
+	If (Len(str) &lt;&gt; 0) Then
+		
+		Dim j as Integer
+		For j = 1 to Len(str)
+
+			If Mid(str, j, 1) = ch Then 
+
+				StringNotContains = FALSE
+				Exit For
+
+			End If
+
+		Next
+
+	End If
+
+End Function 
+
+
+&apos; Return TRUE if prefixString matches the beginning of str (case sensitive)
+&apos; The following would return TRUE...
+&apos;   IsPrefixString( &quot;Jo&quot;, &quot;John&quot; )
+&apos;   IsPrefixString( &quot;Jo&quot;, &quot;Joseph&quot; )
+&apos;   IsPrefixString( &quot;Jo&quot;, &quot;Jolly&quot; )
+&apos; Copyright (c) 2003-2004 Danny Brewer 
+Function IsPrefixString( ByVal prefixString as String, ByVal str as String ) as Boolean
+
+   IsPrefixString = (Left( str, Len( prefixString ) ) = prefixString )
+
+End Function
+
+
+&apos; Get access to the repository
+Function GetConfigAccess(ByVal nodePath as String, ByVal writeAccess as Boolean, Optional enableSync, Optional lazyWrite ) as Variant
+					 
+	If IsMissing( enableSync ) Then enableSync = TRUE
+	If IsMissing( lazyWrite )  Then lazyWrite = FALSE
+
+	Dim oConfigProvider as Variant
+	oConfigProvider = GetProcessServiceManager().createInstanceWithArguments(_
+						&quot;com.sun.star.configuration.ConfigurationProvider&quot;,_
+						Array( MakePropertyValue( &quot;enableasync&quot;, enableSync ) ) )
+
+	Dim serviceName as String
+	If writeAccess Then serviceName = &quot;com.sun.star.configuration.ConfigurationUpdateAccess&quot; _
+	               Else serviceName = &quot;com.sun.star.configuration.ConfigurationAccess&quot;
+
+	Dim oConfigAccess as Variant
+	oConfigAccess = oConfigProvider.createInstanceWithArguments(_
+			serviceName,_
+      		Array(  MakePropertyValue( &quot;nodepath&quot;,  nodePath  ),_
+					MakePropertyValue( &quot;lazywrite&quot;, lazyWrite ) ) )
+
+	GetConfigAccess = oConfigAccess
+
+End Function
+
+
+&apos; Create a PropertyValue structure from name and value pair
+Function MakePropertyValue( Optional propName as String, Optional propValue as Variant) as com.sun.star.beans.PropertyValue
+
+	&apos; Create structure 
+	Dim oPropertyValue as Variant
+	oPropertyValue = createUnoStruct( &quot;com.sun.star.beans.PropertyValue&quot; )
+	
+	&apos; Set name and value pair
+	If Not IsMissing( propName )  Then oPropertyValue.Name  = propName
+	If Not IsMissing( propValue ) Then oPropertyValue.Value = propValue
+
+	&apos; Return structure
+	MakePropertyValue = oPropertyValue
+
+End Function
+
+
+&apos; On Windows, generate path as &quot;C:\path_to_file\&quot;
+Function WinPath(path as String) as String
+
+	path = ConvertFromUrl(path)
+	WinPath = &quot;&quot;&quot;&quot; &amp; path &amp;  &quot;&quot;&quot;&quot;
+
+End function
+
+
+&apos; Determine document type from the services that are supported
+&apos; Author Andrew Pitonyak
+Function GetDocumentType(oDoc as Variant) as String
+
+	Dim sImpress as String, sCalc as String, sDraw as String, sBase as String, sMath as String, sWriter as String
+
+	sCalc    = &quot;com.sun.star.sheet.SpreadsheetDocument&quot;
+	sImpress = &quot;com.sun.star.presentation.PresentationDocument&quot;
+	sDraw    = &quot;com.sun.star.drawing.DrawingDocument&quot;
+	sBase    = &quot;com.sun.star.sdb.DatabaseDocument&quot;
+	sMath    = &quot;com.sun.star.formula.FormulaProperties&quot;
+	sWriter  = &quot;com.sun.star.text.TextDocument&quot;
+
+	On Local Error GoTo NO_DOCUMENT_TYPE
+	
+	If oDoc.SupportsService(sCalc) Then
+
+ 		GetDocumentType = &quot;scalc&quot;
+
+	ElseIf oDoc.SupportsService(sWriter) Then
+
+		GetDocumentType = &quot;swriter&quot;
+
+	ElseIf oDoc.SupportsService(sDraw) Then
+
+		GetDocumentType = &quot;sdraw&quot;
+
+	ElseIf oDoc.SupportsService(sMath) Then
+
+		GetDocumentType = &quot;smath&quot;
+
+	ElseIf oDoc.SupportsService(sImpress) Then
+
+		GetDocumentType = &quot;simpress&quot;
+
+	ElseIf oDoc.SupportsService(sBase) Then
+
+		GetDocumentType = &quot;sbase&quot;
+
+	End If
+
+	NO_DOCUMENT_TYPE:
+
+	If Err &lt;&gt; 0 Then
+
+  		GetDocumentType = &quot;&quot;
+  		Resume GO_ON
+  		GO_ON:
+
+	End If
+
+End Function
+
+
+&apos; Get application locale
+&apos; Original author: Laurent Godard
+&apos; e-mail: listes.godard@laposte.net
+&apos; Modified to return the complete locale String
+&apos; (not only the first two characters) 
+Function GetLocale() as String
+
+	Dim oSet as Variant, oConfigProvider as Variant
+	Dim configprovider as String, configaccess as String
+	
+	configprovider = &quot;com.sun.star.configuration.ConfigurationProvider&quot;
+	configaccess = &quot;com.sun.star.configuration.ConfigurationAccess&quot;
+	
+	oConfigProvider = createUnoService(configprovider)
+
+	oSet = oConfigProvider.createInstanceWithArguments(configaccess, Array( MakePropertyValue(&quot;nodepath&quot;, &quot;/org.openoffice.Setup/L10N&quot;) ) )
+
+	GetLocale = oSet.getbyname(&quot;ooLocale&quot;)
+
+End Function
+
+
+&apos; Translation function
+&apos; Replace each String like _(&quot;String example&quot;) with its translation
+&apos; Original author: Pierre Chef, june 2009
+&apos; Available under the terms of the WTFPL
+Function _(msgid as String) as String
+
+	Dim i as Integer
+	Dim trans as String
+
+	&apos; Read the appropriate po file at the first time
+	If glb_PoFileRead &lt;&gt; 1 Then ReadPoFile(glb_PkgPath &amp; &quot;po&quot;)
+
+	&apos; Look for the corresponding translated String
+	For i = 0 to Ubound(glb_MsgId)
+	
+		If glb_MsgId(i) = msgid Then
+       		
+       		trans = glb_MsgStr(i)
+      		Exit For
+      			
+		End If
+
+	Next i
+
+	&apos; Return the translated String
+	If trans = &quot;&quot; Then trans = msgid
+	_() = trans
+
+End Function
+
+
+&apos; Read po file according to the current locale
+&apos; and construct the tables used to store translated Strings
+&apos; Original author: Pierre Chef, june 2009
+&apos; Available under the terms of the WTFPL
+Sub ReadPoFile(podir as String)
+
+	Dim oFileAccess as Variant
+	Dim strline as String      &apos; Line read
+	Dim lineLen as Integer     &apos; Length of line read
+	Dim msgCounter as Integer  &apos; Message counter
+	Dim position as Integer    &apos; Position in a String
+	Dim quotePos as Integer    &apos; Position after first quotation mark
+	Dim transType as String    &apos; Translation type : msgid or msgstr
+	Dim message as String      &apos; String contained in msgid or msgstr
+	Dim locale as String       &apos; Locale code : fr, en, es, it, de, ...
+	Dim pofile as String       &apos; po file path
+   
+	&apos; Simple file access object
+	oFileAccess = CreateUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+   
+	&apos; The podir must be a folder
+	If oFileAccess.isFolder(podir) Then
+
+		&apos; Add eventually a trailing slash
+		If right(podir,1) &lt;&gt; &quot;/&quot; Then podir = podir + &quot;/&quot;      
+      
+      	&apos; Get current locale
+      	locale = GetLocale()
+      
+		&apos; Po file path      
+		pofile = podir + locale + &quot;.po&quot;
+
+		&apos; File must exist
+		If oFileAccess.exists(pofile) Then
+	 
+			&apos; Open po file in the same way as ReadTextFileUtf8()
+			&apos; because we may have UTF-8 characters within it
+			Dim oTextFile as Variant, oFileStream as Variant
+			oFileStream = oFileAccess.openFileRead(pofile)
+			oTextFile = createUnoService(&quot;com.sun.star.io.TextInputStream&quot;)
+			oTextFile.InputStream = oFileStream
+		
+		Else
+
+         	Exit Sub
+
+		End If
+	
+	Else
+
+		Exit Sub
+
+	End If
+   
+	&apos; Initialize counter
+	msgCounter = -1
+
+	&apos; Read the po file, line by line
+	While Not oTextFile.IsEOF
+ 
+  		&apos; Read line
+  		strline = oTextFile.readLine
+      	lineLen = len(strline)
+      
+     	quotePos = InStr(strline, &quot;&quot;&quot;&quot;) + 1
+
+		If lineLen &gt; 2 Then
+			
+			Select Case left(strline, 1)
+				
+				&apos; Po file comment
+				Case &quot;#&quot;:
+				
+				&apos; Identifier
+				Case &quot;m&quot;:
+            		
+            		If left(strline,5) = &quot;msgid&quot; Then
+               			                 			
+                		transType = &quot;id&quot;
+                		msgCounter = msgCounter + 1
+                		redim Preserve glb_MsgId(msgCounter)
+                		redim Preserve glb_MsgStr(msgCounter)
+               								
+						message = mid(strline, quotePos, lineLen - quotePos)
+ 					
+ 					Elseif left(strline, 6) = &quot;msgstr&quot; Then
+ 						
+ 						transType = &quot;str&quot;
+               			               
+               			message = mid(strline, quotePos, lineLen - quotePos)
+            
+            		Endif
+            
+            		&apos; Update tables
+            		UpdTransTables(message, msgCounter, transType)
+				
+				&apos; String (quotePos=1 obviously)
+				Case &quot;&quot;&quot;&quot;:
+            		
+            		&apos; Update tables
+            		message = mid(strline, quotePos, lineLen - quotePos)
+            		UpdTransTables(message, msgCounter, transType)
+         		
+         		&apos; Other :  error in the po file
+         		Case Else
+            						
+				End Select
+      
+		End If
+	
+	Wend &apos; End file reading loop
+	
+	&apos; Close file
+	oFileStream.closeInput
+	oTextFile.closeInput
+	
+	&apos; Set flag
+	glb_PoFileRead = 1
+
+End Sub
+
+
+&apos; Update the tables used to store translated Strings
+&apos; Original author: Pierre Chef, june 2009
+&apos; Available under the terms of the WTFPL
+Sub UpdTransTables(message as String, msgCounter as Integer, transType as String)
+   
+	If message = &quot;&quot; Then Exit Sub
+	
+	If transType = &quot;id&quot; Then glb_MsgId(msgCounter)= glb_MsgId(msgCounter) + message
+
+	If transType = &quot;str&quot; Then glb_MsgStr(msgcounter)= glb_MsgStr(msgcounter) + message
+	
+End Sub
+
+
+&apos; Save clipboard content to document oDoc
+Sub SaveClipboard(oDoc as Variant)
+
+	Dim oFrame as Variant
+	oFrame = oDoc.CurrentController.Frame
+
+	Dim oDispatcher as Variant
+	oDispatcher = createUnoService( &quot;com.sun.star.frame.DispatchHelper&quot; )
+	oDispatcher.executeDispatch(oFrame,&quot;.uno:Paste&quot;, &quot;&quot;, 0, Array())
+
+End Sub
+
+
+&apos; Restore clipboard content from document oDoc
+Sub RestoreClipboard(oDoc as Variant)
+
+	Dim oFrame as Variant
+	oFrame = oDoc.CurrentController.Frame
+
+	Dim oDispatcher as Variant
+	oDispatcher = createUnoService( &quot;com.sun.star.frame.DispatchHelper&quot; )
+	oDispatcher.executeDispatch(oFrame, &quot;.uno:SelectAll&quot;, &quot;&quot;, 0, Array())
+	oDispatcher.executeDispatch(oFrame,&quot;.uno:Copy&quot;, &quot;&quot;, 0, Array())
+
+End Sub
+
+
+&apos; Put the content of the clipboard into a String
+&apos; Original author: Andrew Pitonyak
+Function ClipboardToText() as String
+
+	On Error Goto ErrorHandler &apos; Enables error handling
+
+	Dim oClip as Variant, oClipContents as Variant, oTypes as Variant, oConverter as Variant
+	Dim i as Integer, iPlainLoc as Integer
+	Dim content as String
+
+	oClip = createUnoService( &quot;com.sun.star.datatransfer.clipboard.SystemClipboard&quot; )
+	oConverter = createUnoService( &quot;com.sun.star.script.Converter&quot; )
+	oClipContents = oClip.getContents()
+	oTypes = oClipContents.getTransferDataFlavors()
+
+	iPlainLoc = -1
+	For i = LBound(oTypes) To UBound(oTypes)
+
+		If oTypes(i).MimeType = &quot;text/plain;charset=utf-16&quot; Then
+
+			iPlainLoc = i
+			Exit For
+
+		End If
+
+	Next
+
+	content = &quot;&quot;
+	If iPlainLoc &gt;= 0 Then
+
+		Dim oData as Variant
+		oData = oClipContents.getTransferData(oTypes(iPlainLoc))
+		content = oConverter.convertToSimpleType(oData, com.sun.star.uno.TypeClass.STRING)
+
+	End If
+
+	ClipboardToText = content
+	Exit Function
+
+	&apos; Handle error that sometimes occurs in oClipContents.getTransferData()
+	ErrorHandler:
+
+	MsgBox( &quot;Error in ClipboardToText()&quot;, 0, &quot;TexMaths&quot; )
+	MsgBox( &quot;Error code: &quot; + Err + Chr$(13) + Error$, 0, &quot;TexMaths&quot; )
+	
+	ClipboardToText = content
+
+End Function
+
+
+&apos; Put a String content into the clipboard
+&apos; Original author : DannyB
+Sub TextToClipboard( content as String )
+   
+	Dim oDoc as Variant, oText as Variant, oCursor as Variant
+	
+	&apos; Create an empty hidden Writer document
+	oDoc = StarDesktop.loadComponentFromURL( &quot;private:factory/swriter&quot;, &quot;_blank&quot;, 0, Array( MakePropertyValue( &quot;Hidden&quot;, TRUE ) ) )
+	
+	&apos; Get the text of the document
+	oText = oDoc.getText()
+	
+	&apos; Get a cursor that can move over or to any part of the text
+	oCursor = oText.createTextCursor()
+	
+	&apos; Insert text and paragraph breaks into the text, at the cursor position
+	oText.insertString(oCursor, content, FALSE)
+	
+	&apos; Dispatch commands
+	Dim oFrame as Variant, oDispatcher as Variant
+	oFrame = oDoc.CurrentController.Frame
+	oDispatcher = createUnoService( &quot;com.sun.star.frame.DispatchHelper&quot; )
+	oDispatcher.executeDispatch(oFrame,&quot;.uno:SelectAll&quot;, &quot;&quot;, 0, Array())
+	oDispatcher.executeDispatch(oFrame,&quot;.uno:Copy&quot;, &quot;&quot;, 0, Array())
+
+	&apos; Close document
+	oDoc.close( TRUE )
+
+End Sub 
+
+
+&apos; Position the cursor at the most left position of the selection
+&apos; Author: Andrew Pitonyak
+&apos; email:   andrew@pitonyak.org
+&apos; oSel is a text selection or cursor range
+Function GetLeftMostCursor(oSel as Variant) as Variant
+
+	Dim oRange as Variant    &apos; Right most range
+	Dim oCursor as Variant   &apos; Cursor at the right most range
+	
+	If oSel.getText().compareRegionStarts(oSel.getEnd(), oSel) &gt;= 0 Then oRange = oSel.getEnd() Else oRange = oSel.getStart()
+	
+	oCursor = oSel.getText().CreateTextCursorByRange(oRange)
+	oCursor.goRight(0, FALSE)
+	GetLeftMostCursor = oCursor
+
+End Function
+
+
+&apos; Position the cursor at the most right position of the selection
+&apos; Author: Andrew Pitonyak
+&apos; email:   andrew@pitonyak.org
+&apos; oSel is a text selection or cursor range
+Function GetRightMostCursor(oSel as Variant) as Variant
+
+	Dim oRange as Variant    &apos; Right most range
+	Dim oCursor as Variant   &apos; Cursor at the right most range
+
+	If oSel.getText().compareRegionStarts(oSel.getEnd(), oSel) &gt;= 0 Then oRange = oSel.getStart() Else oRange = oSel.getEnd()
+
+	oCursor = oSel.getText().CreateTextCursorByRange(oRange)
+	oCursor.goLeft(0, FALSE)
+	GetRightMostCursor = oCursor
+
+End Function
+
+
+&apos; Test if a component (Writer, Draw, Impress) is installed
+Function ComponentInstalled( name as String ) as Boolean
+
+	Dim oModuleManager as Variant
+	oModuleManager = CreateUnoService( &quot;com.sun.star.frame.ModuleManager&quot; )
+    
+	ComponentInstalled = FALSE
+
+    If (name = &quot;Writer&quot;) and oModuleManager.hasByName( &quot;com.sun.star.text.TextDocument&quot; ) Then ComponentInstalled = TRUE
+		
+	If (name = &quot;Impress&quot;) and  oModuleManager.hasByName( &quot;com.sun.star.presentation.PresentationDocument&quot; ) Then ComponentInstalled = TRUE
+
+	If (name = &quot;Draw&quot;) and oModuleManager.hasByName( &quot;com.sun.star.drawing.DrawingDocument&quot; ) Then ComponentInstalled = TRUE
+ 
+End Function
+
+
+&apos; Transfer animation from an old shape to a new shape in Impress mode
+&apos; Author: Daniel Fett
+Sub TransferAnimations(slide as Variant, original as Variant, replacement as Variant)
+
+    Dim oMainSequence as Variant, oClickNodes as Variant, oClickNode as Variant, oGroupNodes as Variant
+    Dim oGroupNode as Variant, oEffectNodes as Variant, oEffectNode as Variant, oAnimNodes as Variant, oAnimNode as Variant
+
+    oMainSequence = GetMainSequence(slide)    
+ 	&apos; Exit if null object
+ 	If oMainSequence = null Then Exit Sub
+
+    oClickNodes = oMainSequence.createEnumeration()
+
+    While oClickNodes.hasMoreElements()
+
+        oClickNode = oClickNodes.nextElement()
+        oGroupNodes = oClickNode.createEnumeration()
+
+        While oGroupNodes.hasMoreElements()
+
+            oGroupNode = oGroupNodes.nextElement()
+            oEffectNodes = oGroupNode.createEnumeration()
+
+            While oEffectNodes.hasMoreElements()
+
+                oEffectNode = oEffectNodes.nextElement()
+                oAnimNodes = oEffectNode.createEnumeration()
+
+                While oAnimNodes.hasMoreElements()
+
+                    oAnimNode = oAnimNodes.nextElement()
+                    If EqualUnoObjects(original, oAnimNode.target) Then oAnimNode.target = replacement
+
+                Wend
+            
+            Wend
+    
+        Wend
+    
+    Wend
+
+End Sub
+
+ 
+&apos; Get the main sequence from the given page
+&apos; Author: Daniel Fett
+Function GetMainSequence(oPage as Variant) as Variant
+
+	Dim oMainSeq as Integer, oNodes as Variant, oNode as Variant
+    oMainSeq = com.sun.star.presentation.EffectNodeType.MAIN_SEQUENCE
+ 
+ 	&apos; Initialize to null
+	GetMainSequence = null
+
+    oNodes = oPage.AnimationNode.createEnumeration()
+    
+    While oNodes.hasMoreElements()
+        
+        oNode = oNodes.nextElement()
+        
+        If GetNodeType(oNode) = oMainSeq Then
+
+            GetMainSequence = oNode
+            Exit Function
+
+        End If
+    
+    Wend
+
+End Function
+
+
+&apos; Get the type of a node
+&apos; Author: Daniel Fett
+Function GetNodeType(oNode as Variant) as Integer
+
+	Dim oData as Variant
+	
+    For each oData in oNode.UserData
+
+        If oData.Name = &quot;node-type&quot; Then
+
+            GetNodeType = oData.Value
+            Exit Function
+
+        End If
+
+    Next oData
+
+End Function
+
+
+&apos; Return all Strings that are contained in a given LaTeX command. 
+&apos; For example, for the source code &quot;\test{a} b c&quot; and the command (search String) &quot;test&quot;, it will return an array with one value, namely &quot;a&quot;.
+&apos; Author: Daniel Fett
+Function FindInLatexCommand(sourceCode as String, command as String)
+
+	Dim StringArray() as String
+	Dim searchstr as String
+	Dim iLast as Integer
+	Dim iCommandStart as Integer
+
+	iCommandStart = 1
+	iLast = 1
+	searchstr = &quot;\&quot; &amp; command &amp; &quot;{&quot;
+	
+	Do While iLast &lt;&gt; 0 and iCommandStart &lt;&gt; 0
+
+		iCommandStart = InStr(iLast, sourceCode, searchstr)
+
+		If iCommandStart &lt;&gt; 0 Then
+
+			&apos; We found the beginning of the command. Great, now search for the end!
+			iLast = InStr(iCommandStart, sourceCode, &quot;}&quot;)
+			
+			Dim n as Integer
+			n = UBound(StringArray) + 1 &apos; To prevent a crash in Openoffice 4.x
+			ReDim Preserve StringArray(n)
+			StringArray(UBound(StringArray)) = Mid(sourceCode, iCommandStart + Len(searchstr), iLast - (iCommandStart + Len(searchstr)))
+
+		End If
+
+	Loop
+	FindInLatexCommand = StringArray
+
+End Function
+	
+
+
+&apos; Returns TRUE if anything is selected in a Writer document
+&apos; Based on a function written by Andrew Pitonyak
+Function IsAnythingSelected(oDoc as Variant) as Boolean
+
+	Dim oSels as Variant    &apos; All of the selections
+	Dim oSel as Variant     &apos; A single selection
+	Dim oCursor as Variant  &apos; A temporary cursor
+
+	IsAnythingSelected = FALSE
+
+	If IsNull(oDoc) Then Exit Function
+
+	&apos; The current selection in the current controller
+	&apos; If there is no current controller, it returns NULL
+	oSels = oDoc.getCurrentSelection()
+	If IsNull(oSels) Then Exit Function
+
+	&apos; Text
+	If oSels.getImplementationName() = &quot;SwXTextRanges&quot; Then
+	
+		&apos; I have never seen a selection count of zero
+		If oSels.getCount() = 0 Then Exit Function
+		
+		&apos; If there are multiple selections, then assume something is selected
+		If oSels.getCount() &gt; 1 Then		
+
+			IsAnythingSelected = TRUE
+		
+		Else
+		
+			&apos; If only one thing is selected, however, then check to see
+			&apos; if the selection is collapsed. In other words, see if the
+			&apos; end location is the same as the starting location.
+			&apos; Notice that I use the text object from the selection object
+			&apos; because it is safer than assuming that it is the same as the
+			&apos; documents text object.
+			oSel = oSels.getByIndex(0)
+			oCursor = oSel.getText().CreateTextCursorByRange(oSel)
+			If Not oCursor.IsCollapsed() Then IsAnythingSelected = TRUE
+		
+		End If
+	
+	&apos; Tables, graphic elements, images, etc.
+	Else
+		
+		IsAnythingSelected = TRUE
+	
+	End If
+
+End Function
+
+
+&apos; Restart LibreOffice
+Sub RestartLO()
+
+	Dim oContext as Variant
+	oContext = GetDefaultContext()
+	
+	Dim oRestartManager as Variant, oHandler as Variant
+	oRestartManager = oContext.getValueByName(&quot;/singletons/com.sun.star.task.OfficeRestartManager&quot;)
+	
+	If Not oRestartManager.isRestartRequested(False) Then
+	    
+	    &apos; Avoid error &quot;The window cannot be closed while BASIC is running&quot;
+		On Error Resume Next
+	    
+	    &apos; Restart LibreOffice
+	    oRestartManager.requestRestart(oHandler)
+	
+	End If
+
+End Sub
+
+
+&apos; Remove tilde characters in String
+Function RemoveTilde( ByVal str as String ) as String
+	
+	Dim result as String
+	Dim c as String
+	Dim i as Integer
+	
+	result = &quot;&quot;
+   	For i = 1 To Len( str )
+
+      c = Mid( str, i, 1 )
+      If c &lt;&gt; &quot;~&quot; Then result = result &amp; c
+
+   Next
+   RemoveTilde = result
+
+End Function
+
+
+&apos; Return TRUE if the visible cursor is in a text box, else return FALSE
+&apos; Can be used in Writer, Calc, Draw or Impress
+&apos; Based on the following posts on the Openoffice forum
+&apos; 	https://forum.openoffice.org/en/forum/viewtopic.php?t=101034
+&apos;	https://forum.openoffice.org/en/forum/viewtopic.php?t=81353
+&apos; Known issue =&gt; this function gives random results in Windows and MacOSX
+Function IsCursorInTextBox(oDoc as Variant) as Boolean
+
+	&apos; Initialize return value (set to true by default to be conervative)
+	IsCursorInTextBox = TRUE
+
+	&apos; Current controller
+ 	Dim oDocCtrl as Variant
+	oDocCtrl = oDoc.getCurrentController()
+
+	&apos; Writer or Calc document (transferable is only supported in Writer or Calc)
+	If GetDocumentType(oDoc) = &quot;swriter&quot; Or GetDocumentType(oDoc) = &quot;scalc&quot; Then
+	
+		Dim Transferable as Variant
+		Transferable = oDocCtrl.getTransferable()
+
+		Dim DataFlavor as new com.sun.star.datatransfer.DataFlavor	
+		DataFlavor.mimetype = &quot;text/plain;charset=utf-16&quot;
+		
+		If Not Transferable.isDataFlavorSupported(DataFlavor) Then IsCursorInTextBox = FALSE
+
+	&apos; Other document type (Impress or Draw)
+	&apos; Use a method based on the accessible context tree
+	Else
+
+		&apos; Get list of commands
+		Dim oList as Variant
+		GlobalScope.BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+		oList = GetRegistryKeyContent(&quot;org.openoffice.Office.UI.GenericCommands&quot;) 
+	
+		&apos; Get localized context label of Insert Symbol command (remove tilde character if present)
+		Dim contextLabel as String
+		contextLabel = RemoveTilde( oList.getByName(&quot;UserInterface&quot;).getByName(&quot;Commands&quot;).getByName(&quot;.uno:InsertSymbol&quot;).ContextLabel )
+	
+		&apos; Accessible context
+		Dim oAccessibleContext as Variant
+		oAccessibleContext = oDocCtrl.getFrame().getComponentWindow().getAccessibleContext().getAccessibleParent().getAccessibleContext()
+	
+		&apos; Recursive function that traverses the accessible context tree
+		IsCursorInTextBox = MenuItemStatus(oAccessibleContext, contextLabel)
+		
+	End If
+
+End Function
+
+
+&apos; Recursive function used by IsInTextbox()
+Function MenuItemStatus(oAccessibleContext as Variant, contextLabel as String) as Boolean
+
+	Dim oChild as Variant, oChildAccessibleContext as Variant
+	Dim i as Integer, n as Integer
+
+	&apos; Initialize result
+	MenuItemStatus = TRUE
+	
+	&apos; Loop on childs
+	n = oAccessibleContext.AccessibleChildCount         
+	For i = 0 to n - 1       
+    
+	    &apos; Child and its accessible context
+	    On Error GoTo EndFunc
+	    oChild = oAccessibleContext.getAccessibleChild(i)
+	    oChildAccessibleContext = oChild.getAccessibleContext()
+	    
+	    &apos; Recurse if there is still childs
+	    If oChildAccessibleContext.AccessibleChildCount &gt; 0 Then
+	            
+	      &apos; End recursion if menu item found
+	      If MenuItemStatus(oChildAccessibleContext, contextLabel) = FALSE Then
+         
+	         MenuItemStatus = FALSE
+	         Exit For
+	      
+	      End If
+	    
+	    End If
+
+		&apos; Restrict to menu items
+	    If oChildAccessibleContext.getAccessibleRole() = com.sun.star.accessibility.AccessibleRole.MENU_ITEM Then
+	     
+     		If oChildAccessibleContext.getAccessibleName() = contextLabel Then
+ 
+ 				&apos; Check state
+				Dim val as Integer
+				
+				val = oChildAccessibleContext.AccessibleStateSet And com.sun.star.accessibility.AccessibleStateType.ENABLED
+	 
+		 		If val = 0 Then
+	 		       
+	    	       MenuItemStatus = FALSE
+	        	   Exit For
+	        	   
+	        	End If      
+      
+	      	End If
+     
+     	End If
+
+	Next i
+
+EndFunc:
+
+End Function
+
+
+&apos; Append LaTeX code to history file
+Sub AppendToHistoryFile(equationCode as String)
+
+	Dim str as String, strline as String, URL as String, EOL as String	
+	Dim oFileAccess as Variant, oInputStream as Variant, oOutputStream as Variant
+
+	&apos; End of line string for Windows and Linux or MacOS X
+	If getGUIType() = 1 Then EOL = chr(13) &amp; chr(10) else EOL = chr(10)
+
+	&apos; History file path
+	URL = ConvertToURL( glb_UserPath &amp; &quot;history.txt&quot; )
+
+	&apos; Initialize file content
+	str = &quot;&quot;
+
+	&apos; File access
+	oFileAccess = CreateUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+	
+	&apos; Read file if it exists (we want UTF-8 encoding so we use SimpleFileAccess interface)
+	If FileExists(URL) Then
+	
+		&apos; Handle read errors
+		On Error GoTo ReadError
+		
+		&apos; Open file for reading	
+		oInputStream = createUnoService(&quot;com.sun.star.io.TextInputStream&quot;)
+		oInputStream.setInputStream(oFileAccess.openFileRead(URL))
+
+		&apos; Read file
+		Do while not oInputStream.isEOF()
+		
+			&apos; Read line
+			strline = oInputStream.readLine()
+			
+			&apos; Append to file content
+			If str = &quot;&quot; Then str = strline Else str = str &amp; EOL &amp; strline
+			
+		Loop
+
+		&apos; Close file
+		oInputStream.closeInput()
+		
+		&apos; Restore error handler
+		On Error GoTo 0 
+
+	End If
+
+	&apos; Delimiter is &quot;¶&quot;
+	strline = equationCode &amp; &quot;¶&quot;
+
+	&apos; Handle write errors
+	On Error GoTo WriteError
+
+	&apos; Open file for writing
+	oOutputStream = CreateUnoService(&quot;com.sun.star.io.TextOutputStream&quot;)
+	oOutputStream.setOutputStream(oFileAccess.openFileWrite(URL))
+	
+	&apos; Write file content
+	If str = &quot;&quot; Then oOutputStream.writeString(strline) Else oOutputStream.writeString(str &amp; EOL &amp; strline)
+	
+	&apos; Close file
+	oOutputStream.closeOutput()
+	
+	Exit Sub
+
+	ReadError:
+	MsgBox( _(&quot;Error: can&apos;t read history file...&quot;), 48, &quot;TexMaths&quot; )
+	Exit Sub
+
+	WriteError:
+	MsgBox( _(&quot;Error: can&apos;t write to history file...&quot;), 48, &quot;TexMaths&quot; )
+
+End Sub 
+
+
+&apos; Read history file and store LaTeX equations to an array of String
+&apos; When HISTORY_MAX_SIZE entries is attained, we keep the last HISTORY_MAX_SIZE/2 entries
+&apos; to keep history file to a reasonable size
+Sub ReadFromHistoryFile(History as Variant, nHistory as Integer)
+
+	Dim StrArray(0) as String, str as String, EOL as String
+	Dim n as Integer, i as Integer
+
+	&apos; End of line string for Windows and Linux or MacOS X
+	If getGUIType() = 1 Then EOL = chr(13) &amp; chr(10) else EOL = chr(10)
+
+	&apos; History file path
+	Dim URL as String
+	URL = glb_UserPath &amp; &quot;history.txt&quot;
+	
+	&apos; File does not exist yet
+	If Not FileExists(URL) Then Exit Sub
+	
+	&apos; Handle read errors
+	On Error GoTo ReadError
+
+	&apos; Open file for reading
+	Dim oFileAccess as Variant, oInputStream as Variant
+	oFileAccess = CreateUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+	oInputStream = CreateUnoService(&quot;com.sun.star.io.TextInputStream&quot;)
+	oInputStream.setInputStream(oFileAccess.openFileRead(URL))
+
+	&apos; Delimiter is &quot;¶&quot;
+	Dim CharArray(0) as Variant
+	CharArray(0) = Asc(&quot;¶&quot;)
+
+	&apos; Read history file
+	n = 0
+	While Not oInputStream.isEOF()
+	
+		&apos; Read string
+		str = oInputStream.readString(CharArray, TRUE)
+
+		&apos; String not empty
+		If Len(str) &gt; 0 Then
+		
+			&apos; Get rid of the first EOLs if any
+			While Left(str, Len(EOL)) = EOL
+			
+				str = mid(str, Len(EOL) + 1, Len(str) - Len(EOL))
+				
+			Wend
+			
+		End If
+
+		&apos; Corrected string not empty
+		If Len(str) &gt; 0 Then
+			
+			&apos; Push to history array
+			StrArray(n) = str
+			n = n + 1
+			ReDim Preserve StrArray(n)
+		
+		End If
+					
+	Wend
+
+	&apos; Close file
+	oInputStream.closeInput()
+	
+	&apos; Restore error handler
+	On Error GoTo 0
+	
+	&apos; Maximum history size attained
+	If n &gt; HISTORY_MAX_SIZE Then
+	
+		&apos; Handle write errors
+		On Error GoTo WriteError
+
+		&apos; Backup current history file
+		Dim backupURL as String
+		backupURL = glb_UserPath &amp; &quot;history-&quot; &amp; CDateToIso(Now()) &amp; &quot;-&quot; &amp; Hour(Now()) &amp; Minute(Now()) &amp; Second(Now()) &amp; &quot;.txt&quot;
+		oFileAccess.copy(URL, backupURL)
+		oFileAccess.kill(URL)
+		
+		&apos; Copy the last HISTORY_MAX_SIZE/2 entries to a new history file and populate the history array
+		Dim StrArrayOut(HISTORY_MAX_SIZE/2) as String, oOutputStream as Variant
+		oOutputStream = CreateUnoService(&quot;com.sun.star.io.TextOutputStream&quot;)
+		oOutputStream.setOutputStream(oFileAccess.openFileWrite(URL))
+
+		&apos; Copy to history file
+		For i = 0 To HISTORY_MAX_SIZE/2 - 1
+		
+			&apos; Delimiter is &quot;¶&quot;
+			StrArrayOut(i) = StrArray(n - HISTORY_MAX_SIZE/2 + i)
+			oOutputStream.writeString(StrArrayOut(i) &amp; &quot;¶&quot; &amp; EOL)
+		
+		Next
+
+		&apos; Close the file
+		oOutputStream.closeOutput()
+		
+		&apos; Restore error handler
+		On Error GoTo 0
+		
+		&apos; Copy the array
+		History = StrArrayOut
+		nHistory = HISTORY_MAX_SIZE/2
+		
+	&apos; Populate history array
+	Else
+
+		History = StrArray
+		nHistory = n
+
+	End If
+	
+	Exit Sub
+	
+	ReadError:
+	MsgBox( _(&quot;Error: can&apos;t read history file...&quot;), 48, &quot;TexMaths&quot; )
+	Exit Sub
+
+	WriteError:
+	MsgBox( _(&quot;Error: can&apos;t write to history file...&quot;), 48, &quot;TexMaths&quot; )
+
+End Sub
+
+
+&apos; Push LaTeX code to history
+Sub PushToHistory(equationCode as String, History as Variant, nHistory as Integer)
+
+	Dim push as Boolean
+	
+	&apos; Don&apos;t push if the equation is the same as the previous one
+	push = TRUE
+	If nHistory &gt; 0 Then
+	
+		If History(nHistory - 1) = equationCode Then push = FALSE
+		
+	End If
+
+	&apos; Push to history
+	If push = TRUE Then
+	
+		History(nHistory) = equationCode
+		nHistory = nHistory + 1
+		ReDim Preserve History(nHistory)
+	 	
+	 	&apos; Append to history file
+	 	AppendToHistoryFile(equationCode)
+
+	End If
+
+End Sub
+
+
+&apos; Get text width (in pixels) for a given font name, size and scaling factor 
+Function GetTextWidth(str as String, fontName as String, fontHeight as Integer, scalingFactor as Double) as Integer
+    
+    Dim fontSlant as Integer, fontWeight as Integer          
+    fontSlant = com.sun.star.awt.FontSlant.NONE
+    fontWeight = com.sun.star.awt.FontWeight.NORMAL
+
+    Dim oFontDesc as new com.sun.star.awt.FontDescriptor
+    oFontDesc.Name = fontName
+    oFontDesc.Height = fontHeight
+    oFontDesc.Slant = fontSlant
+    oFontDesc.Weight = fontWeight
+
+    Dim oDevice as Variant
+    oDevice = CreateUnoService(&quot;com.sun.star.awt.Toolkit&quot;).createScreenCompatibleDevice(0, 0)
+
+    Dim oFont as Variant
+  	oFont = oDevice.getFont(oFontDesc)
+
+    &apos; Conversion to pixels
+    Dim width as Integer
+	width = oFont.getStringWidth(str) * scalingFactor * 2.54 / 72 * 1000
+	
+	GetTextWidth = width 
+	
+End Function
+
+</script:module>

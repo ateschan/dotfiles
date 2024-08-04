@@ -1,0 +1,240 @@
+
+1. Les modes de TexMaths
+
+Depuis la version 0.51, TexMaths dispose de deux modes d'équations, en fonction de la position du curseur dans un document Writer, Impress ou Draw. Lorsque le curseur se trouve à l'intérieur d'une zone de texte (dans Impress la zone où vous tapez votre texte, dans Draw vous entrez dans une zone de texte en double-cliquant sur un formulaire et dans Writer lorsqu'une zone de texte est insérée sur la page), TexMaths passe automatiquement en mode Texte. Partout ailleurs, TexMaths utilise le mode LaTeX.
+
+En mode LaTeX, vous obtenez comme d'habitude votre équation sous la forme d'une image graphique au format PNG ou SVG. En mode Texte, l'équation est insérée sous la forme d'un ensemble de caractères utilisant les polices TexMaths (ces polices sont spécifiques à TexMaths et sont automatiquement installées en cas de besoin). En effet, en raison d'une limitation de LibreOffice, il n'est pas possible d'insérer des graphiques dans une zone de texte et TexMaths doit donc insérer les équations sous forme de texte.
+
+Le mode Texte présente certaines caractéristiques et limitations qui sont expliquées ci-dessous, au paragraphe 6.
+ 
+
+
+2. La barre d'outils TexMaths
+
+Une fois l'extension TexMaths installée dans LibreOffice, vous devriez voir une nouvelle barre d'outils dans Writer, Impress et Draw. Il s'agit de la barre d'outils TexMaths. Dans Writer, cette barre d'outils est composée de quatre icônes, alors que dans Impress et Draw, il n'y en a que trois.
+
+Dans Writer, un clic sur l'icône la plus à gauche (celle avec le symbole Pi bleu) lance la macro Équations TexMaths. La deuxième icône est utilisée pour les équations numérotées. La troisième icône est liée à la macro Recompiler les équations TexMaths. Enfin, un clic sur l'icône la plus à droite ouvre la boîte de dialogue Configuration système TexMaths. Notez que dans Impress et Draw, la deuxième icône n'est pas présente. Il existe également un sous-menu Outils / TexMaths, situé juste au-dessus du sous-menu Outils / Macros. 
+
+
+
+3. Démarrer avec TexMaths
+
+Si LaTeX est déjà installé sur votre système, il vous suffit de cliquer sur l'icône Équations TexMaths de la barre d'outils pour commencer à utiliser TexMaths. TexMaths essaiera de trouver les programmes externes qu'il utilise pour générer des équations LaTeX. Saisissez ensuite un code LaTeX dans le champ de texte de l'éditeur d'équations et cliquez sur le bouton LaTeX pour générer l'image de l'équation.
+
+Ex : x(t) = \mu ^2 (t) devrait produire l'équation x(t)=µ²(t)
+
+Depuis TexMaths 0.46, l'éditeur d'équations dispose de palettes de symboles permettant d'entrer du code LaTeX pour plus de 300 symboles. Il suffit de cliquer sur le symbole sélectionné pour que le code LaTeX correspondant soit inséré à la position du curseur dans l'éditeur d'équations. Les icônes des symboles peuvent être masquées dans l'onglet Interface de la boîte de dialogue Configuration système TexMaths. La couleur des symboles (noir ou blanc) peut également y être définie.
+
+Si le curseur du document se trouve à l'intérieur d'une zone de texte, TexMaths passe automatiquement en mode Texte et installe les polices TexMaths pour l'utilisateur local. Dans ce cas, les équations ne sont pas insérées comme des images graphiques PNG ou SVG, mais comme des caractères normaux utilisant les polices TexMaths. 
+
+
+
+4. Générer des équations LaTeX
+
+Une fois l'équation saisie, vous pouvez la générer en cliquant sur le bouton LaTeX de la boîte de dialogue Équations de TexMaths. En mode LaTeX, une image de votre équation est générée dans le format, le type et la taille que vous avez sélectionnés. Vous pouvez choisir entre les compilateurs LaTeX, XeLaTeX et LuaLaTeX dans la boîte de dialogue Configuration système. En mode texte, cette fonction insère un ensemble de caractères utilisant les polices TexMaths pour représenter l'équation. La taille de la police est égale à celle du texte. 
+
+
+
+5. Mode LaTeX
+
+  5.1. Sélection du format d'image
+
+TexMaths permet de générer et d'insérer deux types d'images dans un document LibreOffice (lorsque le curseur ne se trouve pas dans une zone de texte). Pour sélectionner le format de l'image, utilisez le sélecteur situé dans le cadre Format de l'image.
+
+Le format d'image par défaut est le format vectoriel SVG. Il permet de redimensionner les équations LaTeX sans perte de précision et ne nécessite pas l'installation d'une police mathématique spéciale dans LibreOffice, car les symboles mathématiques sont simplement dessinés à l'aide de courbes. C'est le format préféré (et par défaut), mais il peut y avoir des problèmes lors de l'exportation de documents LibreOffice vers MS Office (voir pararaphe 11). 
+
+L'autre format d'image pris en charge est le PNG, qui est un format bitmap. Vous devez donc sélectionner une résolution pour l'utiliser. La résolution par défaut est de 600 dpi, mais vous pouvez choisir parmi plusieurs valeurs prédéfinies. L'utilisation du format PNG pour l'exportation de documents MS Office ne devrait poser aucun problème de compatibilité.
+
+Notez que chaque format n'est disponible que si le programme externe correspondant (dvisvgm pour SVG et dvipng pour PNG) est installé dans votre système et que son chemin d'accès est défini dans la boîte de dialogue Configuration système de TexMaths (généralement automatiquement défini lors de la première exécution). Au moins l'un de ces deux programmes est nécessaire pour faire fonctionner TexMaths.
+
+
+  5.2. Taille des caractères
+
+TexMaths peut gérer différentes tailles de caractères pour vos équations. Pour modifier la taille de la police, utilisez le sélecteur situé dans le cadre Taille de la police. Vous pouvez choisir parmi les tailles de police prédéfinies ou taper celle que vous préférez si elle n'est pas répertoriée.
+
+
+  5.3. La transparence
+
+Vous pouvez activer la transparence de l'image de l'équation en cochant la case Transparence dans la boîte de dialogue Équations de TexMaths. Cela peut s'avérer utile lorsque l'arrière-plan du document n'est pas blanc. La transparence peut être utilisée avec les formats d'image SVG et PNG.
+
+
+  5.4. Type d'équation
+
+En mode LaTeX, TexMaths peut générer trois types d'équations LaTeX :
+- les équations display
+- les équations inline
+- les équations LaTeX
+
+Pour sélectionner un type d'équation, il suffit d'utiliser le bouton radio situé dans le cadre Type d'équation. 
+
+Pour générer des équations display ou des équations inline, il suffit de sélectionner le type d'équation approprié et de taper le code de l'équation dans le champ de texte de la boîte de dialogue Equations de TexMaths.
+
+Ex : Pour générer le symbole alpha grec, il suffit de taper \alpha.
+
+Les équations inline sont obtenues de la même manière, mais la différence réside dans le style de l'équation générée, qui s'intègre mieux dans un texte dans Writer. Par exemple, l'indice de la somme et l'exposant sont affichés à côté du signe de la somme et non en dessous ou au-dessus.
+
+Les deux types d'équations sont idéaux pour les équations simples d'une ligne et l'alignement vertical dans le texte est correct, mais ils ne peuvent pas gérer les équations multilignes ou les environnements LaTeX plus généraux. Pour ce type d'équations, sélectionnez le type d'équation LaTeX et saisissez votre équation entre les instructions \begin{} et \end{}. Vous pouvez utiliser toutes les instructions d'environnements LaTeX.
+
+Ex : Tapez les lignes suivantes pour afficher une équation de trois lignes, alignée sur le signe =.
+\begin{align*}
+x &= 1 \\
+y &= 2x+1\\N
+&= 3\\
+\N-{align*}
+
+
+  5.5. Nom de l'équation
+
+Dans la boîte de dialogue Équations de TexMaths, vous pouvez saisir une étiquette dans le champ de texte Nom. Cela permet de retrouver une équation par son nom et peut s'avérer utile lors de l'utilisation d'animations dans Impress.
+
+
+  5.6. Préférences
+
+TexMaths est livré avec certains paramètres par défaut. Si ces paramètres ne vous conviennent pas, vous pouvez les modifier en utilisant la boîte de dialogue Préférences de TexMaths qui s'obtient en cliquant sur le bouton Préférences. Cette boîte de dialogue permet de modifier le format de l'image, la taille de la police, le type d'équation, etc. pour chaque type de document LibreOffice. Vous pouvez ensuite enregistrer vos nouveaux paramètres, restaurer les paramètres par défaut ou charger des paramètres déjà enregistrés.
+
+
+  5.7. Préambule LaTeX
+
+En cliquant sur le bouton Préambule, la boîte de dialogue Préambule s'affiche et permet d'ajuster votre préambule LaTeX. Par exemple, pour générer des équations en couleur, décommentez les trois lignes suivantes du préambule par défaut, modifiez la valeur de la couleur RVB comme vous le souhaitez et enregistrez le préambule.
+
+%\definecolor{fgcolor}{RGB}{0,0,255}
+%\definecolor{bgcolor}{RGB}{255,0,0}
+%\pagecolor{bgcolor}\color{fgcolor}
+
+Désormais, toutes les nouvelles équations bénéficieront du schéma de couleurs que vous avez défini dans le préambule. Notez que les équations dont l'arrière-plan est coloré ne sont plus transparentes, même si l'option de transparence a été cochée. Par conséquent, vous devez supprimer l'arrière-plan coloré si vous souhaitez obtenir la transparence.
+
+Le préambule est stocké dans les propriétés du document. Ainsi, chaque document peut avoir son propre préambule. Notez que le préambule par défaut est global et ne peut être modifié. Notez que LaTeX, XeLaTeX et LuaLaTeX ont un préambule par défaut différent.
+
+
+  5.8. Commandes \input, \include et \usepackage
+
+Depuis TexMaths 0.41, les commandes LaTeX \input et \include peuvent être utilisées pour insérer le contenu d'un fichier texte LaTeX (.tex). Les fichiers .tex insérés sont supposés se trouver dans le même répertoire que le document.
+
+Ex : Dans le document mon_doc.odt, la commande LaTeX :
+
+\include{my_equations}
+
+peut être utilisée pour insérer le contenu du fichier LaTeX my_equations.tex à condition que ce fichier soit situé dans le même répertoire que my_doc.odt. 
+
+Il est également possible d'utiliser des fichiers .sty personnalisés à l'aide des commandes \usepackage. Ces commandes doivent être insérées dans le préambule et ensuite (si souhaité) stockées dans le document en cours. Les fichiers .sty doivent être situés dans le même répertoire que le document.
+
+Ex : Dans le document mon_doc.odt, le style de document mon_style.sty peut être utilisé en ajoutant au préambule de LaTeX la commande :
+
+\n-usepackage{my_style}
+
+Le fichier my_style.sty doit se trouver dans le même répertoire que my_doc.odt, sinon cela ne fonctionnera pas.
+
+
+  5.9. Texte vers LaTeX dans Writer
+
+Tapez du code LaTeX directement dans un document Writer (c'est-à-dire sans ouvrir la boîte de dialogue TexMaths), sélectionnez le texte et cliquez sur l'icône Équations TexMaths (ou utilisez un raccourci clavier si vous en avez défini un). Le texte sélectionné est alors converti silencieusement en une image d'équation LaTeX. Le format d'image appliqué, la taille et le type d'équation sont ceux définis par défaut dans les préférences de TexMaths. Notez que cette fonction ne fonctionne pas dans Writer lorsque le curseur se trouve à l'intérieur d'une zone de texte.
+
+
+  5.10. Édition d'équations
+
+Dans un document LibreOffice, sélectionnez une image d'équation (déjà générée avec TexMaths) et cliquez sur l'icône Équations TexMaths dans la barre d'outils TexMaths (ou utilisez un raccourci clavier si vous en avez défini un). La boîte de dialogue Équations apparaît alors, avec le texte de votre équation sélectionné. Il suffit de modifier ce texte et de cliquer sur le bouton LaTeX pour générer l'équation modifiée.
+
+Vous pouvez bien sûr fermer un document, l'ouvrir à nouveau et modifier les équations sauvegardées.
+
+
+  5.11. Recompilation des équations TexMaths
+
+Lorsqu'un document (dans Writer, Impress ou Draw) contient de nombreuses équations, il peut être utile de modifier en une seule fois leur taille de police, leur transparence, leur format d'image, etc. C'est l'objet de la macro Recompiler les équations TexMaths.
+
+En cliquant sur l'icône de la barre d'outils correspondante (celle avec la roue dentée), vous ouvrez une boîte de dialogue dans laquelle vous pouvez modifier un certain nombre de paramètres de l'équation et le préambule. Si vous ne souhaitez pas modifier un paramètre à partir d'une liste, activez le bouton Ne pas modifier.
+
+Dans l'un des trois types de documents, vous pouvez recompiler toutes les équations du document en sélectionnant l'option Recompiler toutes les équations.
+
+Dans les documents Writer, en sélectionnant l'option Recompiler les équations sélectionnées, vous pouvez choisir de ne recompiler que les équations situées dans la zone de texte sélectionnée. Notez qu'en raison de certaines limitations des sélections dans LibreOffice, cette macro ne recompile pas les équations situées dans les tableaux, les blocs de texte, l'en-tête et le pied de page. Si nécessaire, vous pouvez recompiler ces équations une par une, en les éditant de la manière habituelle. 
+
+Dans les documents Impress et Draw, en sélectionnant l'option Recompiler les équations de la diapositive, vous pouvez recompiler uniquement les équations situées dans la diapositive en cours.
+
+Lorsque tous les paramètres et options ont été définis, cliquez sur le bouton Exécuter et toutes les équations ou les équations sélectionnées devraient être mises à jour avec les nouvelles valeurs des paramètres. Lorsqu'il s'agit de centaines d'équations, cette opération peut prendre un certain temps et demande un peu de patience...
+
+
+  5.12. Numérotation des équations dans Writer
+
+La numérotation des équations est aussi simple que de cliquer sur l'icône Équations numérotées TexMaths (ou d'entrer un raccourci clavier si vous en avez défini un), d'entrer votre équation et de cliquer sur le bouton LaTeX. Une équation centrée et numérotée (avec numérotation à gauche ou à droite) est alors automatiquement insérée dans votre document Writer.
+
+Vous pouvez également sélectionner l'espacement souhaité et la légende de l'équation dans l'onglet Options de la boîte de dialogue Configuration système TexMaths.
+
+Les équations numérotées ne peuvent pas être insérées dans Writer lorsque le curseur se trouve dans une zone de texte. 
+
+
+  5.13. Compatibilité avec ooolatex
+
+À partir de la version 0.34, TexMaths est compatible avec ooolatex. Cela signifie que si vous avez un document qui contient des équations ooolatex, vous pouvez éditer ces équations en les sélectionnant (une par une) et en appelant la macro Équations TexMaths. Vous pouvez ensuite modifier le code LaTeX et régénérer l'équation au format SVG ou PNG, selon vos préférences.
+
+
+
+6. Mode texte
+
+  6.1. Équations
+
+Le mode texte est automatiquement sélectionné par TexMaths lorsque le curseur se trouve à l'intérieur d'une zone de texte. Dans Impress, c'est la seule façon d'entrer une équation en ligne qui se déplace avec le texte lorsque celui-ci est modifié. En mode Texte, TexMaths tente de convertir le code LaTeX en un ensemble de caractères utilisant les polices TexMaths. 
+
+En mode texte, il n'est possible de générer que des équations simples comportant au maximum un seul niveau d'indice et d'exposant. Tout le reste n'est pas pris en charge. Notez que dans Impress, il est toujours possible de générer des équations complexes en mode LaTeX en plaçant le curseur en dehors des zones de texte et en cliquant sur l'icône Équations TexMaths.
+
+
+  6.2. Les environnements
+
+En mode texte, les accolades sont utilisées pour obtenir des environnements avec différentes positions et propriétés, comme dans l'équation suivante :
+y_n = \sum_{n=1}^{N-1} x_n
+
+Tous les symboles qui ne sont pas grisés dans la palette de symboles peuvent être saisis.
+
+Il est également possible d'utiliser des environnements simples pour formater votre équation :
+- \text{}, \textrm{}, \textbf{}, \textit{} pour le formatage du texte
+- \bold{}, \italic{}, \underline{} pour la graisse de la police
+- \mathbb{}, \mathcal{}, \mathscr{}, \mathfrak{} pour les polices mathématiques spéciales
+- \huge{}, \Huge{}, \large{}, \Large{}, \small{}, \tiny{} pour la taille de la police
+
+Vous pouvez également imbriquer des environnements, comme dans l'exemple suivant :
+w \textrm{\large{texte}} x
+
+
+  6.3. Partage de documents contenant des équations de texte
+  
+Si vous souhaitez partager un document contenant des équations TexMaths, il n'est pas nécessaire d'envoyer les polices TexMaths à votre destinataire. Au lieu de cela, vous pouvez incorporer les polices TexMaths dans votre document en utilisant le menu Fichier / Propriétés / Polices / Incorporation de polices et en activant l'option "Incorporer les polices dans le document". Cela fonctionne de la même manière pour les documents Writer / Impress et Draw.
+
+
+7. L'historique
+
+Depuis la version 0.51, un mécanisme d'historique permet de retrouver les codes d'équation précédents dans l'éditeur d'équations. Les deux boutons << et >> permettent de naviguer dans l'historique et le bouton <> permet de l'effacer.
+ 
+
+
+8. Configuration système
+
+Un clic sur la troisième icône ouvre le dialogue de configuration du système TexMaths. Dans le premier onglet de cette boîte de dialogue, vous pouvez modifier les chemins de fichiers des programmes externes. Depuis TexMaths 0.46, le chemin d'accès complet doit être indiqué.
+
+Le deuxième onglet permet de sélectionner le compilateur LaTeX (LaTeX, XeLaTeX ou LuaLaTeX, si ces derniers sont installés et supportés par la version de dvisvgm que vous utilisez. Notez que XeLaTeX ne peut pas être utilisé pour produire des images d'équations au format PNG). Des options pour la numérotation des équations et la compatibilité avec MS Word sont également fournies. Dans le troisième onglet, il est possible de sélectionner la police utilisée dans l'éditeur d'équations et de définir diverses options relatives aux icônes des symboles. Le quatrième onglet de la boîte de dialogue Configuration système permet de définir certains raccourcis clavier pour lancer les macros TexMaths.
+
+
+
+9. Exportation de documents vers MS Office
+
+Si vous prévoyez d'exporter vos documents vers MS Office (Word et Powerpoint, quelles que soient les versions), vous pouvez enregistrer vos documents LibreOffice aux formats .docx et .pptx.
+
+Il est également recommandé d'activer l'option de compatibilité avec l'alignement vertical de Word (dans la boîte de dialogue Configuration système TexMaths) si vos documents Writer doivent être exportés vers Word. Cela réglera le problème de l'alignement vertical erratique des équations dans Word.
+
+
+
+10. Raccourcis clavier
+
+Pour configurer les raccourcis de lancement des équations TexMaths avec ou sans numérotation, cliquez sur le bouton Configuration système TexMaths de la barre d'outils TexMaths et définissez vos raccourcis. Pour les équations sans numérotation, vous pouvez avoir un seul raccourci pour toutes les applications ou un raccourci différent pour chacune d'entre elles. Les équations numérotées ne pouvant être utilisées que dans Writer, il n'y a qu'un seul raccourci pour celles-ci.
+
+Dans la boîte de dialogue Equations de TexMaths, vous pouvez utiliser les raccourcis suivants :
+- Esc pour fermer la boîte de dialogue sans générer d'équation
+- Alt-L ou Ctrl-L pour générer une équation
+- Alt-P ou Ctrl-P pour afficher la boîte de dialogue Préférences
+- Alt-B ou Ctrl-B pour afficher la boîte de dialogue Préambule
+
+
+11. Problèmes connus
+
+- Bien que développé pour LibreOffice, TexMaths peut également être utilisé dans Apache Openoffice 4.x.
+
+- Les équations qui comprennent des commandes PSTricks ne peuvent pas être rendues correctement sous forme d'images PNG à cause de dvipng. Vous pouvez utiliser le format SVG à la place.
+
+- Lors de l'exportation de documents Impress contenant des équations Texte vers le format MS PowerPoint, même si l'option d'incorporation des polices est activée dans Impress, il y a un bug qui fait que les polices incorporées ne sont pas disponibles dans PowerPoint. Heureusement, il existe une solution de contournement : sous Windows, après avoir installé les polices TexMaths, ouvrez le fichier .pptx avec PowerPoint et incorporez les polices (utilisez Fichier / Options / Enregistrer, puis Incorporer les polices dans le fichier et sélectionnez l'option d'incorporation souhaitée). Maintenant votre document .pptx a des polices incorporées et peut être partagé avec d'autres personnes. 

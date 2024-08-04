@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="TexMathsRecompileEquationsl_GUI" dlg:tab-index="0" dlg:left="202" dlg:top="146" dlg:width="204" dlg:height="245" dlg:page="3" dlg:closeable="true" dlg:moveable="true" dlg:title="TexMaths Recompile Equations">
+ <dlg:bulletinboard>
+  <dlg:combobox dlg:id="FontSize" dlg:tab-index="1" dlg:left="6" dlg:top="19" dlg:width="35" dlg:height="14" dlg:help-text="Text font size" dlg:spin="true" dlg:linecount="11"/>
+  <dlg:text dlg:id="PointLabel" dlg:tab-index="16" dlg:left="43" dlg:top="23" dlg:width="18" dlg:height="9" dlg:value="Points" dlg:valign="center"/>
+  <dlg:combobox dlg:id="GraphicDPI" dlg:tab-index="5" dlg:left="79" dlg:top="86" dlg:width="40" dlg:height="14" dlg:help-text="Image resolution (only for PNG images)" dlg:spin="true" dlg:linecount="8"/>
+  <dlg:text dlg:id="DPILabel" dlg:tab-index="15" dlg:left="123" dlg:top="88" dlg:width="11" dlg:height="10" dlg:value="dpi" dlg:valign="center"/>
+  <dlg:combobox dlg:id="Format" dlg:tab-index="3" dlg:left="6" dlg:top="86" dlg:width="40" dlg:height="14" dlg:help-text="Image format" dlg:spin="true">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:TexMaths.TexMathsRecompileEquations.Format_Mod?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:combobox>
+  <dlg:text dlg:id="FormatLabel" dlg:tab-index="14" dlg:left="50" dlg:top="88" dlg:width="21" dlg:height="10" dlg:value="Format" dlg:valign="center"/>
+  <dlg:button dlg:id="RunButton" dlg:tab-index="0" dlg:left="152" dlg:top="227" dlg:width="50" dlg:height="15" dlg:help-text="Recompile equations" dlg:default="true" dlg:value="~Run">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:TexMaths.TexMathsRecompileEquations.RecompileEquations?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:button dlg:id="PreambleButton" dlg:tab-index="11" dlg:left="60" dlg:top="227" dlg:width="50" dlg:height="15" dlg:help-text="Set LaTeX preamble" dlg:value="~Preamble...">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:TexMaths.TexMathsRecompileEquations.PreambleButton_Clicked?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:titledbox dlg:id="FontFrame" dlg:tab-index="18" dlg:left="2" dlg:top="3" dlg:width="200" dlg:height="53">
+   <dlg:title dlg:value="Font size"/>
+  </dlg:titledbox>
+  <dlg:titledbox dlg:id="ImageFrame" dlg:tab-index="13" dlg:left="2" dlg:top="68" dlg:width="200" dlg:height="57">
+   <dlg:title dlg:value="Image parameters"/>
+  </dlg:titledbox>
+  <dlg:titledbox dlg:id="CompatFrame" dlg:tab-index="17" dlg:left="2" dlg:top="112" dlg:width="200" dlg:height="47" dlg:page="2">
+   <dlg:title dlg:value="Compatibility"/>
+  </dlg:titledbox>
+  <dlg:checkbox dlg:id="Transparency" dlg:tab-index="7" dlg:left="142" dlg:top="88" dlg:width="60" dlg:height="10" dlg:help-text="Image transparency" dlg:value="Transparency" dlg:valign="center" dlg:checked="false"/>
+  <dlg:button dlg:id="HelpButton" dlg:tab-index="10" dlg:left="2" dlg:top="227" dlg:width="50" dlg:height="15" dlg:help-text="Display help text" dlg:value="Help...">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:TexMaths.TexMathsHelp.HelpDialog?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:checkbox dlg:id="VertAlign" dlg:tab-index="12" dlg:left="7" dlg:top="144" dlg:width="190" dlg:height="10" dlg:page="2" dlg:help-text="Improve vertical alignment of Writer equations for Word export" dlg:value="Vertical alignment for Word export" dlg:valign="center" dlg:checked="false"/>
+  <dlg:radiogroup>
+   <dlg:radio dlg:id="RecompAllRadio" dlg:tab-index="9" dlg:left="7" dlg:top="168" dlg:width="190" dlg:height="12" dlg:help-text="Recompile all equations from the document" dlg:value="Recompile all equations" dlg:valign="center"/>
+   <dlg:radio dlg:id="RecompSelRadio" dlg:tab-index="8" dlg:left="7" dlg:top="152" dlg:width="190" dlg:height="12" dlg:help-text="Recompile equations from the selected text area (does not process equations in tables, text frames, header and footer. Recompile those one by one if necessary)" dlg:value="Recompile selected equations" dlg:valign="center"/>
+  </dlg:radiogroup>
+  <dlg:checkbox dlg:id="FixSVG" dlg:tab-index="19" dlg:left="7" dlg:top="127" dlg:width="190" dlg:height="10" dlg:page="2" dlg:help-text="Fix bad SVG rendering of equations when exporting to MS Office. Note this can affect transparency of some graphical objects (e.g. pstricks drawings)" dlg:value="Fix SVG rendering for MS Office export" dlg:valign="center" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="LeaveFontSize" dlg:tab-index="2" dlg:left="6" dlg:top="41" dlg:width="70" dlg:height="12" dlg:help-text="Don&apos;t change text font size" dlg:value="Leave as is" dlg:checked="false">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:TexMaths.TexMathsRecompileEquations.LeaveFontSizeButton_Clicked?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:checkbox>
+  <dlg:checkbox dlg:id="LeaveFormat" dlg:tab-index="4" dlg:left="6" dlg:top="110" dlg:width="70" dlg:height="12" dlg:help-text="Don&apos;t change image format" dlg:value="Leave as is" dlg:checked="false">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:TexMaths.TexMathsRecompileEquations.LeaveFormatButton_Clicked?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:checkbox>
+  <dlg:checkbox dlg:id="LeaveDpi" dlg:tab-index="6" dlg:left="79" dlg:top="110" dlg:width="70" dlg:height="12" dlg:help-text="Don&apos;t change image resolution" dlg:value="Leave as is" dlg:checked="false">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:TexMaths.TexMathsRecompileEquations.LeaveDpiButton_Clicked?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:checkbox>
+  <dlg:titledbox dlg:id="SelectionFrame" dlg:tab-index="20" dlg:left="2" dlg:top="137" dlg:width="200" dlg:height="49">
+   <dlg:title dlg:value="Selection"/>
+  </dlg:titledbox>
+  <dlg:checkbox dlg:id="LeaveTransparency" dlg:tab-index="21" dlg:left="142" dlg:top="110" dlg:width="56" dlg:height="12" dlg:help-text="Don&apos;t change image transparency" dlg:value="Leave as is" dlg:checked="false">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:TexMaths.TexMathsRecompileEquations.LeaveTransparencyButton_Clicked?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:checkbox>
+ </dlg:bulletinboard>
+</dlg:window>

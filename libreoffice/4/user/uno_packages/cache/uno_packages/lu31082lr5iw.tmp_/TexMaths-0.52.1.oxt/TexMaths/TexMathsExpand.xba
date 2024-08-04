@@ -1,0 +1,786 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="TexMathsExpand" script:language="StarBasic" script:moduleType="normal">&apos;
+&apos;    TexMathsExpand
+&apos;
+&apos;	 Copyright (C) 2012-2023 Roland Baudin (roland65@free.fr)
+&apos;    Based on the work of Geoffroy Piroux (gpiroux@gmail.com)
+&apos;
+&apos;    This program is free software; you can redistribute it and/or modify
+&apos;    it under the terms of the GNU General Public License as published by
+&apos;    the Free Software Foundation; either version 2 of the License, or
+&apos;    (at your option) any later version.
+&apos;
+&apos;    This program is distributed in the hope that it will be useful,
+&apos;    but WITHOUT ANY WARRANTY; without even the implied warranty of
+&apos;    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+&apos;    GNU General Public License for more details.
+&apos;
+&apos;    You should have received a copy of the GNU General Public License
+&apos;    along with this program; if not, write to the Free Software
+&apos;    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+&apos;
+
+&apos; 	 Macros used to expand LaTeX commands as text
+
+&apos; Force variable declaration
+Option Explicit
+
+&apos; Document caracterisation
+Private DocFontName as String
+Private DocFontHeight as Integer
+Private DocFontSlant as Integer
+Private isWriter,isImpress as Boolean
+&apos;
+&apos; Global definition of the latex code...
+Global ListLatexCode(0) as String
+Global NbrLatexCode as Integer
+Private LatexCode, ErrorMsg as String
+&apos;
+&apos; Current stack (max depth 5)
+Private iStack, StackHeight(5) as Integer
+Private StackFont(5), StackPosi(5), StackSlant(5) as String
+&apos;
+&apos; Some objects
+Private oDoc,oDocCtrl,iCursor,iCurText as Object
+&apos;
+&apos; Tex commands...
+Global NbrCateg(0),CurCategory,CurSymbol As Integer
+Global Command(1024,4),Category(0) as String
+&apos;
+Global InitOOLatexExpand as Boolean
+Private InitDialog as Boolean
+Private debug as Boolean
+&apos;
+&apos;
+&apos; Symbol font
+Private SymbolsFont
+
+
+Private Sub main()
+
+	debug = false
+	SymbolsFont = &quot;STIXGeneral&quot;
+	ErrorMsg = &quot;&quot;
+	
+	&apos; Initialisation =&gt; creation of the command list
+	&apos;if not InitOOLatexExpand then InitExpandDialog()
+	
+	&apos;Check if the Impress object is a ShapeText !
+	oDoc = StarDesktop.CurrentComponent
+	if oDoc.getImplementationName() = &quot;SdXImpressDocument&quot; then		
+		oShape = oDoc.getCurrentController().getSelection()
+		On Error Resume Next
+		sImplementaionName = oShape(0).getImplementationName()
+		On Error GoTo 0 &apos;restore the error handler
+		if sImplementaionName &lt;&gt; &quot;SvxShapeText&quot; then 
+			Msgbox &quot;Select a text frame to use the module Expand&quot;
+			exit sub
+		end if
+	end if
+	
+	&apos; Call the Expand window...	
+	ExpandDialog()
+	
+End Sub
+
+Private Sub InsertEquation()
+	
+	oDoc = StarDesktop.CurrentComponent
+	oDocCtrl = oDoc.getCurrentController()
+	
+	if oDoc.getImplementationName() =  &quot;SwXTextDocument&quot; then
+		isWriter = true
+		isImpress = False
+		iViewCursor =  oDocCtrl.ViewCursor
+		iCurText = oDoc.Text
+		iCursor = iViewCursor.Text.createTextCursorByRange(iViewCursor.end)
+		
+		&apos; Save current setting
+		DocFontName = iCursor.charFontName
+		DocFontHeight = iCursor.charHeight
+		DocFontSlant = iCursor.charPosture
+		
+		&apos; Insert the equation
+		Inline()
+		
+		&apos; Restore the setting
+		iCursor.charHeight = DocFontHeight
+		iCursor.charFontName = DocFontName
+		iCursor.charPosture = DocFontSlant
+		iCurText.insertString(iCursor, &quot; &quot; , false)
+		
+	elseif oDoc.getImplementationName() = &quot;SdXImpressDocument&quot; then
+		isWriter = False
+		isImpress = True
+		
+		oShape = oDocCtrl.getSelection()
+		if oShape(0).getImplementationName() &lt;&gt; &quot;SvxShapeText&quot; then exit sub
+		oShapeText = oShape(0)
+		oCursor = oShapeText.Text.createTextCursor()
+		oCursor.collapseToStart
+		
+		&apos; Save current setting
+		DocFontName = oCursor.charFontName
+		DocFontHeight = oCursor.charHeight
+		DocFontSlant = oCursor.charPosture
+
+		&apos; There is no text cursor usable to insert text in Impress :(
+		&apos; So we create a temporary writer file in which we expand the equation !
+		&apos; Then, we cut and paste it in the Impress document...
+		Dim arg1 As New com.sun.star.beans.PropertyValue
+		 	arg1.Name = &quot;Hidden&quot;
+		 	arg1.Value = true
+		iDoc = StarDesktop.loadComponentFromURL(&quot;private:factory/swriter&quot;, &quot;_blank&quot;, 0, Array(arg1))
+		&apos;iDoc = StarDesktop.loadComponentFromURL(&quot;private:factory/swriter&quot;, &quot;_blank&quot;, 0, Array())
+		iDocCtrl = iDoc.getCurrentController()
+		iViewCursor = iDocCtrl.getViewCursor()
+		iCurText = iViewCursor.Text
+		iCursor = iCurText.createTextCursorByRange(iViewCursor)
+		iCursor.charPosture = com.sun.star.awt.FontSlant.NONE
+
+		&apos; Put a space in the writer document before the equation
+		&apos;iCursor.charHeight = 1/4 * DocFontHeight
+		&apos;iCursor.charFontName = DocFontName
+		&apos;iCursor.charPosture = DocFontSlant
+		&apos;iCurText.insertString(iCursor, chr(127) , false)
+	
+		&apos; Expand the latex code...
+		Inline()
+		
+		&apos; Put a space after the equation and restore the setting 
+		iCursor.charHeight = DocFontHeight
+		iCursor.charFontName = DocFontName
+		iCursor.charPosture = DocFontSlant
+		iCurText.insertString(iCursor, &quot; &quot; , false)
+
+		&apos; Copy equation from the tmp doc and paste in the presentation.
+		iViewCursor.goToStart(false)
+		iViewCursor.goToEnd(true)
+		Dispatcher = createUnoService( &quot;com.sun.star.frame.DispatchHelper&quot; )
+		Dispatcher.executeDispatch( iDocCtrl.Frame, &quot;.uno:Copy&quot;, &quot;&quot;, 0, Array() )
+		iDoc.dispose()
+		Dispatcher.executeDispatch( oDocCtrl.Frame, &quot;.uno:Paste&quot;, &quot;&quot;, 0, Array() )
+	end if
+end sub
+
+Private Sub InitStack (Position as String)
+	if debug then Msgbox &quot;Init stack &quot; &amp; iStack
+	iStack = iStack + 1
+
+	StackHeight(iStack) = StackHeight(iStack-1)
+	StackFont(iStack)   = StackFont(iStack-1)
+	StackSlant(iStack)  = StackSlant(iStack-1)
+
+	if Position = &quot;&quot; then 
+		StackPosi(iStack) = StackPosi(iStack-1)
+	else
+		StackPosi(iStack) = Position	
+	end if
+	
+	if StackPosi(iStack) = &quot;^&quot; or StackPosi(iStack) = &quot;_&quot; then
+		if isWriter  then 
+			if StackPosi(iStack) = &quot;^&quot; then iCursor.charEscapement = 30
+			if StackPosi(iStack) = &quot;_&quot; then iCursor.charEscapement = -10
+			iCursor.charEscapementHeight = 70
+		elseif isImpress then
+			if StackPosi(iStack) = &quot;^&quot; then iCursor.charEscapement = 30
+			if StackPosi(iStack) = &quot;_&quot; then iCursor.charEscapement = -15
+			StackHeight(iStack) = 0.70 * StackHeight(iStack-1)
+		end if
+	end if
+End sub 
+
+Private Sub DelStack()
+	if debug then Msgbox &quot;Del stack &quot; &amp; iStack
+
+	iStack = iStack - 1
+	if iStack &lt; 1 then ErrorMsg = &quot;Error of nesting... iStack &lt; 0&quot;
+
+	&apos; If we leave a sub or sup stack...	
+	if StackPosi(iStack) = &quot;&quot; and StackPosi(iStack+1) &lt;&gt; &quot;&quot; then
+		if isWriter then iCursor.charEscapementHeight = 100
+		iCursor.charEscapement = 0		
+	end if
+End Sub
+
+&apos; Parser routine...
+Private Sub Inline()
+	&apos; Initialisation of the first stack !
+	StackHeight(0) = DocFontHeight
+	StackFont(0) = &quot;&quot;
+	StackSlant(0) = &quot;&quot;
+	StackPosi(0) = &quot;&quot;
+	iStack = 0
+	InitStack(&quot;&quot;)
+
+	&apos; if isImpress then LatexCode = &quot;&gt;&quot; &amp; LatexCode
+
+	Dim length,ln,i,j As Integer
+	Dim ch,ch2,str As String
+	i = 1
+	str = &quot;&quot;
+	length = Len(LatexCode)
+	Do While i &lt;= length
+		
+		ch = Mid(LatexCode, i, 1)
+    	ch2 = Mid(LatexCode, i+1, 1)
+    	
+    	if debug then Msgbox &quot;Inline : &quot; &amp; ch &amp; &quot; (&quot; &amp; i &amp; &quot;)&quot; 
+	
+    	Select Case ch
+
+    		Case &quot;\&quot;  &apos;Grab the macro name
+    			EmitString(str)
+    			i = DecodeTex(i)
+    		
+    		Case &quot;^&quot;, &quot;_&quot;
+    			EmitString(str)
+    			InitStack(ch)
+				i = i + 1
+				If ch2 &lt;&gt; &quot;{&quot; then
+					If ch2 = &quot;\&quot; then
+						ln = TexLen(i)
+						EmitAtom(Mid(LatexCode,i,ln))
+						i = i + ln - 1
+					else
+						EmitString(ch2)
+					end if
+					DelStack()
+				end if
+
+			Case &quot;{&quot;
+				EmitString(str)
+				InitStack(&quot;&quot;)
+				
+			Case &quot;}&quot;
+				EmitString(str)
+				DelStack()
+    			
+    		Case else
+    			str = str &amp; ch    		
+    	End Select
+    	i = i + 1
+    Loop
+    
+    if Length(str) &gt; 0 then EmitString(str)
+    
+End sub
+
+Private Function DecodeTex(i as Integer) as integer
+	Dim ch, ch2 As String
+	Dim ln As Integer
+	ln = TexLen(i)
+	ch = Mid(LatexCode, i, ln)    &apos;tex expression
+	ch2 = Mid(LatexCode, i+ln,1)  &apos;following char
+	
+	if debug then Msgbox &quot;DecodeTex &quot; &amp; ch
+	
+	Select Case ch
+		&apos; Insert spaces
+		Case &quot;\,&quot;, &quot;\;&quot;, &quot;\quad&quot;, &quot;\qquad&quot;
+			InsertSpace(ch)			
+
+		&apos; Set the size char font 
+		Case &quot;\rm&quot;, &quot;\Huge&quot;, &quot;\huge&quot;,&quot;\Large&quot;, &quot;\large&quot;, &quot;\small&quot;, &quot;\tiny&quot;
+			if ch2 = &quot;{&quot; or ch2 = &quot; &quot; then ln = ln + 1
+			if ch2 = &quot;{&quot; then InitStack(&quot;&quot;)
+			if ch = &quot;\rm&quot;    then StackFont(iStack) = &quot;cmr10&quot;
+			if ch = &quot;\Huge&quot;  then StackHeight(iStack) = 2.5  * StackHeight(iStack-1)
+			if ch = &quot;\huge&quot;  then StackHeight(iStack) = 2    * StackHeight(iStack-1)
+			if ch = &quot;\Large&quot; then StackHeight(iStack) = 1.5 * StackHeight(iStack-1)
+			if ch = &quot;\large&quot; then StackHeight(iStack) = 1.25 * StackHeight(iStack-1)
+			if ch = &quot;\small&quot; then StackHeight(iStack) = 0.75 * StackHeight(iStack-1)
+			if ch = &quot;\tiny&quot;  then StackHeight(iStack) = 0.5  * StackHeight(iStack-1)
+			
+		&apos;Case &quot;\mathcal&quot;
+		&apos;Case &quot;\mathbb&quot;
+		Case Else
+			EmitAtom(ch)
+	End Select
+	DecodeTex = i + ln - 1
+End function
+
+
+&apos; TexLen return the length of the tex commande
+&apos; If equal 0 =&gt; no a tex commande !
+Private Function TexLen(i as Integer) as Integer
+	Dim ch as String
+	Dim j as Integer
+	if Mid(LatexCode, i, 1) &lt;&gt; &quot;\&quot; then 
+		if debug then Msgbox &quot;Error TexLen : first char is not &apos;\&apos; : &quot; &amp; ch
+		TexLen = 0
+		exit function
+	end if
+	&apos; space \, or \;
+	if Mid(LatexCode, i+1, 1) = &quot;,&quot; or Mid(LatexCode, i+1, 1) = &quot;;&quot; then
+		TexLen = 2
+		exit function
+	end if
+	
+	j = i + 1 
+	Do While j &lt;= len(LatexCode)
+		ch = Mid(LatexCode, j, 1)
+		If (&quot;A&quot; &lt;= ch And ch &lt;= &quot;Z&quot;) Or (&quot;a&quot; &lt;= ch And ch &lt;= &quot;z&quot;) then
+			j = j + 1
+		Else
+			Exit Do
+		End If
+	Loop
+	TexLen = j-i
+End Function
+
+Private Sub InsertSpace(ch as String)
+	Select Case ch
+		Case &quot;\,&quot;
+			factor = .25
+		Case &quot; &quot;
+			factor = .50
+		Case &quot;\;&quot;
+			factor = .75
+		Case &quot;\quad&quot;
+			factor = 1.25
+		Case &quot;\qquad&quot;
+			factor = 2
+	End Select		
+	iCursor.charHeight = StackHeight(iStack) * factor
+	iCursor.charFontName = &quot;cmr10&quot; &apos;&quot;STIXGeneral&quot;
+	iCurText.insertString(iCursor, &quot; &quot;, false)
+	iCursor.charHeight = StackHeight(iStack)
+End Sub
+
+&apos; Emit a character or a latex commande
+Private Sub EmitAtom(str as String)
+	if debug then Msgbox &quot;EmitAtom &quot; &amp; str
+	Dim sChar, sFont as String
+	Dim j as Integer
+	
+	j = CommandId(str)
+	If j = -1 Then
+		&apos;Msgbox &quot;Error : unknown texcommand &quot; &amp; Mid(str,2)
+		Insert(Mid(str,2),&quot;cmr10&quot;,&quot;&quot;)
+		exit sub
+	End If
+	sChar = Command(j,1)
+	sFont = Command(j,2)
+	Insert(sChar,sFont,&quot;&quot;)
+End sub
+
+&apos; Emit a string in the current font
+Private sub EmitString(str As String)
+	Dim ch,font As String
+	Dim i as Integer
+	
+	if str = &quot;&quot; then exit sub
+	if debug then Msgbox &quot;EmitString &quot; &amp; str
+	
+	font = StackFont(iStack)
+	if font = &quot;&quot; then
+		i = 1
+		Do While i &lt;= Len(str)
+			ch = Mid(str, i , 1)
+			EmitChar(ch)
+    		i = i + 1 
+    	Loop
+    else &apos; if the font is defined...
+    	Insert(str, &quot;&quot;, &quot;&quot;)
+    end if
+    str = &quot;&quot;
+End sub
+
+
+Private Sub EmitChar(ch as String)
+	if debug then Msgbox &quot;EmitChar &quot; &amp; ch
+	if Len(ch) &gt; 1 then
+		ErrorMsg = &quot;Erreur: EmitChar &gt; 1&quot;
+		exit sub
+	end if
+	if ( (&quot;a&quot; &lt;= ch and ch &lt;= &quot;z&quot;) or (&quot;A&quot; &lt;= ch and ch &lt;= &quot;Z&quot;) ) then 
+		Insert(ch, &quot;cmmi10&quot;, &quot;&quot;)
+    elseif (ch = &quot;-&quot;) then
+ 		Insert(chr(123), &quot;cmr10&quot;, &quot;&quot;)
+ 	elseif (ch = &quot; &quot;) then
+ 		InsertSpace(&quot; &quot;)
+    else 
+ 		Insert(ch, &quot;cmr10&quot;, &quot;&quot;)
+    end if
+End Sub
+
+Private Sub Insert( str as String, font as String, slant as String)
+	if debug then Msgbox &quot;Insert str : &quot; &amp; str &amp; chr(13) &amp;_
+	                     &quot;      font : &quot; &amp; font &amp; chr(13) &amp;_
+	                     &quot;     slant : &quot; &amp; slant &amp; chr(13) &amp;_
+	                     &quot;             &quot; &amp; chr(13) &amp;_
+                         &quot;Stack posi : &quot; &amp; StackPosi(iStack) &amp; chr(13) &amp;_
+	                     &quot;      font : &quot; &amp; StackFont(iStack) &amp; chr(13) &amp;_
+	                     &quot;    height : &quot; &amp; StackHeight(iStack)
+
+	if font = &quot;&quot; then
+		iCursor.charFontName = StackFont(iStack)
+	else 
+		iCursor.charFontName = font
+	end if
+
+	iCursor.charHeight = StackHeight(iStack)
+	
+	if slant = &quot;\it&quot; or StackSlant(iStack) = &quot;\it&quot; then 
+		iCursor.charPosture = com.sun.star.awt.FontSlant.ITALIC
+	else 
+		iCursor.charPosture = com.sun.star.awt.FontSlant.NONE
+	end if
+	
+	iCurText.insertString(iCursor, str, false)
+End Sub
+
+
+&apos; Search from the end to make sure that commands can be redefined
+Private Function CommandId(sName As String) As Integer
+	Dim j as Integer
+	For j = NbrCateg(0) - 1 To 0 Step -1
+		If Command(j,0) = sName Then Exit For
+	Next j
+	CommandId = j
+End Function
+
+
+&apos; *************************************************
+&apos; ************* Initialisation... *****************
+&apos; *************************************************
+Private oDlgInitExpand As Object
+
+Sub InitExpandDialog( )
+	&apos;Load the library OOoLatex...
+	&apos;DialogLibraries.LoadLibrary( &quot;OOoLatex&quot; )
+	&apos;Create the dialog object
+	&apos;oDlgInitExpand = createUnoDialog( DialogLibraries.GetByName(&quot;OOoLatex&quot;).GetByName(&quot;OOoLatexInitExpand_GUI&quot;) )
+    &apos;oDlgInitExpand.Execute()
+    &apos;oDlgInitExpand.setVisible(true)
+    
+    &apos;Launch the initialization...
+    CommandsInit()
+    
+    &apos;close the window !
+    &apos;oDlgInitExpand.setVisible(false)
+    &apos;oDlgInitExpand.dispose
+End Sub
+
+&apos; Create new Tex commands from a data array !
+Private Sub newCharCommands(Catego as String, fontname As String, data As Variant)
+	Dim i As Integer
+	For i = LBound(data) to UBound(data) Step 2
+		newCommand(Catego, &quot;\&quot; &amp; data(i), chr(data(i + 1)), fontname)
+	Next i
+End Sub
+
+&apos; Create a new tex command. 
+Private Sub newCommand(Catego as String, texCom as string, char as string, fontname as string)
+	Dim iCat as Integer
+
+	&apos; iCat is the index of the category.
+	For iCat = LBound(Category) to UBound(Category)
+		if Category(iCat) = Catego then exit for
+	Next iCat
+	
+	&apos; Initialise new category
+	If iCat &gt; UBound(Category) and Catego &lt;&gt; &quot;&quot; then
+		Redim Preserve Category(iCat)
+		Redim Preserve NbrCateg(iCat)
+		Category(iCat) = Catego
+		NbrCateg(iCat) = 0
+		&apos;oDlgInitExpand.getControl(&quot;Category&quot;).text = &quot;=&gt; &quot; &amp; Catego
+	end if 
+
+	&apos;Progress bar update...
+	&apos;oDlgInitExpand.getControl(&quot;ProgressBar&quot;).Value = NbrCateg(0)
+
+	if NbrCateg(0) &gt; 1024 then 
+		Print &quot;More commands than 1024...&quot;
+		exit sub
+	end if
+	Command(NbrCateg(0),0) = texCom
+	Command(NbrCateg(0),1) = char
+	Command(NbrCateg(0),2) = fontname
+	Command(NbrCateg(0),3) = Catego
+
+	&apos; Increment the counter for category... except for All.
+	if Catego &lt;&gt; &quot;&quot; then 
+		NbrCateg(iCat) = NbrCateg(iCat) + 1
+	End if					
+
+	NbrCateg(0) = NbrCateg(0) + 1
+
+End Sub
+
+&apos; Create the array containing the commands
+&apos; Now populate the command space
+Private Sub CommandsInit()
+	Dim i As Integer
+	
+	if InitOOLatexExpand then exit sub
+	InitOOLatexExpand = true
+	Category(0) = &quot;All&quot;
+	NbrCateg(0) = 0
+	NbrLatexCode = 0
+	CurCategory = 0
+	CurSymbol = 0
+
+	Call newCharCommands(&quot;Greek&quot; ,&quot;cmmi10&quot;, _
+		Array(&quot;alpha&quot;, 174, &quot;beta&quot;, 175, &quot;gamma&quot;, 176, &quot;delta&quot;, 177, &quot;epsilon&quot;, 178, _
+           &quot;varepsilon&quot;, 34, &quot;zeta&quot;, 179, &quot;eta&quot;, 180, &quot;theta&quot;, 181, &quot;vartheta&quot;, 35, _
+           &quot;iota&quot;, 182, &quot;kappa&quot;, 183, &quot;lambda&quot;, 184, &quot;mu&quot;, 185, &quot;nu&quot;, 186, _
+           &quot;xi&quot;, 187, &quot;pi&quot;, 188, &quot;varpi&quot;, 36, &quot;rho&quot;, 189, &quot;varrho&quot;, 37, _
+           &quot;sigma&quot;, 190, &quot;varsigma&quot;, 38, &quot;tau&quot;, 191, &quot;upsilon&quot;, 192, &quot;phi&quot;, 193, _
+           &quot;varphi&quot;, 39, &quot;chi&quot;, 194, &quot;psi&quot;, 195, &quot;omega&quot;, 33))
+
+	Call newCharCommands(&quot;Greek&quot;, &quot;cmr10&quot;,_
+		Array(&quot;Gamma&quot;, 161, &quot;Delta&quot;, 162, &quot;Theta&quot;, 163, &quot;Lambda&quot;, 164, &quot;Xi&quot;, 165, _
+		  &quot;Pi&quot;, 166, &quot;Sigma&quot;, 167, &quot;Upsilon&quot;, 168, &quot;Phi&quot;, 169, _
+          &quot;Psi&quot;, 170, &quot;Omega&quot;, 173))
+
+	Call newCharCommands(&quot;Arrows&quot;, SymbolsFont,_
+		Array(&quot;leftarrow&quot;,8592,&quot;shortleftarrow&quot;,8592,&quot;uparrow&quot;,8593,&quot;rightarrow&quot;,8594,&quot;shortrightarrow&quot;,8594,_
+		&quot;downarrow&quot;,8595,&quot;leftrightarrow&quot;,8596,&quot;updownarrow&quot;,8597,&quot;nwarrow&quot;,8598,&quot;nearrow&quot;,8599,_
+		&quot;searrow&quot;,8600,&quot;swarrow&quot;,8601,&quot;nleftarrow&quot;,8602,&quot;nrightarrow&quot;,8603,&quot;leftsquigarrow&quot;,8604,_
+		&quot;rightsquigarrow&quot;,8605,&quot;twoheadleftarrow&quot;,8606,&quot;twoheaduparrow&quot;,8607,&quot;twoheadrightarrow&quot;,8608,_
+		&quot;twoheaddownarrow&quot;,8609,&quot;leftarrowtail&quot;,8610,&quot;rightarrowtail&quot;,8611,&quot;mapsfrom&quot;,8612,&quot;mapsup&quot;,8613,_
+		&quot;mapsto&quot;,8614,&quot;mapsdown&quot;,8615,&quot;updownarrowbar&quot;,8616,&quot;hookleftarrow&quot;,8617,&quot;hookrightarrow&quot;,8618,_
+		&quot;looparrowleft&quot;,8619,&quot;looparrowright&quot;,8620,&quot;leftrightsquigarrow&quot;,8621,&quot;nleftrightarrow&quot;,8622,_
+		&quot;downzigzagarrow&quot;,8623,&quot;Lsh&quot;,8624,&quot;Rsh&quot;,8625,&quot;Ldsh&quot;,8626,&quot;Rdsh&quot;,8627,&quot;linefeed&quot;,8628,&quot;carriagereturn&quot;,8629,_
+		&quot;curvearrowleft&quot;,8630,&quot;curvearrowright&quot;,8631,&quot;barovernorthwestarrow&quot;,8632,&quot;barleftarrowrightarrowbar&quot;,8633,_
+		&quot;acwopencirclearrow&quot;,8634,&quot;cwopencirclearrow&quot;,8635,&quot;leftharpoonup&quot;,8636,&quot;leftharpoondown&quot;,8637,_
+		&quot;upharpoonright&quot;,8638,&quot;upharpoonleft&quot;,8639,&quot;rightharpoonup&quot;,8640,&quot;rightharpoondown&quot;,8641,_
+		&quot;downharpoonright&quot;,8642,&quot;downharpoonleft&quot;,8643,&quot;rightleftarrows&quot;,8644,&quot;updownarrows&quot;,8645,_
+		&quot;leftrightarrows&quot;,8646,&quot;leftleftarrows&quot;,8647,&quot;upuparrows&quot;,8648,&quot;rightrightarrows&quot;,8649,_
+		&quot;downdownarrows&quot;,8650,&quot;leftrightharpoons&quot;,8651,&quot;rightleftharpoons&quot;,8652,&quot;nLeftarrow&quot;,8653,_
+		&quot;nLeftrightarrow&quot;,8654,&quot;nRightarrow&quot;,8655,&quot;Leftarrow&quot;,8656,&quot;Uparrow&quot;,8657,&quot;Rightarrow&quot;,8658,_
+		&quot;Downarrow&quot;,8659,&quot;Leftrightarrow&quot;,8660,&quot;Updownarrow&quot;,8661,&quot;Nwarrow&quot;,8662,&quot;Nearrow&quot;,8663,&quot;Searrow&quot;,8664,_
+		&quot;Swarrow&quot;,8665,&quot;Lleftarrow&quot;,8666,&quot;Rrightarrow&quot;,8667,&quot;longleftzigzagarrow&quot;,8668,&quot;leftzigzagarrow&quot;,8668,_
+		&quot;rightzigzagarrow&quot;,8669,&quot;nHuparrow&quot;,8670,&quot;nHdownarrow&quot;,8671,&quot;ldasharrhead&quot;,8672,&quot;leftdasharrow&quot;,8672,_
+		&quot;leftdasharrowhead&quot;,8673,&quot;rightdasharrow&quot;,8674,&quot;updasharrow&quot;,8674,&quot;downdasharrow&quot;,8675,&quot;barleftarrow&quot;,8676,_
+		&quot;rightarrowbar&quot;,8677,&quot;leftwhitearrow&quot;,8678,&quot;upwhitearrow&quot;,8679,&quot;rightwhitearrow&quot;,8680,&quot;downwhitearrow&quot;,8681,_
+		&quot;whitearrowupfrombar&quot;,8682,&quot;circleonrightarrow&quot;,8692,&quot;downuparrows&quot;,8693,&quot;rightthreearrows&quot;,8694,_
+		&quot;nvleftarrow&quot;,8695,&quot;nvrightarrow&quot;,8696,&quot;nvleftrightarrow&quot;,8697,&quot;nVleftarrow&quot;,8698,&quot;nVrightarrow&quot;,8699,_
+		&quot;nVleftrightarrow&quot;,8700,&quot;leftarrowtriangle&quot;,8701,&quot;rightarrowtriangle&quot;,8702,&quot;leftrightarrowtriangle&quot;,8703))
+
+	Call newCharCommands(&quot;Arrows-A&quot;, SymbolsFont,_
+		Array(&quot;UUparrow&quot;,10224,&quot;DDownarrow&quot;,10225,&quot;acwgapcirclearrow&quot;,10226,&quot;cwgapcirclearrow&quot;,10227,_
+		&quot;rightarrowonoplus&quot;,10228,&quot;longleftarrow&quot;,10229,&quot;longrightarrow&quot;,10230,&quot;longleftrightarrow&quot;,10231,_
+		&quot;Longleftarrow&quot;,10232,&quot;Longrightarrow&quot;,10233,&quot;Longleftrightarrow&quot;,10234,&quot;longmapsfrom&quot;,10235,_
+		&quot;longmapsto&quot;,10236,&quot;Longmapsfrom&quot;,10237,&quot;Longmapsto&quot;,10238,&quot;longrightzigzagarrow&quot;,10239))
+
+	Call newCharCommands(&quot;Arrows-B&quot;, SymbolsFont,_
+		Array(&quot;nvtwoheadrightarrow&quot;,10496,&quot;nVtwoheadrightarrow&quot;,10497,&quot;nvLeftarrow&quot;,10498,&quot;nvRightarrow&quot;,10499,_
+		&quot;nvLeftrightarrow&quot;,10500,&quot;twoheadmapsto&quot;,10501,&quot;Mapsfrom&quot;,10502,&quot;Mapsto&quot;,10503,&quot;downarrowbarred&quot;,10504,_
+		&quot;uparrowbarred&quot;,10505,&quot;Uuparrow&quot;,10506,&quot;Ddownarrow&quot;,10507,&quot;leftbkarrow&quot;,10508,&quot;rightbkarrow&quot;,10509,_
+		&quot;leftdbkarrow&quot;,10510,&quot;dbkarow&quot;,10511,&quot;drbkarow&quot;,10512,&quot;rightdotarrow&quot;,10513,&quot;baruparrow&quot;,10514,_
+		&quot;downarrowbar&quot;,10515,&quot;nvrightarrowtail&quot;,10516,&quot;nVrightarrowtail&quot;,10517,&quot;twoheadrightarrowtail&quot;,10518,_
+		&quot;nvtwoheadrightarrowtail&quot;,10519,&quot;nVtwoheadrightarrowtail&quot;,10520,&quot;lefttail&quot;,10521,&quot;righttail&quot;,10522,_
+		&quot;leftdbltail&quot;,10523,&quot;rightdbltail&quot;,10524,&quot;diamondleftarrow&quot;,10525,&quot;rightarrowdiamond&quot;,10526,_
+		&quot;diamondleftarrowbar&quot;,10527,&quot;barrightarrowdiamond&quot;,10528,&quot;nwsearrow&quot;,10529,&quot;neswarrow&quot;,10530,&quot;hknwarrow&quot;,10531,_
+		&quot;hknearrow&quot;,10532,&quot;hksearow&quot;,10533,&quot;hkswarow&quot;,10534,&quot;tona&quot;,10535,&quot;toea&quot;,10536,&quot;tosa&quot;,10537,&quot;towa&quot;,10538,_
+		&quot;rdiagovfdiag&quot;,10539,&quot;fdiagovrdiag&quot;,10540,&quot;seovnearrow&quot;,10541,&quot;neovsearrow&quot;,10542,&quot;fdiagovnearrow&quot;,10543,_
+		&quot;rdiagovsearrow&quot;,10544,&quot;neovnwarrow&quot;,10545,&quot;nwovnearrow&quot;,10546,&quot;rightcurvedarrow&quot;,10547,&quot;uprightcurvearrow&quot;,10548,_
+		&quot;downrightcurvedarrow&quot;,10549,&quot;leftdowncurvedarrow&quot;,10550,&quot;rightdowncurvedarrow&quot;,10551,&quot;cwrightarcarrow&quot;,10552,_
+		&quot;acwleftarcarrow&quot;,10553,&quot;acwoverarcarrow&quot;,10554,&quot;acwundercurvearrow&quot;,10555,&quot;curvearrowrightminus&quot;,10556,_
+		&quot;curvearrowleftplus&quot;,10557,&quot;cwundercurvearrow&quot;,10558,&quot;ccwundercurvearrow&quot;,10559,&quot;acwcirclearrow&quot;,10560,_
+		&quot;cwcirclearrow&quot;,10561,&quot;rightarrowshortleftarrow&quot;,10562,&quot;leftarrowshortrightarrow&quot;,10563,_
+		&quot;shortrightarrowleftarrow&quot;,10564,&quot;rightarrowplus&quot;,10565,&quot;leftarrowplus&quot;,10566,&quot;rightarrowx&quot;,10567,_
+		&quot;leftrightarrowcircle&quot;,10568,&quot;twoheaduparrowcircle&quot;,10569,&quot;leftrightharpoonupdown&quot;,10570,_
+		&quot;leftrightharpoondownup&quot;,10571,&quot;updownharpoonrightleft&quot;,10572,&quot;updownharpoonleftright&quot;,10573,_
+		&quot;leftrightharpoonupup&quot;,10574,&quot;updownharpoonrightright&quot;,10575,&quot;leftrightharpoondowndown&quot;,10576,_
+		&quot;updownharpoonleftleft&quot;,10577,&quot;barleftharpoonup&quot;,10578,&quot;rightharpoonupbar&quot;,10579,&quot;barupharpoonright&quot;,10580,_
+		&quot;downharpoonrightbar&quot;,10581,&quot;barleftharpoondown&quot;,10582,&quot;rightharpoondownbar&quot;,10583,&quot;barupharpoonleft&quot;,10584,_
+		&quot;downharpoonleftbar&quot;,10585,&quot;leftharpoonupbar&quot;,10586,&quot;barrightharpoonup&quot;,10587,&quot;upharpoonrightbar&quot;,10588,_
+		&quot;bardownharpoonright&quot;,10589,&quot;leftharpoondownbar&quot;,10590,&quot;barrightharpoondown&quot;,10591,&quot;upharpoonleftbar&quot;,10592,_
+		&quot;bardownharpoonleft&quot;,10593,&quot;leftharpoonsupdown&quot;,10594,&quot;upharpoonsleftright&quot;,10595,&quot;rightharpoonsupdown&quot;,10596,_
+		&quot;downharpoonsleftright&quot;,10597,&quot;leftrightharpoonsup&quot;,10598,&quot;leftrightharpoonsdown&quot;,10599,_
+		&quot;rightleftharpoonsup&quot;,10600,&quot;rightleftharpoonsdown&quot;,10601,&quot;leftharpoonupdash&quot;,10602,&quot;dashleftharpoondown&quot;,10603,_
+		&quot;rightharpoonupdash&quot;,10604,&quot;dashrightharpoondown&quot;,10605,&quot;updownharpoonsleftright&quot;,10606,_
+		&quot;downupharpoonsleftright&quot;,10607,&quot;rightimply&quot;,10608,&quot;equalrightarrow&quot;,10609,&quot;similarrightarrow&quot;,10610,_
+		&quot;leftarrowsimilar&quot;,10611,&quot;rightarrowsimilar&quot;,10612,&quot;rightarrowapprox&quot;,10613,&quot;ltlarr&quot;,10614,&quot;leftarrowless&quot;,10615,_
+		&quot;gtrarr&quot;,10616,&quot;subrarr&quot;,10617,&quot;leftarrowsubset&quot;,10618,&quot;suplarr&quot;,10619,&quot;leftfishtail&quot;,10620,&quot;rightfishtail&quot;,10621,_
+		&quot;upfishtail&quot;,10622,&quot;downfishtail&quot;,10623))
+
+	Call newCharCommands(&quot;Operators-A&quot;, SymbolsFont,_
+		Array(&quot;forall&quot;,8704,&quot;complement&quot;,8705,&quot;partial&quot;,8706,&quot;exists&quot;,8707,&quot;nexists&quot;,8708,&quot;varnothing&quot;,8709,_
+		&quot;emptyset&quot;,8709,&quot;increment&quot;,8710,&quot;nabla&quot;,8711,&quot;in&quot;,8712,&quot;varin&quot;,8712,&quot;notin&quot;,8713,&quot;smallin&quot;,8714,&quot;ni&quot;,8715,_
+		&quot;varni&quot;,8715,&quot;nni&quot;,8716,&quot;smallni&quot;,8717,&quot;QED&quot;,8718,&quot;prod&quot;,8719,&quot;coprod&quot;,8720,&quot;sum&quot;,8721,&quot;minus&quot;,8722,&quot;mp&quot;,8723,_
+		&quot;dotplus&quot;,8724,&quot;slash&quot;,8725,&quot;smallsetminus&quot;,8726,&quot;setminus&quot;,8726,&quot;ast&quot;,8727,&quot;circ&quot;,8728,&quot;bullet&quot;,8729,&quot;sqrt&quot;,8730,_
+		&quot;cuberoot&quot;,8731,&quot;fourthroot&quot;,8732,&quot;propto&quot;,8733,&quot;varpropto&quot;,8733,&quot;infty&quot;,8734,&quot;rightangle&quot;,8735,&quot;angle&quot;,8736,_
+		&quot;measuredangle&quot;,8737,&quot;sphericalangle&quot;,8738,&quot;mid&quot;,8739,&quot;nmid&quot;,8740,&quot;parallel&quot;,8741,&quot;nparallel&quot;,8742,&quot;wedge&quot;,8743,_
+		&quot;vee&quot;,8744,&quot;cap&quot;,8745,&quot;cup&quot;,8746,&quot;int&quot;,8747,&quot;smallint&quot;,8747,&quot;iint&quot;,8748,&quot;iiint&quot;,8749,&quot;oint&quot;,8750,&quot;oiint&quot;,8751,_
+		&quot;oiiint&quot;,8752,&quot;intclockwise&quot;,8753,&quot;varointclockwise&quot;,8754,&quot;ointctrclockwise&quot;,8755,&quot;therefore&quot;,8756,&quot;because&quot;,8757,_
+		&quot;colon&quot;,8758,&quot;Colon&quot;,8759,&quot;dotminus&quot;,8760,&quot;dashcolon&quot;,8761,&quot;dotsminusdots&quot;,8762,&quot;kernelcontraction&quot;,8763,_
+		&quot;sim&quot;,8764,&quot;thicksim&quot;,8764,&quot;backsim&quot;,8765,&quot;ac&quot;,8766,&quot;sinewave&quot;,8767,&quot;wr&quot;,8768,&quot;nsim&quot;,8769,&quot;eqsim&quot;,8770,_
+		&quot;simeq&quot;,8771,&quot;nsime&quot;,8772,&quot;cong&quot;,8773,&quot;simneqq&quot;,8774,&quot;ncong&quot;,8775,&quot;approx&quot;,8776,&quot;thickapprox&quot;,8776,&quot;napprox&quot;,8777,_
+		&quot;approxeq&quot;,8778,&quot;approxident&quot;,8779,&quot;backcong&quot;,8780,&quot;asymp&quot;,8781,&quot;Bumpeq&quot;,8782,&quot;bumpeq&quot;,8783,&quot;doteq&quot;,8784,_
+		&quot;Doteq&quot;,8785,&quot;fallingdotseq&quot;,8786,&quot;risingdotseq&quot;,8787,&quot;coloneq&quot;,8788,&quot;eqcolon&quot;,8789,&quot;eqcirc&quot;,8790,&quot;circeq&quot;,8791,_
+		&quot;arceq&quot;,8792,&quot;wedgeq&quot;,8793,&quot;veeeq&quot;,8794,&quot;stareq&quot;,8795,&quot;triangleq&quot;,8796,&quot;eqdef&quot;,8797,&quot;measeq&quot;,8798,&quot;questeq&quot;,8799,_
+		&quot;ne&quot;,8800,&quot;equiv&quot;,8801,&quot;nequiv&quot;,8802,&quot;Equiv&quot;,8803,&quot;leq&quot;,8804,&quot;geq&quot;,8805,&quot;leqq&quot;,8806,&quot;geqq&quot;,8807,&quot;lneqq&quot;,8808,_
+		&quot;gneqq&quot;,8809,&quot;ll&quot;,8810,&quot;gg&quot;,8811,&quot;between&quot;,8812,&quot;nasymp&quot;,8813,&quot;nless&quot;,8814,&quot;ngtr&quot;,8815,&quot;nleq&quot;,8816,&quot;ngeq&quot;,8817,_
+		&quot;lesssim&quot;,8818,&quot;gtrsim&quot;,8819,&quot;nlesssim&quot;,8820,&quot;ngtrsim&quot;,8821,&quot;lessgtr&quot;,8822,&quot;gtrless&quot;,8823,&quot;nlessgtr&quot;,8824,_
+		&quot;ngtrless&quot;,8825,&quot;prec&quot;,8826,&quot;succ&quot;,8827,&quot;preccurlyeq&quot;,8828,&quot;succcurlyeq&quot;,8829,&quot;precsim&quot;,8830,&quot;succsim&quot;,8831,_
+		&quot;nprec&quot;,8832,&quot;nsucc&quot;,8833,&quot;subset&quot;,8834,&quot;supset&quot;,8835,&quot;nsubset&quot;,8836,&quot;nsupset&quot;,8837,&quot;subseteq&quot;,8838,&quot;supseteq&quot;,8839,_
+		&quot;nsubseteq&quot;,8840,&quot;nsupseteq&quot;,8841,&quot;subsetneq&quot;,8842,&quot;supsetneq&quot;,8843,&quot;cupleftarrow&quot;,8844,&quot;cupdot&quot;,8845,&quot;uplus&quot;,8846,_
+		&quot;sqsubset&quot;,8847,&quot;sqsupset&quot;,8848,&quot;sqsubseteq&quot;,8849,&quot;sqsupseteq&quot;,8850,&quot;sqcap&quot;,8851,&quot;sqcup&quot;,8852,&quot;oplus&quot;,8853,_
+		&quot;ominus&quot;,8854,&quot;otimes&quot;,8855,&quot;oslash&quot;,8856,&quot;odot&quot;,8857,&quot;circledcirc&quot;,8858,&quot;circledast&quot;,8859,&quot;circledequal&quot;,8860,_
+		&quot;circleddash&quot;,8861,&quot;boxplus&quot;,8862,&quot;boxminus&quot;,8863,&quot;boxtimes&quot;,8864,&quot;boxdot&quot;,8865,&quot;vdash&quot;,8866,&quot;dashv&quot;,8867,_
+		&quot;top&quot;,8868,&quot;bot&quot;,8869,&quot;assert&quot;,8870,&quot;models&quot;,8871,&quot;vDash&quot;,8872,&quot;Vdash&quot;,8873,&quot;Vvdash&quot;,8874,&quot;VDash&quot;,8875,_
+		&quot;nvdash&quot;,8876,&quot;nvDash&quot;,8877,&quot;nVdash&quot;,8878,&quot;nVDash&quot;,8879,&quot;prurel&quot;,8880,&quot;scurel&quot;,8881,&quot;vartriangleleft&quot;,8882,_
+		&quot;vartriangleright&quot;,8883,&quot;trianglelefteq&quot;,8884,&quot;trianglerighteq&quot;,8885,&quot;origof&quot;,8886,&quot;imageof&quot;,8887,&quot;multimap&quot;,8888,_
+		&quot;hermitmatrix&quot;,8889,&quot;intercal&quot;,8890,&quot;veebar&quot;,8891,&quot;barwedge&quot;,8892,&quot;barvee&quot;,8893,&quot;measuredrightangle&quot;,8894,_
+		&quot;varlrtriangle&quot;,8895,&quot;bigwedge&quot;,8896,&quot;bigvee&quot;,8897,&quot;bigcap&quot;,8898,&quot;bigcup&quot;,8899,&quot;smalldiamond&quot;,8900,&quot;cdot&quot;,8901,_
+		&quot;star&quot;,8902,&quot;divideontimes&quot;,8903,&quot;bowtie&quot;,8904,&quot;ltimes&quot;,8905,&quot;rtimes&quot;,8906,&quot;leftthreetimes&quot;,8907,_
+		&quot;rightthreetimes&quot;,8908,&quot;backsimeq&quot;,8909,&quot;curlyvee&quot;,8910,&quot;curlywedge&quot;,8911,&quot;Subset&quot;,8912,&quot;Supset&quot;,8913,&quot;Cap&quot;,8914,_
+		&quot;Cup&quot;,8915,&quot;pitchfork&quot;,8916,&quot;equalparallel&quot;,8917,&quot;lessdot&quot;,8918,&quot;gtrdot&quot;,8919,&quot;lll&quot;,8920,&quot;ggg&quot;,8921,_
+		&quot;lesseqgtr&quot;,8922,&quot;gtreqless&quot;,8923,&quot;eqless&quot;,8924,&quot;eqgtr&quot;,8925,&quot;curlyeqprec&quot;,8926,&quot;curlyeqsucc&quot;,8927,_
+		&quot;npreccurlyeq&quot;,8928,&quot;nsucccurlyeq&quot;,8929,&quot;nsqsubseteq&quot;,8930,&quot;nsqsupseteq&quot;,8931,&quot;sqsubsetneq&quot;,8932,_
+		&quot;sqsupsetneq&quot;,8933,&quot;lnsim&quot;,8934,&quot;gnsim&quot;,8935,&quot;precnsim&quot;,8936,&quot;succnsim&quot;,8937,&quot;ntriangleleft&quot;,8938,_
+		&quot;ntriangleright&quot;,8939,&quot;ntrianglelefteq&quot;,8940,&quot;ntrianglerighteq&quot;,8941,&quot;vdots&quot;,8942,&quot;cdots&quot;,8943,&quot;adots&quot;,8944,_
+		&quot;ddots&quot;,8945,&quot;disin&quot;,8946,&quot;varisins&quot;,8947,&quot;isins&quot;,8948,&quot;isindot&quot;,8949,&quot;varisinobar&quot;,8950,&quot;isinobar&quot;,8951,_
+		&quot;isinvb&quot;,8952,&quot;isinE&quot;,8953,&quot;nisd&quot;,8954,&quot;varnis&quot;,8955,&quot;nis&quot;,8956,&quot;varniobar&quot;,8957,&quot;niobar&quot;,8958,&quot;bagmember&quot;,8959))
+
+	Call newCharCommands(&quot;Operators-B&quot;, SymbolsFont,_
+		Array(&quot;bigodot&quot;,10752,&quot;bigoplus&quot;,10753,&quot;bigotimes&quot;,10754,&quot;bigcupdot&quot;,10755,&quot;biguplus&quot;,10756,&quot;bigsqcap&quot;,10757,_
+		&quot;bigsqcup&quot;,10758,&quot;conjquant&quot;,10759,&quot;disjquant&quot;,10760,&quot;bigtimes&quot;,10761,&quot;modtwosum&quot;,10762,&quot;sumint&quot;,10763,_
+		&quot;iiiint&quot;,10764,&quot;intbar&quot;,10765,&quot;intBar&quot;,10766,&quot;fint&quot;,10767,&quot;circfint&quot;,10768,&quot;awint&quot;,10769,&quot;rppolint&quot;,10770,_
+		&quot;scpolint&quot;,10771,&quot;scpolint&quot;,10772,&quot;pointnt&quot;,10773,&quot;sqint&quot;,10774,&quot;intlharhk&quot;,10775,&quot;intx&quot;,10776,&quot;intcap&quot;,10777,_
+		&quot;intcup&quot;,10778,&quot;upint&quot;,10779,&quot;lowint&quot;,10780,&quot;Join&quot;,10781,&quot;bigtriangleleft&quot;,10782,&quot;zcmp&quot;,10783,&quot;zpipe&quot;,10784,_
+		&quot;zproject&quot;,10785,&quot;ringplus&quot;,10786,&quot;plushat&quot;,10787,&quot;simplus&quot;,10788,&quot;plusdot&quot;,10789,&quot;plussim&quot;,10790,_
+		&quot;plussubtwo&quot;,10791,&quot;plustrif&quot;,10792,&quot;commaminus&quot;,10793,&quot;minusdot&quot;,10794,&quot;minusfdots&quot;,10795,&quot;minusrdots&quot;,10796,_
+		&quot;opluslhrim&quot;,10797,&quot;oplusrhrim&quot;,10798,&quot;vectimes&quot;,10799,&quot;dottimes&quot;,10800,&quot;timesbar&quot;,10801,&quot;btimes&quot;,10802,_
+		&quot;smashtimes&quot;,10803,&quot;otimeslhrim&quot;,10804,&quot;otimesrhrim&quot;,10805,&quot;otimeshat&quot;,10806,&quot;Otimes&quot;,10807,&quot;odiv&quot;,10808,_
+		&quot;triangleplus&quot;,10809,&quot;triangleminus&quot;,10810,&quot;triangletimes&quot;,10811,&quot;intprod&quot;,10812,&quot;intprodr&quot;,10813,&quot;fcmp&quot;,10814,_
+		&quot;amalg&quot;,10815,&quot;capdot&quot;,10816,&quot;uminus&quot;,10817,&quot;barcup&quot;,10818,&quot;barcap&quot;,10819,&quot;capwedge&quot;,10820,&quot;cupvee&quot;,10821,_
+		&quot;cupovercap&quot;,10822,&quot;capovercup&quot;,10823,&quot;cupbarcap&quot;,10824,&quot;capbarcup&quot;,10825,&quot;twocups&quot;,10826,&quot;twocaps&quot;,10827,_
+		&quot;closedvarcup&quot;,10828,&quot;closedvarcap&quot;,10829,&quot;Sqcap&quot;,10830,&quot;Sqcup&quot;,10831,&quot;closedvarcupsmashprod&quot;,10832,_
+		&quot;wedgeodot&quot;,10833,&quot;veeodot&quot;,10834,&quot;Wedge&quot;,10835,&quot;Vee&quot;,10836,&quot;wedgeonwedge&quot;,10837,&quot;veeonvee&quot;,10838,_
+		&quot;bigslopedvee&quot;,10839,&quot;bigslopedwedge&quot;,10840,&quot;veeonwedge&quot;,10841,&quot;wedgemidvert&quot;,10842,&quot;veemidvert&quot;,10843,_
+		&quot;midbarwedge&quot;,10844,&quot;midbarvee&quot;,10845,&quot;doublebarwedge&quot;,10846,&quot;wedgebar&quot;,10847,&quot;wedgedoublebar&quot;,10848,_
+		&quot;varveebar&quot;,10849,&quot;doublebarvee&quot;,10850,&quot;veedoublebar&quot;,10851,&quot;dsub&quot;,10852,&quot;rsub&quot;,10853,&quot;eqdot&quot;,10854,_
+		&quot;dotequiv&quot;,10855,&quot;equivVert&quot;,10856,&quot;equivVvert&quot;,10857,&quot;dotsim&quot;,10858,&quot;simrdots&quot;,10859,&quot;simminussim&quot;,10860,_
+		&quot;congdot&quot;,10861,&quot;asteq&quot;,10862,&quot;hatapprox&quot;,10863,&quot;approxeqq&quot;,10864,&quot;eqqplus&quot;,10865,&quot;pluseqq&quot;,10866,_
+		&quot;eqqsim&quot;,10867,&quot;Coloneq&quot;,10868,&quot;eqeq&quot;,10869,&quot;eqeqeq&quot;,10870,&quot;ddotseq&quot;,10871,&quot;equivDD&quot;,10872,&quot;ltcir&quot;,10873,_
+		&quot;gtcir&quot;,10874,&quot;ltquest&quot;,10875,&quot;gtquest&quot;,10876,&quot;leqslant&quot;,10877,&quot;geqslant&quot;,10878,&quot;lesdot&quot;,10879,&quot;gesdot&quot;,10880,_
+		&quot;lesdoto&quot;,10881,&quot;gesdoto&quot;,10882,&quot;lesdotor&quot;,10883,&quot;gesdotol&quot;,10884,&quot;lessapprox&quot;,10885,&quot;gtrapprox&quot;,10886,_
+		&quot;lneq&quot;,10887,&quot;gneq&quot;,10888,&quot;lnapprox&quot;,10889,&quot;gnapprox&quot;,10890,&quot;lesseqqgtr&quot;,10891,&quot;gtreqqless&quot;,10892,&quot;lsime&quot;,10893,_
+		&quot;gsime&quot;,10894,&quot;lsimg&quot;,10895,&quot;gsiml&quot;,10896,&quot;lgE&quot;,10897,&quot;glE&quot;,10898,&quot;lesges&quot;,10899,&quot;gesles&quot;,10900,_
+		&quot;eqslantless&quot;,10901,&quot;eqslantgtr&quot;,10902,&quot;elsdot&quot;,10903,&quot;egsdot&quot;,10904,&quot;eqqless&quot;,10905,&quot;eqqgtr&quot;,10906,_
+		&quot;eqqslantless&quot;,10907,&quot;eqqslantgtr&quot;,10908,&quot;simless&quot;,10909,&quot;simgtr&quot;,10910,&quot;simlE&quot;,10911,&quot;simgE&quot;,10912,_
+		&quot;Lt&quot;,10913,&quot;Gt&quot;,10914,&quot;partialmeetcontraction&quot;,10915,&quot;glj&quot;,10916,&quot;gla&quot;,10917,&quot;ltcc&quot;,10918,&quot;gtcc&quot;,10919,_
+		&quot;lescc&quot;,10920,&quot;gescc&quot;,10921,&quot;smt&quot;,10922,&quot;lat&quot;,10923,&quot;smte&quot;,10924,&quot;late&quot;,10925,&quot;bumpeqq&quot;,10926,&quot;preceq&quot;,10927,_
+		&quot;succeq&quot;,10928,&quot;precneq&quot;,10929,&quot;succneq&quot;,10930,&quot;prE&quot;,10931,&quot;scE&quot;,10932,&quot;precneqq&quot;,10933,&quot;succneqq&quot;,10934,_
+		&quot;precapprox&quot;,10935,&quot;succapprox&quot;,10936,&quot;precnapprox&quot;,10937,&quot;succnapprox&quot;,10938,&quot;Pr&quot;,10939,&quot;Sc&quot;,10940,_
+		&quot;subsetdot&quot;,10941,&quot;supsetdot&quot;,10942,&quot;subsetplus&quot;,10943,&quot;supsetplus&quot;,10944,&quot;submult&quot;,10945,&quot;supmult&quot;,10946,_
+		&quot;subedot&quot;,10947,&quot;supedot&quot;,10948,&quot;subseteqq&quot;,10949,&quot;supseteqq&quot;,10950,&quot;subsim&quot;,10951,&quot;supsim&quot;,10952,_
+		&quot;subsetapprox&quot;,10953,&quot;supsetapprox&quot;,10954,&quot;subsetneqq&quot;,10955,&quot;supsetneqq&quot;,10956,&quot;lsqhook&quot;,10957,&quot;rsqhook&quot;,10958,_
+		&quot;csub&quot;,10959,&quot;csup&quot;,10960,&quot;csube&quot;,10961,&quot;csupe&quot;,10962,&quot;subsup&quot;,10963,&quot;supsub&quot;,10964,&quot;subsub&quot;,10965,&quot;supsup&quot;,10966,_
+		&quot;suphsub&quot;,10967,&quot;supdsub&quot;,10968,&quot;forkv&quot;,10969,&quot;topfork&quot;,10970,&quot;mlcp&quot;,10971,&quot;forks&quot;,10972,&quot;forksnot&quot;,10973,_
+		&quot;shortlefttack&quot;,10974,&quot;shortdowntack&quot;,10975,&quot;shortuptack&quot;,10976,&quot;perps&quot;,10977,&quot;vDdash&quot;,10978,&quot;dashV&quot;,10979,_
+		&quot;Dashv&quot;,10980,&quot;DashV&quot;,10981,&quot;varVdash&quot;,10982,&quot;Barv&quot;,10983,&quot;vBar&quot;,10984,&quot;vBarv&quot;,10985,&quot;barV&quot;,10986,&quot;Vbar&quot;,10987,_
+		&quot;Not&quot;,10988,&quot;bNot&quot;,10989,&quot;revnmid&quot;,10990,&quot;cirmid&quot;,10991,&quot;midcir&quot;,10992,&quot;topcir&quot;,10993,&quot;nhpar&quot;,10994,&quot;parsim&quot;,10995,_
+		&quot;interleave&quot;,10996,&quot;nhVvert&quot;,10997,&quot;threedotcolon&quot;,10998,&quot;lllnest&quot;,10999,&quot;gggnest&quot;,11000,&quot;leqqslant&quot;,11001,_
+		&quot;leqqslant&quot;,11002,&quot;trslash&quot;,11003,&quot;biginterleave&quot;,11004,&quot;sslash&quot;,11005,&quot;talloblong&quot;,11006,&quot;bigtalloblong&quot;,11007))
+
+	Call newCharCommands(&quot;MiscMathSymb-A&quot;, SymbolsFont,_
+		Array(&quot;lBrack&quot;,10214,&quot;rBrack&quot;,10215,&quot;langle&quot;,10216,&quot;rangle&quot;,10217,&quot;lAngle&quot;,10218,&quot;rAngle&quot;,10219,_
+		&quot;threedangle&quot;,10176,&quot;whiteinwhitetriangle&quot;,10177,&quot;perp&quot;,10178,&quot;subsetcirc&quot;,10179,&quot;supsetcirc&quot;,10180,_
+		&quot;lbag&quot;,10181,&quot;rbag&quot;,10182,&quot;veedot&quot;,10183,&quot;bsolhsub&quot;,10184,&quot;suphsol&quot;,10185,&quot;diamondcdot&quot;,10192,&quot;wedgedot&quot;,10193,_
+		&quot;upin&quot;,10194,&quot;pullback&quot;,10195,&quot;pushout&quot;,10196,&quot;leftouterjoin&quot;,10197,&quot;rightouterjoin&quot;,10198,&quot;fullouterjoin&quot;,10199,_
+		&quot;bigbot&quot;,10200,&quot;bigtop&quot;,10201,&quot;DashVDash&quot;,10202,&quot;dashVdash&quot;,10203,&quot;multimapinv&quot;,10204,&quot;vlongdash&quot;,10205,_
+		&quot;longdashv&quot;,10206,&quot;cirbot&quot;,10207,&quot;lozengeminus&quot;,10208,&quot;concavediamond&quot;,10209,&quot;concavediamondtickleft&quot;,10210,_
+		&quot;concavediamondtickright&quot;,10211,&quot;whitesquaretickleft&quot;,10212,&quot;whitesquaretickright&quot;,10213))
+
+	Exit Sub &apos;===========================================================================================================
+
+	Call newCharCommands(&quot;MiscMathSymb-B&quot;, SymbolsFont,_
+		Array(&quot;Vvert&quot;,10624,&quot;mdsmblkcircle&quot;,10625,&quot;typecolon&quot;,10626,&quot;lBrace&quot;,10627,&quot;rBrace&quot;,10628,&quot;lParen&quot;,10629,_
+		&quot;rParen&quot;,10630,&quot;llparenthesis&quot;,10631,&quot;rrparenthesis&quot;,10632,&quot;llangle&quot;,10633,&quot;rrangle&quot;,10634,&quot;lbrackubar&quot;,10635,_
+		&quot;rbrackubar&quot;,10636,&quot;lbrackultick&quot;,10637,&quot;rbracklrtick&quot;,10638,&quot;lbracklltick&quot;,10639,&quot;rbrackurtick&quot;,10640,_
+		&quot;langledot&quot;,10641,&quot;rangledot&quot;,10642,&quot;lparenless&quot;,10643,&quot;rparengtr&quot;,10644,&quot;Lparengtr&quot;,10645,&quot;Rparenless&quot;,10646,_
+		&quot;lblkbrbrak&quot;,10647,&quot;rblkbrbrak&quot;,10648,&quot;fourvdots&quot;,10649,&quot;vzigzag&quot;,10650,&quot;measuredangleleft&quot;,10651,_
+		&quot;rightanglesqr&quot;,10652,&quot;rightanglemdot&quot;,10653,&quot;angles&quot;,10654,&quot;angdnr&quot;,10655,&quot;gtlpar&quot;,10656,&quot;sphericalangleup&quot;,10657,_
+		&quot;turnangle&quot;,10658,&quot;revangle&quot;,10659,&quot;angleubar&quot;,10660,&quot;revangleubar&quot;,10661,&quot;wideangledown&quot;,10662,&quot;wideangleup&quot;,10663,_
+		&quot;measanglerutone&quot;,10664,&quot;measanglelutonw&quot;,10665,&quot;measanglerdtose&quot;,10666,&quot;measangleldtosw&quot;,10667,_
+		&quot;measangleurtone&quot;,10668,&quot;measangleultonw&quot;,10669,&quot;measangledrtose&quot;,10670,&quot;measangledltosw&quot;,10671,&quot;revemptyset&quot;,10672,_
+		&quot;emptysetobar&quot;,10673,&quot;emptysetocirc&quot;,10674,&quot;emptysetoarr&quot;,10675,&quot;emptysetoarrl&quot;,10676,&quot;circlehbar&quot;,10677,_
+		&quot;circledvert&quot;,10678,&quot;circledparallel&quot;,10679,&quot;obslash&quot;,10680,&quot;operp&quot;,10681,&quot;obot&quot;,10682,&quot;olcross&quot;,10683,_
+		&quot;odotslashdot&quot;,10684,&quot;uparrowoncircle&quot;,10685,&quot;circledwhitebullet&quot;,10686,&quot;circledbullet&quot;,10687,&quot;olessthan&quot;,10688,_
+		&quot;ogreaterthan&quot;,10689,&quot;cirscir&quot;,10690,&quot;cirE&quot;,10691,&quot;boxdiag&quot;,10692,&quot;boxbslash&quot;,10693,&quot;boxast&quot;,10694,_
+		&quot;boxcircle&quot;,10695,&quot;boxbox&quot;,10696,&quot;boxonbox&quot;,10697,&quot;triangleodot&quot;,10698,&quot;triangleubar&quot;,10699,&quot;triangles&quot;,10700,_
+		&quot;triangleserifs&quot;,10701,&quot;rtriltri&quot;,10702,&quot;ltrivb&quot;,10703,&quot;vbrtri&quot;,10704,&quot;lfbowtie&quot;,10705,&quot;rfbowtie&quot;,10706,_
+		&quot;fbowtie&quot;,10707,&quot;lftimes&quot;,10708,&quot;rftimes&quot;,10709,&quot;hourglass&quot;,10710,&quot;blackhourglass&quot;,10711,&quot;lvzigzag&quot;,10712,_
+		&quot;rvzigzag&quot;,10713,&quot;Lvzigzag&quot;,10714,&quot;Rvzigzag&quot;,10715,&quot;iinfin&quot;,10716,&quot;tieinfty&quot;,10717,&quot;nvinfty&quot;,10718,_
+		&quot;dualmap&quot;,10719,&quot;laplac&quot;,10720,&quot;lrtriangleeq&quot;,10721,&quot;shuffle&quot;,10722,&quot;eparsl&quot;,10723,&quot;smeparsl&quot;,10724,_
+		&quot;eqvparsl&quot;,10725,&quot;gleichstark&quot;,10726,&quot;thermod&quot;,10727,&quot;downtriangleleftblack&quot;,10728,&quot;downtrianglerightblack&quot;,10729,_
+		&quot;blackdiamonddownarrow&quot;,10730,&quot;mdlgblklozenge&quot;,10731,&quot;circledownarrow&quot;,10732,&quot;blackcircledownarrow&quot;,10733,_
+		&quot;errbarsquare&quot;,10734,&quot;errbarblacksquare&quot;,10735,&quot;errbardiamond&quot;,10736,&quot;errbarblackdiamond&quot;,10737,_
+		&quot;errbarcircle&quot;,10738,&quot;errbarblackcircle&quot;,10739,&quot;ruledelayed&quot;,10740,&quot;opbackslash&quot;,10741,&quot;dsol&quot;,10742,_
+		&quot;rsolbar&quot;,10743,&quot;xsol&quot;,10744,&quot;xbsol&quot;,10745,&quot;doubleplus&quot;,10746,&quot;tripleplus&quot;,10747,&quot;lcurvyangle&quot;,10748,_
+		&quot;rcurvyangle&quot;,10749,&quot;tplus&quot;,10750,&quot;tminus&quot;,10751))
+
+	Call newCharCommands(&quot;MiscSymbol&quot;, SymbolsFont,_
+		Array(&quot;bigstar&quot;,9733,&quot;bigwhitestar&quot;,9734,&quot;astrosun&quot;,9737,&quot;conjunction&quot;,9740,&quot;phone&quot;,9742,&quot;XBox&quot;,9746,_
+		&quot;danger&quot;,9761,&quot;frownie&quot;,9785,&quot;smiley&quot;,9786,&quot;blacksmiley&quot;,9787,&quot;sun&quot;,9788,&quot;rightmoon&quot;,9789,&quot;leftmoon&quot;,9790,_
+		&quot;mercury&quot;,9791,&quot;female&quot;,9792,&quot;earth&quot;,9793,&quot;male&quot;,9794,&quot;jupiter&quot;,9795,&quot;saturn&quot;,9796,&quot;neptune&quot;,9798,&quot;pluto&quot;,9799,_
+		&quot;aries&quot;,9800,&quot;taurus&quot;,9801,&quot;spadesuit&quot;,9824,&quot;heartsuit&quot;,9825,&quot;diamondsuit&quot;,9826,&quot;clubsuit&quot;,9827,&quot;varspadesuit&quot;,9828,_
+		&quot;varheartsuit&quot;,9829,&quot;vardiamondsuit&quot;,9830,&quot;varclubsuit&quot;,9831,&quot;quarternote&quot;,9833,&quot;eighthnote&quot;,9834,&quot;twonotes&quot;,9835,_
+		&quot;flat&quot;,9837,&quot;natural&quot;,9838,&quot;sharp&quot;,9839,&quot;acidfree&quot;,9854,&quot;dicei&quot;,9856,&quot;diceii&quot;,9857,&quot;diceiii&quot;,9858,&quot;diceiv&quot;,9859,_
+		&quot;dicev&quot;,9860,&quot;dicevi&quot;,9861,&quot;circledrightdot&quot;,9862,&quot;circledtwodots&quot;,9863,&quot;blackcircledrightdot&quot;,9864,_
+		&quot;blackcircledtwodots&quot;,9865,&quot;triangleexclam&quot;,9888))
+
+	&apos;For i = Asc(&quot;A&quot;) To Asc(&quot;Z&quot;)
+	&apos;	Call newCommand(&quot;\bb&quot; &amp; chr(i), chr(i), &quot;msbm10&quot;)
+	&apos;Next i
+	
+	&apos;For i = Asc(&quot;A&quot;) To Asc(&quot;Z&quot;)
+	&apos;	Call newCommand(&quot;\cal&quot; &amp; chr(i), chr(i), &quot;Euclid Math One&quot;)
+	&apos;Next i
+
+End Sub
+
+
+&apos;****************************************************************
+Private Sub PrintCommands()
+	Dim i,j,n as integer
+	Dim OldCat, NewCat as String
+	
+	if NbrCateg(0) = 0 then CommandsInit()
+
+	iCalc = StarDesktop.loadComponentFromURL(&quot;private:factory/scalc&quot;, &quot;_blank&quot;, 0, Array())
+	iSheet = iCalc.getSheets().getByIndex(0)
+	
+	i = 0 &apos; Index symbol
+	j = 0 &apos; Column
+	n = 0 &apos; Row
+	OldCat = &quot;&quot;
+	Do While i &lt;= NbrCateg(0)
+	
+		NewCat = Command(i,3)
+		if NewCat = OldCat then
+			&apos; Tex command
+			iCursor= iSheet.getCellByPosition(j,n).gettext().createtextcursor()
+			iCursor.charHeight = &quot;10&quot;
+			iCursor.setString(Command(i,0))	
+			&apos; Expression
+			iCursor= iSheet.getCellByPosition(j+1,n).gettext().createtextcursor()
+			iCursor.charHeight = &quot;13&quot;
+			iCursor.charFontName = Command(i,2)
+			iCursor.setString(Command(i,1))
+			i = i + 1
+		else
+			OldCat = NewCat
+			iCursor= iSheet.getCellByPosition(j,n).gettext().createtextcursor()
+			iCursor.charHeight = &quot;12&quot;
+			iCursor.setString(Command(i,3))				
+		end if
+				
+		n = n + 1
+		if n &gt; 29 then 
+			n = 0
+			j = j + 2
+		end if 		
+	Loop
+End Sub
+
+</script:module>

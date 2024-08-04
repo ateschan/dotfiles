@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="TexMathsPreamble" script:language="StarBasic">&apos;
+&apos;    TexMathsPreamble
+&apos;
+&apos;	 Copyright (C) 2012-2023 Roland Baudin (roland65@free.fr)
+&apos;    Based on the work of Geoffroy Piroux (gpiroux@gmail.com)
+&apos;
+&apos;    This program is free software; you can redistribute it and/or modify
+&apos;    it under the terms of the GNU General Public License as published by
+&apos;    the Free Software Foundation; either version 2 of the License, or
+&apos;    (at your option) any later version.
+&apos;
+&apos;    This program is distributed in the hope that it will be useful,
+&apos;    but WITHOUT ANY WARRANTY; without even the implied warranty of
+&apos;    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+&apos;    GNU General Public License for more details.
+&apos;
+&apos;    You should have received a copy of the GNU General Public License
+&apos;    along with this program; if not, write to the Free Software
+&apos;    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+&apos;
+
+&apos;	Macros used to create and manage the Preamble dialog
+
+
+&apos; Force variable declaration
+Option Explicit
+
+
+&apos; Dialog declaration
+Private oDlgBasePreamble as Variant
+Private oDlgPreamble as Variant
+
+&apos; Conversion factors map appFonts -&gt; pixels
+Private convX as Double
+Private convY as Double
+
+
+&apos; Main subroutine
+Sub PreambleDialog()
+
+	DefaultSysConfig()
+
+	&apos; Parent window
+	Dim oParent as Variant
+	oParent = ThisComponent.getCurrentController().getFrame().getContainerWindow()
+      
+	&apos; Create base outer window as modal dialog
+	oDlgBasePreamble = CreateBaseDialog(oParent)
+ 
+	&apos; Set window title
+	oDlgBasePreamble.setTitle( _(&quot;TexMaths Preamble&quot;) )
+     
+	&apos; Embed inner dialog created with the dialog editor
+	Dim URL as String
+	URL = &quot;vnd.sun.star.script:TexMaths.TexMathsPreamble_GUI?location=application&quot;
+	oDlgPreamble = CreateInnerDialog(oDlgBasePreamble, URL)
+
+	&apos; Set the preamble text
+	oDlgPreamble.getControl(&quot;Preamble&quot;).setText(glb_Preamble)
+	oDlgPreamble.getControl(&quot;Preamble&quot;).Model.FontName = &quot;Monospace&quot;
+
+	Dim aRect as New com.sun.star.awt.Rectangle
+	aRect = CreateUnoStruct(&quot;com.sun.star.awt.Rectangle&quot;)
+
+	&apos; Compute conversion factors between map appFonts and pixels
+	aRect = oDlgPreamble.getPosSize()
+	convX = aRect.Width / oDlgPreamble.Model.Width 
+	convY = aRect.Height / oDlgPreamble.Model.Height
+
+	&apos; Show the modal dialog, has to be done by the outer dialog
+	If oDlgBasePreamble.execute() &gt; 0 Then MsgBox( _(&quot;Error: dialog box can&apos;t be created...&quot;), 48, &quot;TexMaths&quot; )
+
+	&apos; Delete dialog
+	oDlgBasePreamble.dispose()
+
+End Sub
+
+
+
+&apos; Create new outer base dialog
+&apos; oParent: parent window peer
+&apos; Return dialog window
+Function CreateBaseDialog(oParent as Variant) as Variant
+     
+	Dim oToolkit as Variant
+	oToolkit = oParent.getToolkit()
+	
+	Dim WA as Variant, aRect as Variant, oDesc as Variant
+	WA = com.sun.star.awt.WindowAttribute
+	aRect = CreateUnoStruct(&quot;com.sun.star.awt.Rectangle&quot;)
+	oDesc = CreateUnoStruct(&quot;com.sun.star.awt.WindowDescriptor&quot;)
+
+	With oDesc
+
+    	.Type = com.sun.star.awt.WindowClass.SIMPLE
+        .WindowServiceName = &quot;dialog&quot;
+        .Parent = oParent
+        .ParentIndex = -1
+        .Bounds = aRect
+        .WindowAttributes = WA.CLOSEABLE OR WA.MOVEABLE OR WA.SIZEABLE OR WA.BORDER
+
+	End With
+
+	Dim oDialog as Variant
+	oDialog = oToolkit.createWindow(oDesc)
+
+	&apos; Create listeners
+	oDialog.addTopWindowListener(CreateUnoListener(&quot;PreambleWindowListener_&quot;, &quot;com.sun.star.awt.XTopWindowListener&quot;))
+	oDialog.addWindowListener(CreateUnoListener(&quot;PreambleWindowListener_&quot;, &quot;com.sun.star.awt.XWindowListener&quot;))
+
+	CreateBaseDialog = oDialog
+
+End Function
+
+
+&apos; Create inner (child) dialog embedded
+&apos; oParent: parent window
+&apos; URL: dialog URL, without toolbar
+&apos; Return dialog window
+Function CreateInnerDialog(oParent as Variant, URL as String) as Variant
+
+	Dim PS as Variant
+	PS = com.sun.star.awt.PosSize
+	
+	Dim oDP as Variant, oChildDialog as Variant
+	oDP = CreateUnoService(&quot;com.sun.star.awt.ContainerWindowProvider&quot;)
+	oChildDialog = oDP.createContainerWindow(URL, &quot;&quot;, oParent, nothing)
+	oChildDialog.setPosSize(0, 0, 0, 0, PS.POS)
+	oChildDialog.setVisible(TRUE)
+
+	&apos; Dialog Strings for translation
+	oChildDialog.setTitle( _(&quot;TexMaths Preamble&quot;) )
+	oChildDialog.getControl(&quot;LoadDefaultButton&quot;).Model.Label = _(&quot;Load Default&quot;)
+	oChildDialog.getControl(&quot;LoadDefaultButton&quot;).Model.HelpText = _(&quot;Load default preamble&quot;)
+	oChildDialog.getControl(&quot;LoadLocalButton&quot;).Model.Label = _(&quot;Load Local&quot;)
+	oChildDialog.getControl(&quot;LoadLocalButton&quot;).Model.HelpText = _(&quot;Load local preamble (from the current document)&quot;)
+	oChildDialog.getControl(&quot;LoadGlobalButton&quot;).Model.Label = _(&quot;Load Global&quot;)
+	oChildDialog.getControl(&quot;LoadGlobalButton&quot;).Model.HelpText = _(&quot;Load global preamble&quot;)
+	oChildDialog.getControl(&quot;ApplyButton&quot;).Model.Label = _(&quot;Apply&quot;)
+	oChildDialog.getControl(&quot;ApplyButton&quot;).Model.HelpText = _(&quot;Apply current preamble&quot;)
+	oChildDialog.getControl(&quot;SaveGlobalButton&quot;).Model.Label = _(&quot;Save Global&quot;)
+	oChildDialog.getControl(&quot;SaveGlobalButton&quot;).Model.HelpText = _(&quot;Save current preamble as global and apply it&quot;)
+	oChildDialog.getControl(&quot;SaveLocalButton&quot;).Model.Label = _(&quot;Save Local&quot;)
+	oChildDialog.getControl(&quot;SaveLocalButton&quot;).Model.HelpText = _(&quot;Save current preamble as local (into the current document) and apply it&quot;)
+	oChildDialog.getControl(&quot;IgnorePreamble&quot;).Model.Label = _(&quot;Do not use preamble for LaTeX type equations&quot;)
+	oChildDialog.getControl(&quot;IgnorePreamble&quot;).Model.HelpText = _(&quot;Ignore preamble when generating LaTeX type equations. Full LaTeX code must then be entered in the TexMaths equation dialog.&quot;)
+
+	&apos; Set the value
+	oChildDialog.getControl(&quot;Preamble&quot;).setText(glb_Preamble)
+	
+	&apos; Ignore preamble button state
+	If glb_IgnorePreamble Then oChildDialog.getControl(&quot;IgnorePreamble&quot;).setState(1) _
+	                      Else oChildDialog.getControl(&quot;IgnorePreamble&quot;).setState(0)
+
+	&apos; The local load button is activated if a preamble is stored in the current document
+	If ReadLocalPreamble() = 1 Then oChildDialog.getControl(&quot;LoadLocalButton&quot;).setEnable(TRUE) _
+	                           Else oChildDialog.getControl(&quot;LoadLocalButton&quot;).setEnable(FALSE)
+
+	&apos; The global load button is activated if a global preamble exists
+	If FileExists(ConvertFromURL( glb_UserPath ) &amp; &quot;GlobalPreamble.tex&quot; ) Then oChildDialog.getControl(&quot;LoadGlobalButton&quot;).setEnable(TRUE) _
+	                                                                      Else oChildDialog.getControl(&quot;LoadGlobalButton&quot;).setEnable(FALSE)
+
+	Dim aSize as Variant
+	aSize = oChildDialog.getPosSize()
+	oParent.setPosSize(0, 0, aSize.Width, aSize.Height, PS.SIZE)
+	oChildDialog.addWindowListener(CreateUnoListener(&quot;PreambleChildWindowListener_&quot;, &quot;com.sun.star.awt.XWindowListener&quot;))
+	
+	CreateInnerDialog = oChildDialog
+
+End Function
+
+
+&apos; Resize inner dialog window
+&apos; This is called indirectly when resizing the outer base dialog      
+Sub PreambleChildWindowListener_windowResized(ev)
+
+	&apos; Inner dialog
+	Dim oDialog as Variant
+	oDialog = ev.Source
+	
+	&apos; Dialog size
+	Dim aRect as Variant
+	aRect = oDialog.getPosSize()
+
+	&apos; Dialog min width and height 
+	Const PRB_MIN_WIDTH  = 275
+	Const PRB_MIN_HEIGHT = 230
+
+	&apos; Convert min width and height to pixels
+	Dim minW as Integer, minH as Integer
+	minW = PRB_MIN_WIDTH * convX
+	minH = PRB_MIN_HEIGHT * convY
+
+	&apos; Resize inner dialog if too narrow
+	If aRect.Width &lt; minW Then
+
+		aRect.Width = minW
+		oDialog.setPosSize(0, 0, aRect.Width, aRect.Height, com.sun.star.awt.PosSize.SIZE)
+
+	End If
+
+	&apos; Resize inner dialog if too short
+	If aRect.Height &lt; minH Then
+
+		aRect.Height = minH
+		oDialog.setPosSize(0, 0, aRect.Width, aRect.Height, com.sun.star.awt.PosSize.SIZE)
+
+	End If
+	
+	Dim oWidget as Variant
+	Dim X as Integer, Y as Integer, W as Integer, H as Integer
+
+	&apos; Resize preamble text
+	oWidget = oDialog.getControl(&quot;Preamble&quot;)
+	W = aRect.Width - (oDialog.Model.Width - oWidget.Model.Width ) * convX
+	H = aRect.Height - (oDialog.Model.Height - oWidget.Model.Height ) * convY
+	oWidget.setPosSize(0, 0, W, H, com.sun.star.awt.PosSize.SIZE)
+
+	&apos; Position Apply button
+	oWidget = oDialog.getControl(&quot;ApplyButton&quot;)
+	X = aRect.Width - (oDialog.Model.Width - oWidget.Model.PositionX) * convX
+	Y = aRect.Height - (oDialog.Model.Height - oWidget.Model.PositionY ) * convY
+	oWidget.setPosSize(X , Y, 0, 0, com.sun.star.awt.PosSize.POS)
+
+	&apos; Position Load Default button
+	oWidget = oDialog.getControl(&quot;LoadDefaultButton&quot;)
+	X = aRect.Width - (oDialog.Model.Width - oWidget.Model.PositionX) * convX
+	&apos;X = oWidget.Model.PositionX * convX
+	Y = aRect.Height - (oDialog.Model.Height - oWidget.Model.PositionY ) * convY
+	oWidget.setPosSize(X , Y, 0, 0, com.sun.star.awt.PosSize.POS)
+
+	&apos; Position Save Global button
+	oWidget = oDialog.getControl(&quot;SaveGlobalButton&quot;)
+	X = oWidget.Model.PositionX * convX
+	Y = aRect.Height - (oDialog.Model.Height - oWidget.Model.PositionY ) * convY
+	oWidget.setPosSize(X , Y, 0, 0, com.sun.star.awt.PosSize.POS)
+
+	&apos; Position Load Global button
+	oWidget = oDialog.getControl(&quot;LoadGlobalButton&quot;)
+	X = oWidget.Model.PositionX * convX
+	Y = aRect.Height - (oDialog.Model.Height - oWidget.Model.PositionY ) * convY
+	oWidget.setPosSize(X , Y, 0, 0, com.sun.star.awt.PosSize.POS)
+
+	&apos; Position Save Local button
+	oWidget = oDialog.getControl(&quot;SaveLocalButton&quot;)
+	X = oWidget.Model.PositionX * convX
+	Y = aRect.Height - (oDialog.Model.Height - oWidget.Model.PositionY ) * convY
+	oWidget.setPosSize(X , Y, 0, 0, com.sun.star.awt.PosSize.POS)
+
+	&apos; Position Load Local button
+	oWidget = oDialog.getControl(&quot;LoadLocalButton&quot;)
+	X = oWidget.Model.PositionX * convX
+	Y = aRect.Height - (oDialog.Model.Height - oWidget.Model.PositionY ) * convY
+	oWidget.setPosSize(X , Y, 0, 0, com.sun.star.awt.PosSize.POS)
+
+	&apos; Position IgnorePreamble 
+	oWidget = oDialog.getControl(&quot;IgnorePreamble&quot;)
+	X = oWidget.Model.PositionX * convX
+	Y = aRect.Height - (oDialog.Model.Height - oWidget.Model.PositionY ) * convY
+	oWidget.setPosSize(X , Y, 0, 0, com.sun.star.awt.PosSize.POS)
+
+End Sub
+
+
+&apos; Close modal dialog
+Sub ClosePreamble()
+
+	oDlgBasePreamble.endExecute()
+
+End Sub
+
+
+&apos; Load the default preamble
+Sub LoadDefaultPreambleButton_Clicked()
+	
+	&apos; Load the default preamble 
+	SetDefaultPreamble()
+	oDlgPreamble.getControl(&quot;Preamble&quot;).setText(glb_Preamble)
+	oDlgPreamble.getControl(&quot;IgnorePreamble&quot;).setState(glb_IgnorePreamble)
+
+End Sub
+
+
+&apos; Load the local preamble if any
+Sub LoadLocalPreambleButton_Clicked()
+
+	&apos; Try to read the local (stored in the current document) preamble
+	If ReadLocalPreamble() = 0 Then
+		
+		&apos; Try to read the global preamble
+		If ReadGlobalPreamble() = 0 Then
+			
+			&apos; Fallback to the default preamble
+			SetDefaultPreamble()
+			
+		End If
+		
+	End If
+	
+	oDlgPreamble.getControl(&quot;Preamble&quot;).setText(glb_Preamble)
+	oDlgPreamble.getControl(&quot;IgnorePreamble&quot;).setState(glb_IgnorePreamble)
+
+End Sub
+
+
+&apos; Save the current preamble as local (store it into the current document)
+Sub SaveLocalPreambleButton_Clicked()
+
+	&apos; Set the preamble variable
+	glb_Preamble = oDlgPreamble.getControl(&quot;Preamble&quot;).getText()
+
+	&apos; Save the preamble to a UserDefinedProperties property
+	Dim oDoc as Variant, oProperties as Variant, ignorePreamble as String
+	
+	oDoc = ThisComponent
+	oProperties = oDoc.DocumentProperties.UserDefinedProperties
+	
+	&apos; Set the ignore preamble state 
+	If oDlgPreamble.getControl(&quot;IgnorePreamble&quot;).state() = 1 Then
+
+		ignorePreamble = &quot;TRUE&quot;
+		glb_IgnorePreamble = TRUE
+
+	Else
+
+		ignorePreamble = &quot;FALSE&quot;
+		glb_IgnorePreamble = FALSE
+
+	End If
+
+	&apos; No LaTeX preamble already set =&gt; create it and set it
+	If Not oProperties.PropertySetInfo.hasPropertyByName(&quot;TexMathsPreamble&quot;) Then
+	
+		&apos; Encode the preamble String to avoid newline characters (workaround for an LO bug)
+		oProperties.addProperty(&quot;TexMathsPreamble&quot;, com.sun.star.beans.PropertyAttribute.REMOVEABLE, EncodeNewline(glb_Preamble))
+	
+	&apos; LaTeX preamble already set =&gt; modify it
+	Else
+	
+		&apos; Encode the preamble String to avoid newline characters (workaround for an LO bug)
+		oProperties.setPropertyValue(&quot;TexMathsPreamble&quot;, EncodeNewline(glb_Preamble))
+	
+	End If
+
+	&apos; IgnorePreamble value might be present or not
+	If Not oProperties.PropertySetInfo.hasPropertyByName(&quot;TexMathignorePreamble&quot;) Then
+
+		oProperties.addProperty(&quot;TexMathignorePreamble&quot;, com.sun.star.beans.PropertyAttribute.REMOVEABLE, ignorePreamble)
+	
+	Else
+
+		oProperties.setPropertyValue(&quot;TexMathignorePreamble&quot;, ignorePreamble)
+	
+	End If
+
+	&apos; Close the dialog
+	oDlgBasePreamble.endExecute()
+	DisplayStatus( _(&quot;Preamble applied and saved...&quot;) )
+	
+End Sub
+
+
+&apos; Apply the current preamble
+Sub ApplyPreambleButton_Clicked()
+	
+	&apos; Set The preamble variable
+	glb_Preamble = oDlgPreamble.getControl(&quot;Preamble&quot;).getText()
+
+	If oDlgPreamble.getControl(&quot;IgnorePreamble&quot;).state() = 1 Then glb_IgnorePreamble = TRUE Else glb_IgnorePreamble = FALSE
+
+	oDlgBasePreamble.endExecute()
+
+	DisplayStatus( _(&quot;Preamble applied...&quot;) )
+	
+End Sub
+
+
+&apos; Load the global preamble if any
+Sub LoadGlobalPreambleButton_Clicked()
+
+	&apos; Try to read the global preamble
+	If ReadGlobalPreamble() = 0 Then
+	
+		&apos; Fallback to the default preamble
+		SetDefaultPreamble()
+			
+	End If
+
+	oDlgPreamble.getControl(&quot;Preamble&quot;).setText(glb_Preamble)
+	oDlgPreamble.getControl(&quot;IgnorePreamble&quot;).setState(glb_IgnorePreamble)
+
+End Sub
+
+
+&apos; Save the current preamble as global
+Sub SaveGlobalPreambleButton_Clicked()
+
+	Dim URL as String
+	
+	&apos; Set the preamble variable
+	glb_Preamble = oDlgPreamble.getControl(&quot;Preamble&quot;).getText()
+
+	URL = ConvertFromURL( glb_UserPath ) &amp; &quot;GlobalPreamble.tex&quot;
+
+	&apos; Open service file and an output stream
+	Dim oFileAccess as Variant, oTextStream as Variant
+	oFileAccess = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+	oTextStream  = createUnoService(&quot;com.sun.star.io.TextOutputStream&quot;)
+
+	&apos; Write file
+	If oFileAccess.exists( URL ) Then oFileAccess.kill( URL )
+    oTextStream.setOutputStream( oFileAccess.openFileWrite( URL ) )
+	oTextStream.writeString(glb_Preamble)
+
+	&apos; Close the file
+    oTextStream.closeOutput()
+	
+ 	&apos; Save IgnorePreamble state to the registry
+ 	Dim oSystemInfo as Variant
+	oSystemInfo = GetConfigAccess(&quot;/ooo.ext.texmaths.Registry/SystemInfo&quot;, TRUE)
+	
+	If oDlgPreamble.getControl(&quot;IgnorePreamble&quot;).state() = 1 Then
+	
+		glb_IgnorePreamble = TRUE
+		oSystemInfo.IgnorePreamble = &quot;TRUE&quot;
+	
+	Else
+	
+		glb_IgnorePreamble = FALSE
+		oSystemInfo.IgnorePreamble = &quot;FALSE&quot;
+	
+	End If
+
+	oSystemInfo.commitChanges()
+
+	&apos; Close dialog
+	oDlgBasePreamble.endExecute()
+	DisplayStatus( _(&quot;Global preamble applied and saved...&quot;) )
+	
+End Sub
+
+
+Sub PreambleChildWindowListener_windowMoved(ev)
+End Sub
+
+Sub PreambleChildWindowListener_windowShown(ev)
+End Sub
+
+Sub PreambleChildWindowListener_windowHidden(ev)
+End Sub
+
+
+&apos; Invoked when a window is resized
+Sub PreambleWindowListener_windowResized(ev)
+      
+	&apos; Inner dialog size
+	Dim aSize as Variant
+	aSize = ev.Source.getSize()
+
+	&apos; Child window index is 0 for OpenOffice and 2 for LibreOffice
+	Dim i as Integer
+	If ev.Source.Windows(0).isVisible Then i = 0 Else i = 2
+	ev.Source.Windows(i).setPosSize(0, 0, aSize.Width, aSize.Height, com.sun.star.awt.PosSize.SIZE)
+
+End Sub
+
+
+&apos; Invoked when a window is in the process of being closed
+Sub PreambleWindowListener_windowClosing(ev)
+    
+	&apos; Close modal window
+	ev.Source.endExecute()
+
+End Sub
+
+&apos; Invoked when a window has been opened
+Sub PreambleWindowListener_windowOpened(ev)
+End Sub
+
+&apos; Invoked when a window has been closed
+Sub PreambleWindowListener_windowClosed(ev)
+End Sub
+
+&apos; Invoked when a window is iconified
+Sub PreambleWindowListener_windowMinimized(ev)
+End Sub
+
+&apos; Invoked when a window is de-iconified
+Sub PreambleWindowListener_windowNormalized(ev)
+End Sub
+
+&apos; Invoked when a window is activated
+Sub PreambleWindowListener_windowActivated(ev)
+End Sub
+
+&apos; Invoked when a window is de-activated
+Sub PreambleWindowListener_windowDeactivated(ev)
+End Sub
+
+Sub PreambleWindowListener_disposing(ev)
+End Sub
+
+Sub PreambleWindowListener_windowMoved(ev)
+End Sub
+
+Sub PreambleWindowListener_windowShown(ev)
+End Sub
+
+Sub PreambleWindowListener_windowHidden(ev)
+End Sub
+
+</script:module>

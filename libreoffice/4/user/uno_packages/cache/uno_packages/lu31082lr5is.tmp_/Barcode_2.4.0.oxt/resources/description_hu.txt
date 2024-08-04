@@ -1,0 +1,2 @@
+Egy új "Vonalkód beszúrása" menüpontot ad a rajzoló Beszúrás menüjéhez.
+Telepítés után kérem indítsa újra az LibreOffice.

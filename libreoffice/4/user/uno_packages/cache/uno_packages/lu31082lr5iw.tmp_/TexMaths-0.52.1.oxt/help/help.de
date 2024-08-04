@@ -1,0 +1,240 @@
+
+1. TexMaths Modi
+
+Ab Version 0.51 verfügt TexMaths über zwei Gleichungsmodi, die von der Position des Cursors in einem Writer-, Impress- oder Draw-Dokument abhängen. Wenn sich der Cursor innerhalb eines Textfeldes befindet (in Impress ist dies der Ort, an dem Sie Ihren Text eingeben, in Draw können Sie ein Textfeld durch Doppelklick auf ein Formular eingeben, und in Writer ist dies der Fall, wenn ein Textfeld auf der Seite eingefügt wird), schaltet TexMaths automatisch in den Textmodus um. Überall sonst verwendet TexMaths den LaTeX-Modus.
+
+Im LaTeX-Modus erhalten Sie wie gewohnt Ihre Gleichung als Grafik im PNG- oder SVG-Format. Im Textmodus wird die Gleichung als Zeichensatz mit TexMaths-Schriftarten eingefügt (diese Schriftarten sind spezifisch für TexMaths und werden bei Bedarf automatisch installiert). Dies liegt daran, dass es aufgrund einer Einschränkung in LibreOffice nicht möglich ist, Grafiken in ein Textfeld einzufügen, so dass TexMaths die Gleichungen als Text einfügen muss.
+
+Der Textmodus hat einige Merkmale und Einschränkungen, die weiter unten in Abschnitt 6 erläutert werden.
+ 
+
+
+2. Die TexMaths-Symbolleiste
+
+Sobald die TexMaths-Erweiterung in LibreOffice installiert ist, sollten Sie eine neue Symbolleiste in Writer, Impress und Draw sehen. Dies ist die TexMaths-Symbolleiste. In Writer besteht diese Symbolleiste aus vier Symbolen, während es in Impress und Draw nur drei sind.
+
+Wenn Sie in Writer auf das linke Symbol (das mit dem blauen Pi-Symbol) klicken, wird das TexMaths-Makro Gleichungen gestartet. Das zweite Symbol wird für TexMaths Numbered Equations verwendet. Das dritte Symbol ist mit dem TexMaths-Makro Gleichungen neu kompilieren verbunden. Wenn Sie schließlich auf das rechte Symbol klicken, wird das Dialogfeld TexMaths Systemkonfiguration geöffnet. Beachten Sie, dass in Impress und Draw das zweite Symbol nicht vorhanden ist. Es gibt auch ein Untermenü Tools/TexMaths, das sich direkt über dem Untermenü Tools/Makros befindet. 
+
+
+
+3. Erste Schritte mit TexMaths-Gleichungen
+
+Wenn LaTeX bereits auf Ihrem System installiert ist, brauchen Sie nur auf das Symbol TexMaths-Gleichungen in der TexMaths-Symbolleiste zu klicken, um mit TexMaths zu arbeiten. TexMaths wird versuchen, die externen Programme zu finden, die es zur Erstellung von LaTeX-Gleichungen verwendet. Geben Sie dann einen LaTeX-Code in das Textfeld des TexMaths-Editors für Gleichungen ein und klicken Sie auf die Schaltfläche LaTeX, um das Gleichungsbild zu erzeugen.
+
+Beispiel: x(t) = \mu ^2 (t) sollte die Gleichung x(t)=(t) ergeben
+
+Ab TexMaths 0.46 verfügt der Gleichungseditor über Symbolpaletten zur Eingabe von LaTeX-Code für mehr als 300 Symbole. Klicken Sie einfach auf das ausgewählte Symbol und der entsprechende LaTeX-Code wird an der Cursorposition im Gleichungseditor eingefügt. Die Symbole können in der Registerkarte "Schnittstelle" des Dialogs "TexMaths-Systemkonfiguration" ausgeblendet werden. Die Farbe der Symbole (schwarz oder weiß) kann dort ebenfalls festgelegt werden.
+
+Wenn sich der Dokumentcursor in einem Textfeld befindet, schaltet TexMaths automatisch in den Textmodus und installiert TexMaths-Schriftarten für den lokalen Benutzer. In diesem Fall werden die Gleichungen nicht als PNG- oder SVG-Grafiken eingefügt, sondern als normale Zeichen mit TexMaths-Schriftarten. 
+
+
+
+4. LaTeX-Gleichungen generieren
+
+Wenn Sie eine Gleichung eingegeben haben, können Sie sie durch Klicken auf die Schaltfläche LaTeX im Dialogfeld TexMaths-Gleichungen erzeugen. Im LaTeX-Modus wird dann ein Bild Ihrer Gleichung in dem von Ihnen gewählten Format, Typ und der Größe erzeugt. Sie können im Dialogfeld Systemkonfiguration zwischen den Compilern LaTeX, XeLaTeX und LuaLaTeX wählen. Im Textmodus wird eine Reihe von Zeichen mit TexMaths-Schriftarten eingefügt, die die Gleichung darstellen. Die Schriftgröße entspricht der Größe der Textschrift. 
+
+
+
+5. LaTeX-Modus
+
+  5.1. Auswählen des Bildformats
+
+TexMaths kann zwei Arten von Bildern erzeugen und in ein LibreOffice-Dokument einfügen (wenn sich der Cursor nicht in einem Textfeld befindet). Um das Bildformat auszuwählen, verwenden Sie den Selektor, der sich im Rahmen Bildformat befindet.
+
+Das Standard-Bildformat ist das SVG-Vektorformat. Es ermöglicht die Größenänderung von LaTeX-Gleichungen ohne Präzisionsverlust und erfordert keine spezielle mathematische Schriftart, die in LibreOffice installiert sein muss, da mathematische Symbole einfach mit Kurven gezeichnet werden. Dies ist das bevorzugte (und Standard-) Format, aber es kann einige Probleme beim Export von LibreOffice-Dokumenten in MS Office geben (siehe Abschnitt 11).
+
+Das andere unterstützte Bildformat ist PNG und ist ein Rasterbildformat. Daher müssen Sie eine Auflösung wählen, um es zu verwenden. Die Standardauflösung beträgt 600 dpi, Sie können aber auch aus mehreren vordefinierten Werten wählen. Bei der Verwendung des PNG-Formats für den Export von MS Office-Dokumenten sollte es keine Kompatibilitätsprobleme geben.
+
+Beachten Sie, dass jedes Format nur dann verfügbar ist, wenn das entsprechende externe Programm (dvisvgm für SVG und dvipng für PNG) in Ihrem System installiert ist und sein Pfad über den TexMaths-Systemkonfigurationsdialog festgelegt wurde (wird normalerweise beim ersten Start erraten). Mindestens eines dieser beiden Programme ist erforderlich, um TexMaths auszuführen.
+
+
+  5.2. Schriftgröße
+
+TexMaths kann verschiedene Schriftgrößen für Ihre Gleichungen verarbeiten. Um die Schriftgröße zu ändern, verwenden Sie den Selektor, der sich im Rahmen der Schriftgröße befindet. Sie können zwischen vordefinierten Schriftgrößen wählen oder die von Ihnen bevorzugte Schriftgröße eingeben, wenn sie nicht aufgeführt ist.
+
+
+  5.3. Transparenz
+
+Sie können die Transparenz des Gleichungsbildes einschalten, indem Sie das Kontrollkästchen Transparenz im Dialogfeld TexMaths-Gleichungen aktivieren. Dies kann nützlich sein, wenn der Hintergrund des Dokuments nicht weiß ist. Die Transparenz kann sowohl mit SVG- als auch mit PNG-Bildformaten verwendet werden.
+
+
+  5.4. Gleichungstyp
+
+Im LaTeX-Modus kann TexMaths drei Arten von LaTeX-Gleichungen erzeugen:
+- Anzeigegleichungen
+- Inline-Display-Gleichungen
+- LaTeX-Gleichungen
+
+Um einen Gleichungstyp auszuwählen, verwenden Sie einfach die Optionsschaltfläche im Rahmen Gleichungstyp. 
+
+Um Anzeigegleichungen oder Inline-Anzeigegleichungen zu erstellen, müssen Sie nur den entsprechenden Gleichungstyp auswählen und dann den Gleichungscode in das Textfeld des TexMaths-Dialogs Gleichungen eingeben.
+
+Beispiel: Um das griechische Alphasymbol zu erzeugen, geben Sie einfach \alpha
+
+Inline-Anzeige-Gleichungen werden auf dieselbe Weise erstellt, der Unterschied liegt jedoch in der Art der erzeugten Gleichung, die in Writer besser in einen Text integriert werden kann. So werden beispielsweise der Summenindex und der Exponent neben dem Summenzeichen angezeigt und nicht darunter oder darüber.
+
+Beide Arten von Gleichungen sind ideal für einfache einzeilige Gleichungen und die vertikale Ausrichtung im Text ist korrekt, aber sie können keine mehrzeiligen Gleichungen oder allgemeinere LaTeX-Umgebungen verarbeiten. Für diese Art von Gleichungen wählen Sie den LaTeX-Gleichungstyp und geben Ihre Gleichung innerhalb der Anweisungen \begin{} und \end{} ein. Sie können alle LaTeX-Umgebungsanweisungen verwenden.
+
+Beispiel: Geben Sie die folgenden Zeilen ein, um eine dreizeilige Gleichung anzuzeigen, die am Gleichheitszeichen ausgerichtet ist.
+\begin{align*}
+x &= 1 \\
+y &= 2x+1\\
+&= 3\\
+\end{align*}
+
+
+  5.5. Name der Gleichung
+
+Im Dialogfeld TexMaths-Gleichungen können Sie eine Bezeichnung in das Textfeld Name eingeben. Dies kann verwendet werden, um eine Gleichung über ihren Namen aufzufinden, und kann bei der Arbeit mit Animationen in Impress hilfreich sein.
+
+
+  5.6. Präferenzen
+
+TexMaths wird mit einigen Standardeinstellungen geliefert. Wenn diese Einstellungen nicht Ihren Bedürfnissen entsprechen, können Sie sie über das Dialogfeld TexMaths-Voreinstellungen ändern, das Sie durch Klicken auf die Schaltfläche Voreinstellungen erreichen. In diesem Dialogfeld können Sie das Bildformat, die Schriftgröße, den Gleichungstyp usw. für jede Art von LibreOffice-Dokument ändern. Sie können dann Ihre neuen Einstellungen speichern, die Standardeinstellungen wiederherstellen oder bereits gespeicherte Einstellungen laden.
+
+
+  5.7. LaTeX-Präambel
+
+Wenn Sie auf die Schaltfläche Präambel klicken, wird das Dialogfeld TexMaths-Präambel angezeigt, in dem Sie Ihre LaTeX-Präambel anpassen können. Um zum Beispiel farbige Gleichungen zu erzeugen, entfernen Sie die folgenden drei Zeilen der Standard-Präambel, ändern Sie den RGB-Farbwert wie gewünscht und speichern Sie die Präambel.
+
+%\definecolor{fgcolor}{RGB}{0,0,255}
+%\definecolor{bgcolor}{RGB}{255,0,0}
+%\pagecolor{bgcolor}\color{fgcolor}
+
+Nun werden alle neuen Gleichungen das Farbschema haben, das Sie in der Präambel festgelegt haben. Beachten Sie, dass Gleichungen mit einer Hintergrundfarbe nicht mehr transparent sind, auch wenn die Option Transparenz aktiviert war. Daher müssen Sie den farbigen Hintergrund entfernen, wenn Sie Transparenz wünschen.
+
+Die Präambel wird in den Dokumenteigenschaften gespeichert. Auf diese Weise kann jedes Dokument seine eigene Präambel haben. Beachten Sie, dass die Standard-Präambel global ist und nicht geändert werden kann. Beachten Sie, dass LaTeX, XeLaTeX und LuaLaTeX eine andere Standard-Präambel haben.
+
+
+  5.8. Befehle \input, \include und \usepackage
+
+Ab TexMaths 0.41 können die LaTeX-Befehle \input und \include verwendet werden, um den Inhalt einer LaTeX-Textdatei (.tex) einzufügen. Es wird davon ausgegangen, dass sich die eingefügten .tex-Dateien im selben Verzeichnis wie das Dokument befinden.
+
+Beispiel: In dem Dokument my_doc.odt wird der LaTeX-Befehl:
+
+\include{my_equations}
+
+kann verwendet werden, um den Inhalt der LaTeX-Datei my_equations.tex einzufügen, vorausgesetzt, diese Datei befindet sich im selben Verzeichnis wie my_doc.odt. 
+
+Es besteht auch die Möglichkeit, benutzerdefinierte .sty-Dateien durch die Verwendung von \usepackage-Befehlen zu verwenden. Diese Befehle müssen in der Präambel eingefügt und dann (falls gewünscht) im aktuellen Dokument gespeichert werden. Die .sty-Dateien müssen sich im gleichen Verzeichnis wie das Dokument befinden.
+
+Beispiel: In dem Dokument my_doc.odt kann die Dokumentvorlage my_style.sty verwendet werden, indem der LaTeX-Präambel der Befehl hinzugefügt wird:
+
+\usepackage{my_style}
+
+Die Datei my_style.sty muss sich in demselben Verzeichnis wie my_doc.odt befinden, sonst funktioniert es nicht.
+
+
+  5.9. Text zu LaTeX in Writer
+
+Geben Sie einen LaTeX-Code direkt in ein Writer-Dokument ein (d. h. ohne das TexMaths-Dialogfeld zu öffnen), markieren Sie den Text und klicken Sie auf das TexMaths-Symbol für Gleichungen (oder verwenden Sie einen Tastaturbefehl, wenn Sie einen definiert haben). Der markierte Text wird dann stillschweigend in ein LaTeX-Gleichungsbild umgewandelt. Das verwendete Bildformat, die Gleichungsgröße und der Gleichungstyp sind die Standardeinstellungen, die in den TexMaths-Voreinstellungen festgelegt wurden. Beachten Sie, dass dies in Writer nicht funktioniert, wenn sich der Cursor innerhalb eines Textfeldes befindet.
+
+
+  5.10. Gleichungen bearbeiten
+
+Wählen Sie in einem LibreOffice-Dokument ein Gleichungsbild aus (das bereits mit TexMaths erstellt wurde) und klicken Sie auf das Symbol TexMaths-Gleichungen in der TexMaths-Symbolleiste (oder verwenden Sie ein Tastenkürzel, wenn Sie eines definiert haben). Daraufhin wird das Dialogfeld TexMaths-Gleichungen angezeigt, in dem der Text Ihrer Gleichung ausgewählt ist. Bearbeiten Sie einfach diesen Text und klicken Sie auf die Schaltfläche LaTeX, um die geänderte Gleichung zu erstellen.
+
+Natürlich können Sie ein Dokument schließen, es wieder öffnen und Ihre gespeicherten Gleichungen bearbeiten.
+
+
+  5.11. Neukompilierung von TexMaths-Gleichungen
+
+Wenn ein Dokument (in Writer, Impress oder Draw) viele Gleichungen enthält, kann es nützlich sein, deren Schriftgröße, Transparenz, Bildformat usw. auf einen Schlag zu ändern. Dies ist der Zweck des TexMaths-Makros Gleichungen neu kompilieren.
+
+Wenn Sie auf das entsprechende Symbol in der Symbolleiste (das mit dem Zahnrad) klicken, öffnet sich ein Dialog, in dem Sie eine Reihe von Gleichungsparametern und die Präambel ändern können. Wenn Sie einen Parameter aus einer Liste nicht ändern möchten, aktivieren Sie die Schaltfläche Belassen.
+
+In jedem der drei Dokumenttypen können Sie alle Gleichungen des Dokuments neu kompilieren, indem Sie die Option Alle Gleichungen neu kompilieren auswählen.
+
+In Writer-Dokumenten können Sie durch Auswahl der Option "Ausgewählte Gleichungen neu kompilieren" festlegen, dass nur die Gleichungen neu kompiliert werden, die sich innerhalb des ausgewählten Textbereichs befinden. Beachten Sie, dass dieses Makro aufgrund einiger Einschränkungen bei der Auswahl in LibreOffice keine Gleichungen neu kompiliert, die sich in Tabellen, Textrahmen, Kopf- und Fußzeilen befinden. Bei Bedarf können Sie diese Gleichungen einzeln neu kompilieren, indem Sie sie auf die übliche Weise bearbeiten. 
+
+In Impress- und Draw-Dokumenten können Sie durch Auswahl der Option Gleichungen aus Folie neu kompilieren nur Gleichungen neu kompilieren, die sich auf der aktuellen Folie befinden.
+
+Wenn Sie alle Parameter und Optionen eingestellt haben, klicken Sie auf die Schaltfläche Ausführen, und alle oder ausgewählte Gleichungen sollten mit den neuen Parameterwerten aktualisiert werden. Bei Hunderten von Gleichungen kann dies eine Weile dauern, haben Sie also bitte etwas Geduld.
+
+
+  5.12. Nummerierung von Gleichungen in Writer
+
+Um Gleichungen zu nummerieren, klicken Sie einfach auf das TexMaths-Symbol für nummerierte Gleichungen (oder geben Sie ein Tastaturkürzel ein, wenn Sie eines definiert haben), geben Sie Ihre Gleichung ein und klicken Sie auf die LaTeX-Schaltfläche. Eine zentrierte, nummerierte Gleichung (mit linker oder rechter Nummerierung) wird dann automatisch in Ihr Writer-Dokument eingefügt.
+
+Sie können auch die gewünschten Abstände und die Beschriftung der Gleichung auf der Registerkarte Optionen des Dialogs TexMaths Systemkonfiguration auswählen.
+
+Nummerierte Gleichungen können in Writer nicht eingefügt werden, wenn sich der Cursor in einem Textfeld befindet. 
+
+
+  5.13. Kompatibilität mit ooolatex
+
+Ab Version 0.34 ist TexMaths mit ooolatex kompatibel. Das heißt, wenn Sie ein Dokument haben, das Ooolatex-Gleichungen enthält, können Sie diese Gleichungen bearbeiten, indem Sie sie (eine nach der anderen) auswählen und das TexMaths-Makro Gleichung aufrufen. Sie können dann den LaTeX-Code ändern und die Gleichung je nach Wunsch im SVG- oder PNG-Format neu generieren.
+
+
+
+6. Text-Modus
+
+  6.1. Gleichungen
+
+Der Textmodus wird von TexMaths automatisch ausgewählt, wenn sich der Cursor in einem Textfeld befindet. In Impress ist dies die einzige Möglichkeit, eine Inline-Gleichung einzugeben, die sich mit dem Text bewegt, wenn dieser geändert wird. Im Textmodus versucht TexMaths, den LaTeX-Code in eine Reihe von Zeichen zu konvertieren, die TexMaths-Schriftarten verwenden. 
+
+Im Textmodus ist es nur möglich, einfache Gleichungen mit maximal einer tief- und hochgestellten Ebene zu erstellen. Alles andere wird nicht unterstützt. Beachten Sie, dass es in Impress immer noch möglich ist, komplexe Gleichungen im LaTeX-Modus zu erstellen, indem Sie den Cursor außerhalb von Textfeldern platzieren und auf das TexMaths-Gleichungssymbol klicken.
+
+
+  6.2. Umgebungen
+
+Im Textmodus werden geschweifte Klammern verwendet, um Umgebungen mit unterschiedlichen Positionen und Eigenschaften zu erhalten, wie in der folgenden Gleichung:
+y_n = \sum_{n=1}^{N-1} x_n
+
+Alle Symbole, die in der Symbolpalette nicht ausgegraut sind, können eingegeben werden.
+
+Es ist auch möglich, einige einfache Umgebungen zu verwenden, um Ihre Gleichung zu formatieren:
+- \text{}, \textrm{}, \textbf{}, \textit{} für die Textformatierung
+- \bold{}, \italic{}, \underline{} für Schriftstärke
+- \mathbb{}, \mathcal{}, \mathscr{}, \mathfrak{} für spezielle mathematische Schriftarten
+- \huge{}, \Huge{}, \large{}, \Large{}, \small{}, \tiny{} für Schriftgröße
+
+Sie können auch Umgebungen verschachteln, wie im folgenden Beispiel:
+w \textrm{\large{text}} x
+
+
+  6.3. Gemeinsame Nutzung von Dokumenten mit Textgleichungen
+  
+Wenn Sie ein Dokument weitergeben möchten, das TexMaths Textgleichungen enthält, müssen Sie die TexMaths-Schriftarten nicht an den Empfänger senden. Stattdessen können Sie die TexMaths-Schriftarten in Ihr Dokument einbetten, indem Sie das Menü Datei / Eigenschaften / Schriftarten / Schrifteinbettung aufrufen und die Option Schriftarten in das Dokument einbetten aktivieren. Dies gilt auch für Writer / Impress und Draw Dokumente.
+
+
+7. Geschichte
+
+Ab Version 0.51 ermöglicht ein Verlaufsmechanismus das Auffinden früherer Gleichungscodes im Gleichungseditor. Mit den beiden Schaltflächen << und >> können Sie durch die Historie navigieren, mit der Schaltfläche <> können Sie sie löschen.
+ 
+
+
+8. System-Konfiguration
+
+Wenn Sie auf das dritte Symbol klicken, wird das Dialogfeld TexMaths Systemkonfiguration geöffnet. In der ersten Registerkarte dieses Dialogs können Sie die Dateipfade der externen Programme ändern. Seit TexMaths 0.46 muss der komplette Dateipfad angegeben werden.
+
+Die zweite Registerkarte ermöglicht die Auswahl des LaTeX-Compilers (LaTeX, XeLaTeX oder LuaLaTeX, wenn letztere installiert sind und von der von Ihnen verwendeten dvisvgm-Version unterstützt werden. Beachten Sie, dass XeLaTeX nicht verwendet werden kann, um PNG-Gleichungsbilder zu erzeugen). Optionen für die Nummerierung von Gleichungen und die Kompatibilität mit MS Word sind ebenfalls vorhanden. Auf der dritten Registerkarte können Sie die im Gleichungseditor verwendete Schriftart auswählen und verschiedene Optionen in Bezug auf Symbolsymbole festlegen. Auf der vierten Registerkarte des Dialogfelds Systemkonfiguration können Sie einige Tastenkombinationen zum Starten von TexMaths-Makros festlegen.
+
+
+
+9. Exportieren von Dokumenten in MS Office
+
+Wenn Sie Ihre Dokumente in MS Office (Word und Powerpoint, egal in welcher Version) exportieren möchten, können Sie Ihre LibreOffice-Dokumente in den Formaten .docx und .pptx speichern.
+
+Es wird auch empfohlen, die Option für die vertikale Ausrichtung in Word zu aktivieren (im Dialogfeld TexMaths-Systemkonfiguration), wenn Ihre Writer-Dokumente nach Word exportiert werden sollen. Dadurch wird die vertikale Ausrichtung von Textgleichungen in Word erheblich verbessert. Beachten Sie, dass es notwendig sein kann, die vertikale Ausrichtung von Gleichungen in Word manuell anzupassen.
+
+
+
+10. Tastaturkürzel
+
+Um Verknüpfungen zum Starten der TexMaths-Gleichungen mit oder ohne Nummerierung zu konfigurieren, klicken Sie auf die Schaltfläche TexMaths-Systemkonfiguration in der TexMaths-Symbolleiste und definieren Sie Ihre Verknüpfungen. Für Gleichungen ohne Nummerierung können Sie eine einzige Verknüpfung für alle Anwendungen verwenden oder für jede Anwendung eine andere. Da nummerierte Gleichungen nur in Writer verwendet werden können, gibt es für sie nur eine Abkürzung.
+
+Im Dialogfeld TexMaths-Gleichungen können Sie die folgenden Tastenkombinationen verwenden:
+- Esc, um den Dialog zu schließen, ohne eine Gleichung zu erstellen
+- Alt-L oder Ctrl-L zum Erstellen einer Gleichung
+- Alt-P oder Ctrl-P, um das Dialogfeld Einstellungen anzuzeigen
+- Alt-B oder Ctrl-B, um das Dialogfeld Präambel anzuzeigen
+
+
+11. Bekannte Probleme
+
+- TexMaths wurde zwar für LibreOffice entwickelt, kann aber auch in Apache Openoffice 4.x verwendet werden.
+
+- Gleichungen, die PSTricks-Befehle enthalten, können aufgrund von dvipng nicht korrekt als PNG-Bilder dargestellt werden. Sie können stattdessen sicher das SVG-Format verwenden.
+
+- Beim Exportieren von Impress-Dokumenten mit Textgleichungen in das MS PowerPoint-Format gibt es einen Fehler, der dazu führt, dass die eingebetteten Schriftarten in PowerPoint nicht verfügbar sind, selbst wenn die Option zum Einbetten von Schriftarten in Impress aktiviert ist. Zum Glück gibt es einen Workaround: Öffnen Sie unter Windows, wenn die TexMaths-Schriftarten installiert sind, die .pptx-Datei mit PowerPoint und betten Sie die Schriftarten dort ein (verwenden Sie Datei / Optionen / Speichern, dann Schriftarten in Datei einbetten und wählen Sie die gewünschte Einbettungsoption). Jetzt hat Ihr .pptx-Dokument eingebettete Schriftarten und kann mit anderen Personen geteilt werden. 

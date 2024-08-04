@@ -23,7 +23,8 @@
         "hyprland/submap",
         "clock#date",
         "clock#time",
-        "custom/weather"
+        "custom/weather",
+        "custom/vpn"
     ],
 "modules-center": [ 
         "hyprland/window"
@@ -44,6 +45,14 @@
     // -------------------------------------------------------------------------
     // Modules
     // -------------------------------------------------------------------------
+
+    "custom/vpn": {
+        "format": "🌎 {}",
+        "exec": "curl -s www.icanhazip.com",
+        "interval": 30
+    },
+
+
     "custom/weather": {
         "format": "☄ Feels Like: {}°",
         "tooltip": true,
@@ -102,9 +111,10 @@
       "tooltip": false
     },
 
+
     "memory": {
         "interval": 5,
-        "format": " {}%", // Icon: memory
+        "format": " {}%", // Icon: memory
         "states": {
             "warning": 70,
             "critical": 90
