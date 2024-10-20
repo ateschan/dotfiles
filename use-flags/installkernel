@@ -1,0 +1,17 @@
+sys-kernel/installkernel dracut
+# required by gui-apps/wofi-1.3::gentoo
+# required by gui-apps/wofi (argument)
+>=x11-libs/gtk+-3.24.41 wayland
+# required by x11-libs/gtk+-3.24.41::gentoo[wayland]
+# required by gui-apps/wofi-1.3::gentoo
+# required by gui-apps/wofi (argument)
+>=media-libs/mesa-24.1.3 wayland
+# required by media-sound/pulseaudio-daemon-17.0-r1::gentoo[alsa,alsa-plugin]
+# required by media-libs/libpulse-17.0::gentoo
+# required by media-libs/libpulse (argument)
+>=media-plugins/alsa-plugins-1.2.7.1-r1 pulseaudio
+# required by dev-libs/libayatana-appindicator-0.5.92::gentoo
+# required by gui-apps/waybar-0.10.3::gentoo[tray]
+# required by @selected
+# required by @world (argument)
+>=dev-libs/libdbusmenu-16.04.0-r2 gtk3
