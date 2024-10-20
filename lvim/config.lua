@@ -4,6 +4,7 @@ lvim.builtin.treesitter.ensure_installed = {
   "rust",
   "toml",
 }
+lsp_codelens = false
 
 vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "rust_analyzer" })
 
@@ -46,7 +47,7 @@ pcall(function()
         border = "rounded",
       },
       on_initialized = function()
-        vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter", "CursorHold", "InsertLeave" }, {
+        vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter", "InsertLeave" }, {
           pattern = { "*.rs" },
           callback = function()
             local _, _ = pcall(vim.lsp.codelens.refresh)
@@ -97,6 +98,21 @@ lvim.builtin.dap.on_config_done = function(dap)
   }
 end
 
+vim.api.nvim_create_autocmd({"BufWinLeave"}, {
+  pattern = {"*.*"},
+  desc = "save view (folds), when closing file",
+  command = "mkview",
+})
+vim.api.nvim_create_autocmd({"BufWinEnter"}, {
+  pattern = {"*.*"},
+  desc = "load view (folds), when opening file",
+  command = "silent! loadview"
+})
+vim.opt.relativenumber = true
+vim.opt.foldlevel = 99
+vim.opt.foldmethod = "syntax" -- default is "normal"
+vim.opt.foldenable = false -- if this option is true and fold method option is other than normal, every time a document is opened everything will be folded
+
 vim.api.nvim_set_keymap("n", "<m-d>", "<cmd>RustOpenExternalDocs<Cr>", { noremap = true, silent = true })
 
 lvim.builtin.which_key.mappings["C"] = {
@@ -121,6 +137,7 @@ lvim.builtin.which_key.mappings["C"] = {
 }
 
 lvim.plugins = {
+
   "simrat39/rust-tools.nvim",
   {
     "saecki/crates.nvim",
@@ -144,4 +161,110 @@ lvim.plugins = {
       require("fidget").setup()
     end,
   },
+  {
+    'windwp/nvim-autopairs',
+    event = "InsertEnter",
+    config = true
+    -- use opts = {} for passing setup options
+    -- this is equivalent to setup({}) function
+},
+  {
+    "jake-stewart/multicursor.nvim",
+    config = function()
+        local mc = require("multicursor-nvim")
+
+        mc.setup()
+
+        -- add cursors above/below the main cursor
+        vim.keymap.set({"n", "v"}, "<up>", function() mc.addCursor("k") end)
+        vim.keymap.set({"n", "v"}, "<down>", function() mc.addCursor("j") end)
+
+        -- add a cursor and jump to the next word under cursor
+        vim.keymap.set({"n", "v"}, "<c-n>", function() mc.addCursor("*") end)
+
+        -- jump to the next word under cursor but do not add a cursor
+        vim.keymap.set({"n", "v"}, "<c-s>", function() mc.skipCursor("*") end)
+
+        -- rotate the main cursor
+        vim.keymap.set({"n", "v"}, "<left>", mc.nextCursor)
+        vim.keymap.set({"n", "v"}, "<right>", mc.prevCursor)
+
+        -- delete the main cursor
+        vim.keymap.set({"n", "v"}, "<leader>x", mc.deleteCursor)
+
+        -- add and remove cursors with control + left click
+        vim.keymap.set("n", "<c-leftmouse>", mc.handleMouse)
+
+        vim.keymap.set({"n", "v"}, "<c-q>", function()
+            if mc.cursorsEnabled() then
+                -- stop other cursors from moving. this allows you to reposition the main cursor
+                mc.disableCursors()
+            else
+                mc.addCursor()
+            end
+        end)
+
+        vim.keymap.set("n", "<esc>", function()
+            if not mc.cursorsEnabled() then
+                mc.enableCursors()
+            elseif mc.hasCursors() then
+                mc.clearCursors()
+            else
+                -- default <esc> handler
+            end
+        end)
+
+        -- align cursor columns
+        vim.keymap.set("n", "<leader>a", mc.alignCursors)
+
+        -- split visual selections by regex
+        vim.keymap.set("v", "S", mc.splitCursors)
+
+        -- match new cursors within visual selections by regex
+        vim.keymap.set({"n", "v"}, "M", mc.matchCursors)
+
+        -- rotate visual selection contents
+        vim.keymap.set("v", "<leader>t", function() mc.transposeCursors(1) end)
+        vim.keymap.set("v", "<leader>T", function() mc.transposeCursors(-1) end)
+
+        -- customize how cursors look
+        vim.cmd.hi("link", "MultiCursorCursor", "Cursor")
+        vim.cmd.hi("link", "MultiCursorVisual", "Visual")
+        vim.cmd.hi("link", "MultiCursorDisabledCursor", "Visual")
+        vim.cmd.hi("link", "MultiCursorDisabledVisual", "Visual")
+    end,
+},
+  {
+  "folke/todo-comments.nvim",
+  dependencies = { "nvim-lua/plenary.nvim" },
+  opts = {
+    -- your configuration comes here
+    -- or leave it empty to use the default settings
+    -- refer to the configuration section below
+  }
+},
+  "epwalsh/obsidian.nvim",
+  tag = "*",  -- recommended, use latest release instead of latest commit
+  requires = {
+    -- Required.
+    "nvim-lua/plenary.nvim",
+
+    -- see below for full list of optional dependencies 👇
+  },
+  config = function()
+    require("obsidian").setup({
+      workspaces = {
+        {
+          name = "personal",
+          path = "~/vaults/personal",
+        },
+        {
+          name = "work",
+          path = "~/vaults/work",
+        },
+      },
+
+      -- see below for full list of options 👇
+    })
+  end,
 }

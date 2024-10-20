@@ -1,0 +1,1304 @@
+2024-10-07 14:26:49 INFO  (LoggingInitialization) Using log config file: jar:file:/usr/share/ghidra/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2024-10-07 14:26:49 INFO  (LoggingInitialization) Using log file: /home/ateschan/.config/ghidra/ghidra_11.2_DEV/application.log  
+2024-10-07 14:26:49 INFO  (Preferences) Loading user preferences: /home/ateschan/.config/ghidra/ghidra_11.2_DEV/preferences  
+2024-10-07 14:26:52 INFO  (ClassSearcher) Searching for classes...  
+2024-10-07 14:26:54 INFO  (ClassSearcher) Class search complete (1852 ms)  
+2024-10-07 14:26:54 INFO  (SSLContextInitializer) Initializing SSL Context  
+2024-10-07 14:26:54 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2024-10-07 14:26:54 INFO  (SecureRandomFactory) Random Number Generator initialization complete: NativePRNGNonBlocking  
+2024-10-07 14:26:54 INFO  (ApplicationTrustManagerFactory) Trust manager disabled, cacerts have not been set  
+2024-10-07 14:26:54 INFO  (GhidraRun) User ateschan started Ghidra.  
+2024-10-07 14:26:54 INFO  (GhidraRun) User settings directory: /home/ateschan/.config/ghidra/ghidra_11.2_DEV  
+2024-10-07 14:26:54 INFO  (GhidraRun) User temp directory: /tmp/ateschan-ghidra  
+2024-10-07 14:26:54 INFO  (GhidraRun) User cache directory: /var/tmp/ateschan-ghidra  
+2024-10-07 14:26:54 DEBUG (DefaultProjectManager) No tools found; Installing default tools  
+2024-10-07 14:26:54 DEBUG (DefaultProjectManager) 	no recent project directories found  
+2024-10-07 14:26:55 DEBUG (RecoverySnapshotMgrPlugin) Recovery snapshot timer set to 5 minute(s)  
+2024-10-07 14:26:55 INFO  (GhidraRun) Ghidra startup complete (7707 ms)  
+2024-10-07 14:32:17 INFO  (DefaultProject) Creating project: /home/ateschan/Reverse_Engineering/test_01  
+2024-10-07 18:31:01 INFO  (LoggingInitialization) Using log config file: jar:file:/usr/share/ghidra/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2024-10-07 18:31:01 INFO  (LoggingInitialization) Using log file: /home/ateschan/.config/ghidra/ghidra_11.2_DEV/application.log  
+2024-10-07 18:31:02 INFO  (Preferences) Loading user preferences: /home/ateschan/.config/ghidra/ghidra_11.2_DEV/preferences  
+2024-10-07 18:31:02 INFO  (ClassSearcher) Searching for classes...  
+2024-10-07 18:31:03 INFO  (ClassSearcher) Class search complete (1384 ms)  
+2024-10-07 18:31:03 INFO  (SSLContextInitializer) Initializing SSL Context  
+2024-10-07 18:31:03 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2024-10-07 18:31:03 INFO  (SecureRandomFactory) Random Number Generator initialization complete: NativePRNGNonBlocking  
+2024-10-07 18:31:03 INFO  (ApplicationTrustManagerFactory) Trust manager disabled, cacerts have not been set  
+2024-10-07 18:31:03 INFO  (GhidraRun) User ateschan started Ghidra.  
+2024-10-07 18:31:03 INFO  (GhidraRun) User settings directory: /home/ateschan/.config/ghidra/ghidra_11.2_DEV  
+2024-10-07 18:31:03 INFO  (GhidraRun) User temp directory: /tmp/ateschan-ghidra  
+2024-10-07 18:31:03 INFO  (GhidraRun) User cache directory: /var/tmp/ateschan-ghidra  
+2024-10-07 18:31:04 DEBUG (RecoverySnapshotMgrPlugin) Recovery snapshot timer set to 5 minute(s)  
+2024-10-07 18:31:04 INFO  (DefaultProject) Opening project: /home/ateschan/Reverse_Engineering/test_01  
+2024-10-07 18:31:07 INFO  (GhidraRun) Ghidra startup complete (6625 ms)  
+2024-10-07 18:31:14 INFO  (FileCacheMaintenanceDaemon) Starting cache cleanup: /var/tmp/ateschan-ghidra/fscache2  
+2024-10-07 18:31:14 INFO  (FileCacheMaintenanceDaemon) Finished cache cleanup, estimated storage used: 0  
+2024-10-07 18:31:39 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-07 18:31:39 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-07 18:31:39 DEBUG (ElfHeader) Elf relocation table section .rela.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-07 18:31:39 DEBUG (ElfHeader) Elf relocation table section .rela.plt linked to symbol table section .dynsym affecting .got  
+2024-10-07 18:31:42 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-07 18:31:42 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-07 18:31:42 DEBUG (ElfHeader) Elf relocation table section .rela.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-07 18:31:42 DEBUG (ElfHeader) Elf relocation table section .rela.plt linked to symbol table section .dynsym affecting .got  
+2024-10-07 18:31:42 DEBUG (ElfProgramBuilder) Discarding 2-byte alignment/filler segment_4.2 at 0010202e  
+2024-10-07 18:31:42 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_4.4 at 0010206c  
+2024-10-07 18:31:42 DEBUG (ElfProgramBuilder) Discarding 5-byte alignment/filler segment_3.2 at 0010101b  
+2024-10-07 18:31:42 DEBUG (ElfProgramBuilder) Discarding 1-byte alignment/filler segment_3.7 at 001012f3  
+2024-10-07 18:31:42 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_2.3 at 00100334  
+2024-10-07 18:31:42 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_2.7 at 001003ac  
+2024-10-07 18:31:42 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_2.12 at 001005f4  
+2024-10-07 18:31:48 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-07 18:31:48 DEBUG (ToolTaskManager) Task Start: Auto Analysis  
+2024-10-07 18:31:48 INFO  (ImporterUtilities) Additional info:
+Loading file:///home/ateschan/Downloads/guess_the_password?MD5=3aa98ef710cbe1544232483bcd6ccc3b...
+ELF Relocation Failure: R_X86_64_COPY (5, 0x5) at 00104010 (Symbol = stdin) - Runtime copy not supported (8-bytes)
+Setting block .init_array to read-only
+Setting block .fini_array to read-only
+Setting block .dynamic to read-only
+Failed to markup ELF Note at 00100338: data conflict
+Failed to markup ELF Note at 00100368: data conflict
+Failed to markup ELF Note at 0010038c: data conflict
+------------------------------------------------
+
+Linking the External Programs of 'guess_the_password' to imported libraries...
+  [libc.so.6] -> not found in project
+------------------------------------------------
+
+Resolving External Symbols of [/guess_the_password] - 8 unresolved symbols, no external libraries configured - skipping
+  
+2024-10-07 18:31:48 INFO  (ExternalDebugFileSectionProvider) DWARF external debug information found: ExternalDebugInfo [filename=null, crc=0, hash=4b5316bbef627d72efaa8d38723b2e9725065ec2]  
+2024-10-07 18:31:48 INFO  (DWARFAnalyzer) Unable to find DWARF information, skipping DWARF analysis  
+2024-10-07 18:31:48 INFO  (DecompilerSwitchAnalyzer) hit non-returning function, restarting decompiler switch analyzer later  
+2024-10-07 18:31:49 WARN  (DecompileCallback) Decompiling 00101130, pcode error at 00105008: Unable to disassemble EXTERNAL block location: 00105008  
+2024-10-07 18:31:49 WARN  (DecompileCallback) Decompiling 00101160, pcode error at 00105048: Unable to disassemble EXTERNAL block location: 00105048  
+2024-10-07 18:31:49 INFO  (PackedDatabaseCache) Packed database cache: /var/tmp/ateschan-ghidra/packed-db-cache  
+2024-10-07 18:31:49 DEBUG (PackedDatabaseCache) Caching packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib_64.gdt  
+2024-10-07 18:31:49 DEBUG (PackedDatabase) Unpacking database /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib_64.gdt -> /var/tmp/ateschan-ghidra/packed-db-cache/pdbEBF59883/db.1.gbf  
+2024-10-07 18:31:49 DEBUG (PackedDatabaseCache) Cache update completed: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib_64.gdt  
+2024-10-07 18:31:50 INFO  (ApplyDataArchiveAnalyzer) Applied data type archive: generic_clib_64  
+2024-10-07 18:31:50 INFO  (ExternalSymbolResolverAnalyzer) Resolving External Symbols of [/guess_the_password] - 11 unresolved symbols, no external libraries configured - skipping  
+2024-10-07 18:31:50 INFO  (AutoAnalysisManager) -----------------------------------------------------
+    ASCII Strings                              0.353 secs
+    Apply Data Archives                        0.403 secs
+    Call Convention ID                         0.243 secs
+    Call-Fixup Installer                       0.004 secs
+    Create Address Tables                      0.005 secs
+    Create Function                            0.008 secs
+    DWARF                                      0.011 secs
+    Data Reference                             0.007 secs
+    Decompiler Switch Analysis                 0.044 secs
+    Decompiler Switch Analysis - One Time      0.757 secs
+    Demangler GNU                              0.009 secs
+    Disassemble Entry Points                   0.122 secs
+    ELF Scalar Operand References              0.009 secs
+    Embedded Media                             0.027 secs
+    External Entry References                  0.001 secs
+    External Symbol Resolver                   0.002 secs
+    Function Start Search                      0.028 secs
+    Function Start Search After Code           0.001 secs
+    Function Start Search After Data           0.002 secs
+    GCC Exception Handlers                     0.069 secs
+    Non-Returning Functions - Discovered       0.003 secs
+    Non-Returning Functions - Known            0.003 secs
+    Reference                                  0.022 secs
+    Shared Return Calls                        0.012 secs
+    Stack                                      0.044 secs
+    Subroutine References                      0.006 secs
+    Subroutine References - One Time           0.001 secs
+    x86 Constant Reference Analyzer            0.164 secs
+-----------------------------------------------------
+     Total Time   2 secs
+-----------------------------------------------------
+  
+2024-10-07 18:31:50 DEBUG (ToolTaskManager) Start: Auto Analysis  
+2024-10-07 18:31:50 DEBUG (ToolTaskManager) Completed: Auto Analysis (0.0 secs)  
+2024-10-07 18:31:50 DEBUG (ToolTaskManager) Task Completed: Auto Analysis (2.574 secs)  
+2024-10-07 18:31:50 DEBUG (ToolTaskManager) Background processing complete (2.575 secs)  
+2024-10-07 18:34:03 WARN  (DebuggerModulesPlugin) Plugin DebuggerModulesPlugin did not register a service handler for: interface ghidra.app.services.DebuggerAutoMappingService  
+2024-10-07 18:36:07 INFO  (RecoveryMgr) Mon Oct 07 18:36:07 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/test_01.rep/idata/00/~00000000.db/snapshotA.grf  
+2024-10-07 18:42:09 INFO  (LoggingInitialization) Using log config file: jar:file:/usr/share/ghidra/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2024-10-07 18:42:09 INFO  (LoggingInitialization) Using log file: /home/ateschan/.config/ghidra/ghidra_11.2_DEV/application.log  
+2024-10-07 18:42:10 INFO  (Preferences) Loading user preferences: /home/ateschan/.config/ghidra/ghidra_11.2_DEV/preferences  
+2024-10-07 18:42:10 INFO  (ClassSearcher) Searching for classes...  
+2024-10-07 18:42:11 INFO  (ClassSearcher) Class search complete (1425 ms)  
+2024-10-07 18:42:11 INFO  (SSLContextInitializer) Initializing SSL Context  
+2024-10-07 18:42:11 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2024-10-07 18:42:11 INFO  (SecureRandomFactory) Random Number Generator initialization complete: NativePRNGNonBlocking  
+2024-10-07 18:42:11 INFO  (ApplicationTrustManagerFactory) Trust manager disabled, cacerts have not been set  
+2024-10-07 18:42:11 INFO  (GhidraRun) User ateschan started Ghidra.  
+2024-10-07 18:42:11 INFO  (GhidraRun) User settings directory: /home/ateschan/.config/ghidra/ghidra_11.2_DEV  
+2024-10-07 18:42:11 INFO  (GhidraRun) User temp directory: /tmp/ateschan-ghidra  
+2024-10-07 18:42:11 INFO  (GhidraRun) User cache directory: /var/tmp/ateschan-ghidra  
+2024-10-07 18:42:12 DEBUG (RecoverySnapshotMgrPlugin) Recovery snapshot timer set to 5 minute(s)  
+2024-10-07 18:42:13 INFO  (DefaultProject) Opening project: /home/ateschan/Reverse_Engineering/test_01  
+2024-10-07 18:42:13 INFO  (IndexJournal) restoring data storage index...  
+2024-10-07 18:42:13 INFO  (GhidraRun) Ghidra startup complete (4169 ms)  
+2024-10-07 18:42:19 WARN  (DebuggerModulesPlugin) Plugin DebuggerModulesPlugin did not register a service handler for: interface ghidra.app.services.DebuggerAutoMappingService  
+2024-10-07 18:42:21 INFO  (PackedDatabaseCache) Packed database cache: /var/tmp/ateschan-ghidra/packed-db-cache  
+2024-10-07 18:42:21 DEBUG (PackedDatabaseCache) Using cached packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib_64.gdt  
+2024-10-07 19:02:13 INFO  (RecoveryMgr) Mon Oct 07 19:02:13 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/test_01.rep/idata/00/~00000000.db/snapshotA.grf  
+2024-10-07 19:07:13 INFO  (RecoveryMgr) Mon Oct 07 19:07:13 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/test_01.rep/idata/00/~00000000.db/snapshotB.grf  
+2024-10-07 19:17:13 INFO  (RecoveryMgr) Mon Oct 07 19:17:13 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/test_01.rep/idata/00/~00000000.db/snapshotA.grf  
+2024-10-07 20:20:45 INFO  (LoggingInitialization) Using log config file: jar:file:/usr/share/ghidra/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2024-10-07 20:20:45 INFO  (LoggingInitialization) Using log file: /home/ateschan/.config/ghidra/ghidra_11.2_DEV/application.log  
+2024-10-07 20:20:45 INFO  (Preferences) Loading user preferences: /home/ateschan/.config/ghidra/ghidra_11.2_DEV/preferences  
+2024-10-07 20:20:45 INFO  (ClassSearcher) Searching for classes...  
+2024-10-07 20:20:46 INFO  (ClassSearcher) Class search complete (1429 ms)  
+2024-10-07 20:20:47 INFO  (SSLContextInitializer) Initializing SSL Context  
+2024-10-07 20:20:47 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2024-10-07 20:20:47 INFO  (SecureRandomFactory) Random Number Generator initialization complete: NativePRNGNonBlocking  
+2024-10-07 20:20:47 INFO  (ApplicationTrustManagerFactory) Trust manager disabled, cacerts have not been set  
+2024-10-07 20:20:47 INFO  (GhidraRun) User ateschan started Ghidra.  
+2024-10-07 20:20:47 INFO  (GhidraRun) User settings directory: /home/ateschan/.config/ghidra/ghidra_11.2_DEV  
+2024-10-07 20:20:47 INFO  (GhidraRun) User temp directory: /tmp/ateschan-ghidra  
+2024-10-07 20:20:47 INFO  (GhidraRun) User cache directory: /var/tmp/ateschan-ghidra  
+2024-10-07 20:20:48 DEBUG (RecoverySnapshotMgrPlugin) Recovery snapshot timer set to 5 minute(s)  
+2024-10-07 20:20:48 INFO  (GhidraRun) Ghidra startup complete (3713 ms)  
+2024-10-07 20:21:23 INFO  (DefaultProject) Creating project: /home/ateschan/Reverse_Engineering/guess_the_password/guess_the_password_project  
+2024-10-07 20:21:30 WARN  (DebuggerModulesPlugin) Plugin DebuggerModulesPlugin did not register a service handler for: interface ghidra.app.services.DebuggerAutoMappingService  
+2024-10-07 20:21:31 INFO  (PackedDatabaseCache) Packed database cache: /var/tmp/ateschan-ghidra/packed-db-cache  
+2024-10-07 20:21:31 DEBUG (PackedDatabaseCache) Using cached packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib_64.gdt  
+2024-10-07 20:21:59 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-07 20:21:59 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-07 20:21:59 DEBUG (ElfHeader) Elf relocation table section .rela.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-07 20:21:59 DEBUG (ElfHeader) Elf relocation table section .rela.plt linked to symbol table section .dynsym affecting .got  
+2024-10-07 20:22:02 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-07 20:22:02 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-07 20:22:02 DEBUG (ElfHeader) Elf relocation table section .rela.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-07 20:22:02 DEBUG (ElfHeader) Elf relocation table section .rela.plt linked to symbol table section .dynsym affecting .got  
+2024-10-07 20:22:02 DEBUG (ElfProgramBuilder) Discarding 2-byte alignment/filler segment_4.2 at 0010202e  
+2024-10-07 20:22:02 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_4.4 at 0010206c  
+2024-10-07 20:22:02 DEBUG (ElfProgramBuilder) Discarding 5-byte alignment/filler segment_3.2 at 0010101b  
+2024-10-07 20:22:02 DEBUG (ElfProgramBuilder) Discarding 1-byte alignment/filler segment_3.7 at 001012f3  
+2024-10-07 20:22:02 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_2.3 at 00100334  
+2024-10-07 20:22:02 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_2.7 at 001003ac  
+2024-10-07 20:22:02 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_2.12 at 001005f4  
+2024-10-07 20:22:09 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-07 20:22:09 DEBUG (ToolTaskManager) Task Start: Auto Analysis  
+2024-10-07 20:22:09 INFO  (ImporterUtilities) Additional info:
+Loading file:///home/ateschan/Reverse_Engineering/guess_the_password/guess_the_password?MD5=3aa98ef710cbe1544232483bcd6ccc3b...
+ELF Relocation Failure: R_X86_64_COPY (5, 0x5) at 00104010 (Symbol = stdin) - Runtime copy not supported (8-bytes)
+Setting block .init_array to read-only
+Setting block .fini_array to read-only
+Setting block .dynamic to read-only
+Failed to markup ELF Note at 00100338: data conflict
+Failed to markup ELF Note at 00100368: data conflict
+Failed to markup ELF Note at 0010038c: data conflict
+------------------------------------------------
+
+Linking the External Programs of 'guess_the_password' to imported libraries...
+  [libc.so.6] -> not found in project
+------------------------------------------------
+
+Resolving External Symbols of [/guess_the_password] - 8 unresolved symbols, no external libraries configured - skipping
+  
+2024-10-07 20:22:09 INFO  (ExternalDebugFileSectionProvider) DWARF external debug information found: ExternalDebugInfo [filename=null, crc=0, hash=4b5316bbef627d72efaa8d38723b2e9725065ec2]  
+2024-10-07 20:22:09 INFO  (DWARFAnalyzer) Unable to find DWARF information, skipping DWARF analysis  
+2024-10-07 20:22:10 INFO  (DecompilerSwitchAnalyzer) hit non-returning function, restarting decompiler switch analyzer later  
+2024-10-07 20:22:10 WARN  (DecompileCallback) Decompiling 00101130, pcode error at 00105008: Unable to disassemble EXTERNAL block location: 00105008  
+2024-10-07 20:22:10 WARN  (DecompileCallback) Decompiling 00101160, pcode error at 00105048: Unable to disassemble EXTERNAL block location: 00105048  
+2024-10-07 20:22:11 INFO  (ApplyDataArchiveAnalyzer) Applied data type archive: generic_clib_64  
+2024-10-07 20:22:11 INFO  (ExternalSymbolResolverAnalyzer) Resolving External Symbols of [/guess_the_password] - 11 unresolved symbols, no external libraries configured - skipping  
+2024-10-07 20:22:12 INFO  (AutoAnalysisManager) -----------------------------------------------------
+    ASCII Strings                              0.344 secs
+    Apply Data Archives                        0.309 secs
+    Call Convention ID                         0.253 secs
+    Call-Fixup Installer                       0.005 secs
+    Create Address Tables                      0.006 secs
+    Create Function                            0.007 secs
+    DWARF                                      0.013 secs
+    Data Reference                             0.007 secs
+    Decompiler Switch Analysis                 0.039 secs
+    Decompiler Switch Analysis - One Time      0.857 secs
+    Demangler GNU                              0.015 secs
+    Disassemble Entry Points                   0.115 secs
+    ELF Scalar Operand References              0.007 secs
+    Embedded Media                             0.025 secs
+    External Entry References                  0.000 secs
+    External Symbol Resolver                   0.002 secs
+    Function Start Search                      0.060 secs
+    Function Start Search After Code           0.002 secs
+    Function Start Search After Data           0.002 secs
+    GCC Exception Handlers                     0.084 secs
+    Non-Returning Functions - Discovered       0.003 secs
+    Non-Returning Functions - Known            0.004 secs
+    Reference                                  0.016 secs
+    Shared Return Calls                        0.014 secs
+    Stack                                      0.046 secs
+    Subroutine References                      0.005 secs
+    Subroutine References - One Time           0.000 secs
+    x86 Constant Reference Analyzer            0.111 secs
+-----------------------------------------------------
+     Total Time   2 secs
+-----------------------------------------------------
+  
+2024-10-07 20:22:12 DEBUG (ToolTaskManager) Start: Auto Analysis  
+2024-10-07 20:22:12 DEBUG (ToolTaskManager) Completed: Auto Analysis (0.0 secs)  
+2024-10-07 20:22:12 DEBUG (ToolTaskManager) Task Completed: Auto Analysis (2.672 secs)  
+2024-10-07 20:22:12 DEBUG (ToolTaskManager) Background processing complete (2.673 secs)  
+2024-10-07 20:23:54 INFO  (ProgramSaveManager) Save All...: Saved 1 modified programs.  
+2024-10-07 20:26:15 INFO  (LoggingInitialization) Using log config file: jar:file:/usr/share/ghidra/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2024-10-07 20:26:15 INFO  (LoggingInitialization) Using log file: /home/ateschan/.config/ghidra/ghidra_11.2_DEV/application.log  
+2024-10-07 20:26:16 INFO  (Preferences) Loading user preferences: /home/ateschan/.config/ghidra/ghidra_11.2_DEV/preferences  
+2024-10-07 20:26:16 INFO  (ClassSearcher) Searching for classes...  
+2024-10-07 20:26:17 INFO  (ClassSearcher) Class search complete (1458 ms)  
+2024-10-07 20:26:17 INFO  (SSLContextInitializer) Initializing SSL Context  
+2024-10-07 20:26:17 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2024-10-07 20:26:17 INFO  (SecureRandomFactory) Random Number Generator initialization complete: NativePRNGNonBlocking  
+2024-10-07 20:26:17 INFO  (ApplicationTrustManagerFactory) Trust manager disabled, cacerts have not been set  
+2024-10-07 20:26:17 INFO  (GhidraRun) User ateschan started Ghidra.  
+2024-10-07 20:26:17 INFO  (GhidraRun) User settings directory: /home/ateschan/.config/ghidra/ghidra_11.2_DEV  
+2024-10-07 20:26:17 INFO  (GhidraRun) User temp directory: /tmp/ateschan-ghidra  
+2024-10-07 20:26:17 INFO  (GhidraRun) User cache directory: /var/tmp/ateschan-ghidra  
+2024-10-07 20:26:18 DEBUG (RecoverySnapshotMgrPlugin) Recovery snapshot timer set to 5 minute(s)  
+2024-10-07 20:26:19 INFO  (DefaultProject) Opening project: /home/ateschan/Reverse_Engineering/guess_the_password/guess_the_password_project  
+2024-10-07 20:26:19 INFO  (DefaultProjectData) Project Locked: Project is locked. You have another instance of Ghidra 
+already running with this project open (locally or remotely). 
+ 
+Project: /home/ateschan/Reverse_Engineering/guess_the_password//guess_the_password_project 
+ 
+Lock information:
+       Username:           ateschan
+       Hostname:
+       Timestamp:          10/7/24, 8:21 PM
+       OS Name:             Linux
+       OS Architecture:   amd64
+       OS Version:          6.6.35-gentoo-dist  
+2024-10-07 20:26:22 INFO  (GhidraRun) Ghidra startup complete (7156 ms)  
+2024-10-07 20:26:56 INFO  (DefaultProject) Creating project: /home/ateschan/Reverse_Engineering/lvl2crackmepassword/lvl2crackmepassword_project  
+2024-10-07 20:27:01 WARN  (DebuggerModulesPlugin) Plugin DebuggerModulesPlugin did not register a service handler for: interface ghidra.app.services.DebuggerAutoMappingService  
+2024-10-07 20:27:03 INFO  (PackedDatabaseCache) Packed database cache: /var/tmp/ateschan-ghidra/packed-db-cache  
+2024-10-07 20:27:03 DEBUG (PackedDatabaseCache) Using cached packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib_64.gdt  
+2024-10-07 20:27:20 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-07 20:27:20 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-07 20:27:20 DEBUG (ElfHeader) Elf relocation table section .rela.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-07 20:27:20 DEBUG (ElfHeader) Elf relocation table section .rela.plt linked to symbol table section .dynsym affecting .got.plt  
+2024-10-07 20:27:22 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-07 20:27:22 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-07 20:27:22 DEBUG (ElfHeader) Elf relocation table section .rela.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-07 20:27:22 DEBUG (ElfHeader) Elf relocation table section .rela.plt linked to symbol table section .dynsym affecting .got.plt  
+2024-10-07 20:27:22 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_4.3 at 001020dc  
+2024-10-07 20:27:22 DEBUG (ElfProgramBuilder) Discarding 9-byte alignment/filler segment_3.2 at 00101017  
+2024-10-07 20:27:22 DEBUG (ElfProgramBuilder) Discarding 8-byte alignment/filler segment_3.5 at 00101118  
+2024-10-07 20:27:22 DEBUG (ElfProgramBuilder) Discarding 1-byte alignment/filler segment_3.7 at 00101413  
+2024-10-07 20:27:22 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_2.3 at 00100334  
+2024-10-07 20:27:22 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_2.7 at 0010039c  
+2024-10-07 20:27:22 DEBUG (ElfProgramBuilder) Discarding 2-byte alignment/filler segment_2.12 at 0010074e  
+2024-10-07 20:27:28 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-07 20:27:28 DEBUG (ToolTaskManager) Task Start: Auto Analysis  
+2024-10-07 20:27:28 INFO  (ExternalDebugFileSectionProvider) DWARF external debug information found: ExternalDebugInfo [filename=null, crc=0, hash=0e0c93a34d9c0703deeddeac67e74430efada748]  
+2024-10-07 20:27:28 INFO  (DWARFAnalyzer) Unable to find DWARF information, skipping DWARF analysis  
+2024-10-07 20:27:28 INFO  (ImporterUtilities) Additional info:
+Loading file:///home/ateschan/Reverse_Engineering/lvl2crackmepassword/crackme666adv?MD5=8bf693df2ff52d4c459f3efbfa528ef2...
+ELF Relocation Failure: R_X86_64_COPY (5, 0x5) at 00104080 (Symbol = stdin) - Runtime copy not supported (8-bytes)
+Setting block .init_array to read-only
+Setting block .fini_array to read-only
+Setting block .dynamic to read-only
+Failed to markup ELF Note at 00100338: data conflict
+Failed to markup ELF Note at 00100358: data conflict
+Failed to markup ELF Note at 0010037c: data conflict
+------------------------------------------------
+
+Linking the External Programs of 'crackme666adv' to imported libraries...
+  [libcrypto.so.3] -> not found in project
+  [libc.so.6] -> not found in project
+------------------------------------------------
+
+Resolving External Symbols of [/crackme666adv] - 16 unresolved symbols, no external libraries configured - skipping
+  
+2024-10-07 20:27:29 WARN  (DecompileCallback) Decompiling 00101150, pcode error at 00105028: Unable to disassemble EXTERNAL block location: 00105028  
+2024-10-07 20:27:29 WARN  (DecompileCallback) Decompiling 00101180, pcode error at 00105038: Unable to disassemble EXTERNAL block location: 00105038  
+2024-10-07 20:27:30 INFO  (ApplyDataArchiveAnalyzer) Applied data type archive: generic_clib_64  
+2024-10-07 20:27:30 INFO  (ExternalSymbolResolverAnalyzer) Resolving External Symbols of [/crackme666adv] - 19 unresolved symbols, no external libraries configured - skipping  
+2024-10-07 20:27:30 INFO  (AutoAnalysisManager) -----------------------------------------------------
+    ASCII Strings                              0.434 secs
+    Apply Data Archives                        0.291 secs
+    Call Convention ID                         0.235 secs
+    Call-Fixup Installer                       0.005 secs
+    Create Address Tables                      0.006 secs
+    Create Function                            0.022 secs
+    DWARF                                      0.020 secs
+    Data Reference                             0.005 secs
+    Decompiler Switch Analysis                 1.035 secs
+    Demangler GNU                              0.011 secs
+    Disassemble Entry Points                   0.170 secs
+    ELF Scalar Operand References              0.006 secs
+    Embedded Media                             0.023 secs
+    External Entry References                  0.000 secs
+    External Symbol Resolver                   0.002 secs
+    Function Start Search                      0.073 secs
+    Function Start Search After Code           0.003 secs
+    Function Start Search After Data           0.002 secs
+    GCC Exception Handlers                     0.062 secs
+    Non-Returning Functions - Discovered       0.005 secs
+    Non-Returning Functions - Known            0.002 secs
+    Reference                                  0.015 secs
+    Shared Return Calls                        0.021 secs
+    Stack                                      0.058 secs
+    Subroutine References                      0.021 secs
+    Subroutine References - One Time           0.000 secs
+    x86 Constant Reference Analyzer            0.104 secs
+-----------------------------------------------------
+     Total Time   2 secs
+-----------------------------------------------------
+  
+2024-10-07 20:27:30 DEBUG (ToolTaskManager) Start: Auto Analysis  
+2024-10-07 20:27:30 DEBUG (ToolTaskManager) Completed: Auto Analysis (0.001 secs)  
+2024-10-07 20:27:30 DEBUG (ToolTaskManager) Task Completed: Auto Analysis (2.892 secs)  
+2024-10-07 20:27:30 DEBUG (ToolTaskManager) Background processing complete (2.893 secs)  
+2024-10-07 20:28:10 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-07 20:28:10 DEBUG (ToolTaskManager) Task Start: Set Comments  
+2024-10-07 20:28:10 DEBUG (ToolTaskManager) Task Completed: Set Comments (0.077 secs)  
+2024-10-07 20:28:10 DEBUG (ToolTaskManager) Background processing complete (0.078 secs)  
+2024-10-07 20:28:24 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-07 20:28:24 DEBUG (ToolTaskManager) Task Start: Set Comments  
+2024-10-07 20:28:24 DEBUG (ToolTaskManager) Task Completed: Set Comments (0.071 secs)  
+2024-10-07 20:28:24 DEBUG (ToolTaskManager) Background processing complete (0.073 secs)  
+2024-10-07 20:28:38 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-07 20:28:38 DEBUG (ToolTaskManager) Task Start: Set Comments  
+2024-10-07 20:28:38 DEBUG (ToolTaskManager) Task Completed: Set Comments (0.083 secs)  
+2024-10-07 20:28:38 DEBUG (ToolTaskManager) Background processing complete (0.084 secs)  
+2024-10-07 20:28:53 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-07 20:28:53 DEBUG (ToolTaskManager) Task Start: Set Comments  
+2024-10-07 20:28:53 DEBUG (ToolTaskManager) Task Completed: Set Comments (0.091 secs)  
+2024-10-07 20:28:53 DEBUG (ToolTaskManager) Background processing complete (0.093 secs)  
+2024-10-07 20:28:57 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-07 20:28:57 DEBUG (ToolTaskManager) Task Start: Set Comments  
+2024-10-07 20:28:57 DEBUG (ToolTaskManager) Task Completed: Set Comments (0.072 secs)  
+2024-10-07 20:28:57 DEBUG (ToolTaskManager) Background processing complete (0.073 secs)  
+2024-10-07 20:29:04 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-07 20:29:04 DEBUG (ToolTaskManager) Task Start: Set Comments  
+2024-10-07 20:29:04 DEBUG (ToolTaskManager) Task Completed: Set Comments (0.066 secs)  
+2024-10-07 20:29:04 DEBUG (ToolTaskManager) Background processing complete (0.066 secs)  
+2024-10-07 20:29:13 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-07 20:29:13 DEBUG (ToolTaskManager) Task Start: Set Comments  
+2024-10-07 20:29:13 DEBUG (ToolTaskManager) Task Completed: Set Comments (0.063 secs)  
+2024-10-07 20:29:13 DEBUG (ToolTaskManager) Background processing complete (0.063 secs)  
+2024-10-07 20:29:18 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-07 20:29:18 DEBUG (ToolTaskManager) Task Start: Set Comments  
+2024-10-07 20:29:18 DEBUG (ToolTaskManager) Task Completed: Set Comments (0.054 secs)  
+2024-10-07 20:29:18 DEBUG (ToolTaskManager) Background processing complete (0.055 secs)  
+2024-10-07 20:29:23 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-07 20:29:23 DEBUG (ToolTaskManager) Task Start: Set Comments  
+2024-10-07 20:29:24 DEBUG (ToolTaskManager) Task Completed: Set Comments (0.067 secs)  
+2024-10-07 20:29:24 DEBUG (ToolTaskManager) Background processing complete (0.068 secs)  
+2024-10-07 20:29:26 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-07 20:29:26 DEBUG (ToolTaskManager) Task Start: Set Comments  
+2024-10-07 20:29:26 DEBUG (ToolTaskManager) Task Completed: Set Comments (0.063 secs)  
+2024-10-07 20:29:26 DEBUG (ToolTaskManager) Background processing complete (0.065 secs)  
+2024-10-07 20:29:28 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-07 20:29:28 DEBUG (ToolTaskManager) Task Start: Set Comments  
+2024-10-07 20:29:29 DEBUG (ToolTaskManager) Task Completed: Set Comments (0.087 secs)  
+2024-10-07 20:29:29 DEBUG (ToolTaskManager) Background processing complete (0.089 secs)  
+2024-10-07 20:29:43 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-07 20:29:43 DEBUG (ToolTaskManager) Task Start: Set Comments  
+2024-10-07 20:29:43 DEBUG (ToolTaskManager) Task Completed: Set Comments (0.055 secs)  
+2024-10-07 20:29:43 DEBUG (ToolTaskManager) Background processing complete (0.056 secs)  
+2024-10-07 20:31:56 INFO  (RecoveryMgr) Mon Oct 07 20:31:56 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/lvl2crackmepassword/lvl2crackmepassword_project.rep/idata/00/~00000000.db/snapshotA.grf  
+2024-10-07 20:35:24 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-07 20:35:24 DEBUG (ToolTaskManager) Task Start: Set Comments  
+2024-10-07 20:35:24 DEBUG (ToolTaskManager) Task Completed: Set Comments (0.085 secs)  
+2024-10-07 20:35:24 DEBUG (ToolTaskManager) Background processing complete (0.086 secs)  
+2024-10-07 20:36:14 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-07 20:36:14 DEBUG (ToolTaskManager) Task Start: Set Comments  
+2024-10-07 20:36:14 DEBUG (ToolTaskManager) Task Completed: Set Comments (0.079 secs)  
+2024-10-07 20:36:14 DEBUG (ToolTaskManager) Background processing complete (0.081 secs)  
+2024-10-07 20:36:25 WARN  (DecompileCallback) Decompiling 00105050, pcode error at 00105050: Unable to disassemble EXTERNAL block location: 00105050  
+2024-10-07 20:36:50 WARN  (DecompileCallback) Decompiling 00105088, pcode error at 00105088: Unable to disassemble EXTERNAL block location: 00105088  
+2024-10-07 20:36:56 INFO  (RecoveryMgr) Mon Oct 07 20:36:56 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/lvl2crackmepassword/lvl2crackmepassword_project.rep/idata/00/~00000000.db/snapshotB.grf  
+2024-10-07 22:32:25 INFO  (LoggingInitialization) Using log config file: jar:file:/usr/share/ghidra/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2024-10-07 22:32:25 INFO  (LoggingInitialization) Using log file: /home/ateschan/.config/ghidra/ghidra_11.2_DEV/application.log  
+2024-10-07 22:32:25 INFO  (Preferences) Loading user preferences: /home/ateschan/.config/ghidra/ghidra_11.2_DEV/preferences  
+2024-10-07 22:32:25 INFO  (ClassSearcher) Searching for classes...  
+2024-10-07 22:32:27 INFO  (ClassSearcher) Class search complete (1420 ms)  
+2024-10-07 22:32:27 INFO  (SSLContextInitializer) Initializing SSL Context  
+2024-10-07 22:32:27 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2024-10-07 22:32:27 INFO  (SecureRandomFactory) Random Number Generator initialization complete: NativePRNGNonBlocking  
+2024-10-07 22:32:27 INFO  (ApplicationTrustManagerFactory) Trust manager disabled, cacerts have not been set  
+2024-10-07 22:32:27 INFO  (GhidraRun) User ateschan started Ghidra.  
+2024-10-07 22:32:27 INFO  (GhidraRun) User settings directory: /home/ateschan/.config/ghidra/ghidra_11.2_DEV  
+2024-10-07 22:32:27 INFO  (GhidraRun) User temp directory: /tmp/ateschan-ghidra  
+2024-10-07 22:32:27 INFO  (GhidraRun) User cache directory: /var/tmp/ateschan-ghidra  
+2024-10-07 22:32:28 DEBUG (RecoverySnapshotMgrPlugin) Recovery snapshot timer set to 5 minute(s)  
+2024-10-07 22:32:28 INFO  (DefaultProject) Opening project: /home/ateschan/Reverse_Engineering/lvl2crackmepassword/lvl2crackmepassword_project  
+2024-10-07 22:32:28 INFO  (IndexJournal) restoring data storage index...  
+2024-10-07 22:32:30 WARN  (DebuggerModulesPlugin) Plugin DebuggerModulesPlugin did not register a service handler for: interface ghidra.app.services.DebuggerAutoMappingService  
+2024-10-07 22:32:32 INFO  (PackedDatabaseCache) Packed database cache: /var/tmp/ateschan-ghidra/packed-db-cache  
+2024-10-07 22:32:32 DEBUG (PackedDatabaseCache) Using cached packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib_64.gdt  
+2024-10-07 22:32:35 INFO  (GhidraRun) Ghidra startup complete (10659 ms)  
+2024-10-07 22:33:05 INFO  (FileActionManager) Closed project: guess_the_password_project  
+2024-10-07 22:33:38 INFO  (DefaultProject) Creating project: /home/ateschan/Reverse_Engineering/supersecret/supersecret_project  
+2024-10-07 22:33:49 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-07 22:33:49 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-07 22:33:49 DEBUG (ElfHeader) Elf relocation table section .rela.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-07 22:33:49 DEBUG (ElfHeader) Elf relocation table section .rela.plt linked to symbol table section .dynsym affecting .got.plt  
+2024-10-07 22:33:50 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-07 22:33:50 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-07 22:33:50 DEBUG (ElfHeader) Elf relocation table section .rela.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-07 22:33:50 DEBUG (ElfHeader) Elf relocation table section .rela.plt linked to symbol table section .dynsym affecting .got.plt  
+2024-10-07 22:33:50 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_4.3 at 0010206c  
+2024-10-07 22:33:50 DEBUG (ElfProgramBuilder) Discarding 5-byte alignment/filler segment_3.2 at 0010101b  
+2024-10-07 22:33:50 DEBUG (ElfProgramBuilder) Discarding 3-byte alignment/filler segment_3.5 at 00101305  
+2024-10-07 22:33:50 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_2.6 at 00100324  
+2024-10-07 22:33:50 DEBUG (ElfProgramBuilder) Discarding 1-byte alignment/filler segment_2.9 at 001004ad  
+2024-10-07 22:33:50 DEBUG (ElfProgramBuilder) Discarding 6-byte alignment/filler segment_2.11 at 001004c2  
+2024-10-07 22:33:54 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-07 22:33:54 DEBUG (ToolTaskManager) Task Start: Auto Analysis  
+2024-10-07 22:33:54 INFO  (ImporterUtilities) Additional info:
+Loading file:///home/ateschan/Reverse_Engineering/supersecret/Secretserial?MD5=75ee295935afd9eea6c6064624c8c4f3...
+Failed to properly markup GNU Hash table at 00100308: Insufficent memory at address 00100324 (length: 36 bytes)
+Setting block .init_array to read-only
+Setting block .fini_array to read-only
+Setting block .dynamic to read-only
+Failed to markup ELF Note at 001002c4: data conflict
+Failed to markup ELF Note at 001002e4: data conflict
+------------------------------------------------
+
+Linking the External Programs of 'Secretserial' to imported libraries...
+  [libc.so.6] -> not found in project
+------------------------------------------------
+
+Resolving External Symbols of [/Secretserial] - 6 unresolved symbols, no external libraries configured - skipping
+  
+2024-10-07 22:33:54 INFO  (ExternalDebugFileSectionProvider) DWARF external debug information found: ExternalDebugInfo [filename=null, crc=0, hash=4b657ffd4f43a704861b200c9f2235f8fe395e27]  
+2024-10-07 22:33:54 INFO  (DWARFAnalyzer) Unable to find DWARF information, skipping DWARF analysis  
+2024-10-07 22:33:55 WARN  (DecompileCallback) Decompiling 001010d0, pcode error at 00105038: Unable to disassemble EXTERNAL block location: 00105038  
+2024-10-07 22:33:55 WARN  (DecompileCallback) Decompiling 001010a0, pcode error at 00105000: Unable to disassemble EXTERNAL block location: 00105000  
+2024-10-07 22:33:56 INFO  (ApplyDataArchiveAnalyzer) Applied data type archive: generic_clib_64  
+2024-10-07 22:33:56 INFO  (ExternalSymbolResolverAnalyzer) Resolving External Symbols of [/Secretserial] - 9 unresolved symbols, no external libraries configured - skipping  
+2024-10-07 22:33:57 INFO  (AutoAnalysisManager) -----------------------------------------------------
+    ASCII Strings                              0.358 secs
+    Apply Data Archives                        0.289 secs
+    Call Convention ID                         0.243 secs
+    Call-Fixup Installer                       0.006 secs
+    Create Address Tables                      0.004 secs
+    Create Function                            0.005 secs
+    DWARF                                      0.011 secs
+    Data Reference                             0.004 secs
+    Decompiler Switch Analysis                 0.780 secs
+    Demangler GNU                              0.011 secs
+    Disassemble Entry Points                   0.141 secs
+    ELF Scalar Operand References              0.012 secs
+    Embedded Media                             0.018 secs
+    External Entry References                  0.000 secs
+    External Symbol Resolver                   0.002 secs
+    Function Start Search                      0.081 secs
+    Function Start Search After Code           0.002 secs
+    Function Start Search After Data           0.002 secs
+    GCC Exception Handlers                     0.088 secs
+    Non-Returning Functions - Discovered       0.011 secs
+    Non-Returning Functions - Known            0.003 secs
+    Reference                                  0.019 secs
+    Shared Return Calls                        0.011 secs
+    Stack                                      0.053 secs
+    Subroutine References                      0.004 secs
+    Subroutine References - One Time           0.000 secs
+    x86 Constant Reference Analyzer            0.115 secs
+-----------------------------------------------------
+     Total Time   2 secs
+-----------------------------------------------------
+  
+2024-10-07 22:33:57 DEBUG (ToolTaskManager) Start: Auto Analysis  
+2024-10-07 22:33:57 DEBUG (ToolTaskManager) Completed: Auto Analysis (0.001 secs)  
+2024-10-07 22:33:57 DEBUG (ToolTaskManager) Task Completed: Auto Analysis (2.53 secs)  
+2024-10-07 22:33:57 DEBUG (ToolTaskManager) Background processing complete (2.532 secs)  
+2024-10-12 11:19:32 INFO  (LoggingInitialization) Using log config file: jar:file:/usr/share/ghidra/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2024-10-12 11:19:32 INFO  (LoggingInitialization) Using log file: /home/ateschan/.config/ghidra/ghidra_11.2_DEV/application.log  
+2024-10-12 11:19:32 INFO  (Preferences) Loading user preferences: /home/ateschan/.config/ghidra/ghidra_11.2_DEV/preferences  
+2024-10-12 11:19:32 INFO  (ClassSearcher) Searching for classes...  
+2024-10-12 11:19:34 INFO  (ClassSearcher) Class search complete (1516 ms)  
+2024-10-12 11:19:34 INFO  (SSLContextInitializer) Initializing SSL Context  
+2024-10-12 11:19:34 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2024-10-12 11:19:34 INFO  (SecureRandomFactory) Random Number Generator initialization complete: NativePRNGNonBlocking  
+2024-10-12 11:19:34 INFO  (ApplicationTrustManagerFactory) Trust manager disabled, cacerts have not been set  
+2024-10-12 11:19:34 INFO  (GhidraRun) User ateschan started Ghidra.  
+2024-10-12 11:19:34 INFO  (GhidraRun) User settings directory: /home/ateschan/.config/ghidra/ghidra_11.2_DEV  
+2024-10-12 11:19:34 INFO  (GhidraRun) User temp directory: /tmp/ateschan-ghidra  
+2024-10-12 11:19:34 INFO  (GhidraRun) User cache directory: /var/tmp/ateschan-ghidra  
+2024-10-12 11:19:35 DEBUG (RecoverySnapshotMgrPlugin) Recovery snapshot timer set to 5 minute(s)  
+2024-10-12 11:19:35 INFO  (DefaultProject) Opening project: /home/ateschan/Reverse_Engineering/lvl2crackmepassword/lvl2crackmepassword_project  
+2024-10-12 11:19:36 INFO  (IndexJournal) restoring data storage index...  
+2024-10-12 11:19:36 INFO  (GhidraRun) Ghidra startup complete (4957 ms)  
+2024-10-12 11:24:36 INFO  (ThemeUtils) Saving theme to /home/ateschan/.config/ghidra/ghidra_11.2_DEV/themes/vaporwave.theme  
+2024-10-12 11:24:44 WARN  (DebuggerModulesPlugin) Plugin DebuggerModulesPlugin did not register a service handler for: interface ghidra.app.services.DebuggerAutoMappingService  
+2024-10-12 11:24:46 INFO  (PackedDatabaseCache) Packed database cache: /var/tmp/ateschan-ghidra/packed-db-cache  
+2024-10-12 11:24:46 DEBUG (PackedDatabaseCache) Using cached packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib_64.gdt  
+2024-10-12 11:38:39 DEBUG (UnixPty) New Pty: /dev/pts/0 at (200,201)  
+2024-10-12 11:38:39 INFO  (LocalProcessPtySession) local Pty session. PID = 906  
+2024-10-12 11:38:39 ERROR (ThreadedTerminal) Console input closed unexpectedly: java.io.IOException: com.sun.jna.LastErrorException: [5] Input/output error  
+2024-10-12 11:39:45 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-12 11:39:45 DEBUG (ToolTaskManager) Task Start: Auto Analysis  
+2024-10-12 11:39:45 DEBUG (ToolTaskManager) Task Completed: Auto Analysis (0.137 secs)  
+2024-10-12 11:39:45 DEBUG (ToolTaskManager) Background processing complete (0.14 secs)  
+2024-10-12 11:40:02 DEBUG (UnixPty) New Pty: /dev/pts/0 at (200,201)  
+2024-10-12 11:40:02 INFO  (LocalProcessPtySession) local Pty session. PID = 1098  
+2024-10-12 11:40:02 ERROR (ThreadedTerminal) Console input closed unexpectedly: java.io.IOException: com.sun.jna.LastErrorException: [5] Input/output error  
+2024-10-12 11:40:02 ERROR (UnixPtyChild) Could not set terminal window size: com.sun.jna.LastErrorException: [9] Bad file descriptor  
+2024-10-12 11:41:45 INFO  (LoggingInitialization) Using log config file: jar:file:/usr/share/ghidra/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2024-10-12 11:41:45 INFO  (LoggingInitialization) Using log file: /home/ateschan/.config/ghidra/ghidra_11.2_DEV/application.log  
+2024-10-12 11:41:45 INFO  (Preferences) Loading user preferences: /home/ateschan/.config/ghidra/ghidra_11.2_DEV/preferences  
+2024-10-12 11:41:45 INFO  (ClassSearcher) Searching for classes...  
+2024-10-12 11:41:47 INFO  (ClassSearcher) Class search complete (1605 ms)  
+2024-10-12 11:41:47 INFO  (SSLContextInitializer) Initializing SSL Context  
+2024-10-12 11:41:47 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2024-10-12 11:41:47 INFO  (SecureRandomFactory) Random Number Generator initialization complete: NativePRNGNonBlocking  
+2024-10-12 11:41:47 INFO  (ApplicationTrustManagerFactory) Trust manager disabled, cacerts have not been set  
+2024-10-12 11:41:47 INFO  (GhidraRun) User ateschan started Ghidra.  
+2024-10-12 11:41:47 INFO  (GhidraRun) User settings directory: /home/ateschan/.config/ghidra/ghidra_11.2_DEV  
+2024-10-12 11:41:47 INFO  (GhidraRun) User temp directory: /tmp/ateschan-ghidra  
+2024-10-12 11:41:47 INFO  (GhidraRun) User cache directory: /var/tmp/ateschan-ghidra  
+2024-10-12 11:41:48 DEBUG (RecoverySnapshotMgrPlugin) Recovery snapshot timer set to 5 minute(s)  
+2024-10-12 11:41:49 INFO  (DefaultProject) Opening project: /home/ateschan/Reverse_Engineering/lvl2crackmepassword/lvl2crackmepassword_project  
+2024-10-12 11:41:49 INFO  (GhidraRun) Ghidra startup complete (4605 ms)  
+2024-10-12 11:41:58 WARN  (DebuggerModulesPlugin) Plugin DebuggerModulesPlugin did not register a service handler for: interface ghidra.app.services.DebuggerAutoMappingService  
+2024-10-12 11:42:00 INFO  (PackedDatabaseCache) Packed database cache: /var/tmp/ateschan-ghidra/packed-db-cache  
+2024-10-12 11:42:00 DEBUG (PackedDatabaseCache) Using cached packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib_64.gdt  
+2024-10-12 11:42:42 DEBUG (UnixPty) New Pty: /dev/pts/1 at (200,201)  
+2024-10-12 11:42:42 DEBUG (UnixPty) New Pty: /dev/pts/2 at (202,203)  
+2024-10-12 11:42:42 INFO  (LocalProcessPtySession) local Pty session. PID = 2524  
+2024-10-12 11:42:42 ERROR (ThreadedTerminal) Console input closed unexpectedly: java.io.IOException: com.sun.jna.LastErrorException: [5] Input/output error  
+2024-10-12 11:42:42 ERROR (ThreadedTerminal) Console input closed unexpectedly: java.io.IOException: com.sun.jna.LastErrorException: [5] Input/output error  
+2024-10-12 11:46:57 DEBUG (UnixPty) New Pty: /dev/pts/1 at (200,201)  
+2024-10-12 11:46:57 DEBUG (UnixPty) New Pty: /dev/pts/2 at (202,203)  
+2024-10-12 11:46:57 INFO  (LocalProcessPtySession) local Pty session. PID = 2837  
+2024-10-12 11:46:57 ERROR (ThreadedTerminal) Console input closed unexpectedly: java.io.IOException: com.sun.jna.LastErrorException: [5] Input/output error  
+2024-10-12 11:46:57 ERROR (ThreadedTerminal) Console input closed unexpectedly: java.io.IOException: com.sun.jna.LastErrorException: [5] Input/output error  
+2024-10-12 11:46:57 ERROR (UnixPtyChild) Could not set terminal window size: com.sun.jna.LastErrorException: [9] Bad file descriptor  
+2024-10-12 11:46:57 ERROR (UnixPtyChild) Could not set terminal window size: com.sun.jna.LastErrorException: [9] Bad file descriptor  
+2024-10-12 12:00:15 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-12 12:00:15 DEBUG (ToolTaskManager) Task Start: Auto Analysis  
+2024-10-12 12:00:16 DEBUG (ToolTaskManager) Task Completed: Auto Analysis (0.071 secs)  
+2024-10-12 12:00:16 DEBUG (ToolTaskManager) Background processing complete (0.074 secs)  
+2024-10-12 12:01:49 INFO  (RecoveryMgr) Sat Oct 12 12:01:49 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/lvl2crackmepassword/lvl2crackmepassword_project.rep/idata/00/~00000001.db/snapshotA.grf  
+2024-10-12 12:06:49 INFO  (RecoveryMgr) Sat Oct 12 12:06:49 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/lvl2crackmepassword/lvl2crackmepassword_project.rep/idata/00/~00000001.db/snapshotB.grf  
+2024-10-12 12:08:30 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-12 12:08:30 DEBUG (ToolTaskManager) Task Start: Auto Analysis  
+2024-10-12 12:08:30 DEBUG (ToolTaskManager) Task Completed: Auto Analysis (0.025 secs)  
+2024-10-12 12:08:30 DEBUG (ToolTaskManager) Background processing complete (0.025 secs)  
+2024-10-12 12:11:49 INFO  (RecoveryMgr) Sat Oct 12 12:11:49 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/lvl2crackmepassword/lvl2crackmepassword_project.rep/idata/00/~00000001.db/snapshotA.grf  
+2024-10-12 13:15:02 INFO  (LoggingInitialization) Using log config file: jar:file:/usr/share/ghidra/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2024-10-12 13:15:02 INFO  (LoggingInitialization) Using log file: /home/ateschan/.config/ghidra/ghidra_11.2_DEV/application.log  
+2024-10-12 13:15:02 INFO  (Preferences) Loading user preferences: /home/ateschan/.config/ghidra/ghidra_11.2_DEV/preferences  
+2024-10-12 13:15:02 INFO  (ClassSearcher) Searching for classes...  
+2024-10-12 13:15:04 INFO  (ClassSearcher) Class search complete (1603 ms)  
+2024-10-12 13:15:04 INFO  (SSLContextInitializer) Initializing SSL Context  
+2024-10-12 13:15:04 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2024-10-12 13:15:04 INFO  (SecureRandomFactory) Random Number Generator initialization complete: NativePRNGNonBlocking  
+2024-10-12 13:15:04 INFO  (ApplicationTrustManagerFactory) Trust manager disabled, cacerts have not been set  
+2024-10-12 13:15:04 INFO  (GhidraRun) User ateschan started Ghidra.  
+2024-10-12 13:15:04 INFO  (GhidraRun) User settings directory: /home/ateschan/.config/ghidra/ghidra_11.2_DEV  
+2024-10-12 13:15:04 INFO  (GhidraRun) User temp directory: /tmp/ateschan-ghidra  
+2024-10-12 13:15:04 INFO  (GhidraRun) User cache directory: /var/tmp/ateschan-ghidra  
+2024-10-12 13:15:05 DEBUG (RecoverySnapshotMgrPlugin) Recovery snapshot timer set to 5 minute(s)  
+2024-10-12 13:15:05 INFO  (DefaultProject) Opening project: /home/ateschan/Reverse_Engineering/lvl2crackmepassword/lvl2crackmepassword_project  
+2024-10-12 13:15:05 INFO  (DefaultProjectData) Project Locked: Project is locked. You have another instance of Ghidra 
+already running with this project open (locally or remotely). 
+ 
+Project: /home/ateschan/Reverse_Engineering/lvl2crackmepassword//lvl2crackmepassword_project 
+ 
+Lock information:
+      Username:           ateschan
+      Hostname:
+      Timestamp:         10/12/24, 11:41 AM
+      OS Name:           Linux
+      OS Architecture:  amd64
+      OS Version:         6.6.35-gentoo-dist  
+2024-10-12 13:15:14 INFO  (GhidraRun) Ghidra startup complete (13199 ms)  
+2024-10-12 13:16:47 INFO  (DefaultProject) Creating project: /home/ateschan/Reverse_Engineering/level1easycrack/level1easycrack  
+2024-10-12 13:16:50 INFO  (FileCacheMaintenanceDaemon) Starting cache cleanup: /var/tmp/ateschan-ghidra/fscache2  
+2024-10-12 13:16:50 INFO  (FileCacheMaintenanceDaemon) Finished cache cleanup, estimated storage used: 0  
+2024-10-12 13:16:57 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-12 13:16:57 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-12 13:16:57 DEBUG (ElfHeader) Elf relocation table section .rela.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-12 13:16:57 DEBUG (ElfHeader) Elf relocation table section .rela.plt linked to symbol table section .dynsym affecting .got  
+2024-10-12 13:17:01 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-12 13:17:01 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-12 13:17:01 DEBUG (ElfHeader) Elf relocation table section .rela.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-12 13:17:01 DEBUG (ElfHeader) Elf relocation table section .rela.plt linked to symbol table section .dynsym affecting .got  
+2024-10-12 13:17:01 DEBUG (ElfProgramBuilder) Discarding 1-byte alignment/filler segment_4.2 at 00102057  
+2024-10-12 13:17:01 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_4.4 at 00102094  
+2024-10-12 13:17:01 DEBUG (ElfProgramBuilder) Discarding 5-byte alignment/filler segment_3.2 at 0010101b  
+2024-10-12 13:17:01 DEBUG (ElfProgramBuilder) Discarding 1-byte alignment/filler segment_3.7 at 0010129f  
+2024-10-12 13:17:01 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_2.3 at 00100334  
+2024-10-12 13:17:01 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_2.7 at 001003ac  
+2024-10-12 13:17:01 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_2.9 at 001003d4  
+2024-10-12 13:17:01 DEBUG (ElfProgramBuilder) Discarding 1-byte alignment/filler segment_2.12 at 0010050f  
+2024-10-12 13:17:01 DEBUG (ElfProgramBuilder) Discarding 2-byte alignment/filler segment_2.14 at 0010051e  
+2024-10-12 13:17:02 INFO  (ImporterUtilities) Additional info:
+Loading file:///home/ateschan/Reverse_Engineering/level1easycrack/level1?MD5=e562e7861e2fe0c2606b3db705ee7ec3...
+Setting block .init_array to read-only
+Setting block .fini_array to read-only
+Setting block .dynamic to read-only
+Failed to markup ELF Note at 00100338: data conflict
+Failed to markup ELF Note at 00100368: data conflict
+Failed to markup ELF Note at 0010038c: data conflict
+------------------------------------------------
+
+Linking the External Programs of 'level1' to imported libraries...
+  [libc.so.6] -> not found in project
+------------------------------------------------
+
+Resolving External Symbols of [/level1] - 3 unresolved symbols, no external libraries configured - skipping
+  
+2024-10-12 13:17:19 WARN  (DebuggerModulesPlugin) Plugin DebuggerModulesPlugin did not register a service handler for: interface ghidra.app.services.DebuggerAutoMappingService  
+2024-10-12 13:17:21 INFO  (PackedDatabaseCache) Packed database cache: /var/tmp/ateschan-ghidra/packed-db-cache  
+2024-10-12 13:17:21 DEBUG (PackedDatabaseCache) Using cached packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib_64.gdt  
+2024-10-12 13:17:31 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-12 13:17:32 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-12 13:17:32 DEBUG (ElfHeader) Elf relocation table section .rela.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-12 13:17:32 DEBUG (ElfHeader) Elf relocation table section .rela.plt linked to symbol table section .dynsym affecting .got  
+2024-10-12 13:17:52 WARN  (DebuggerModulesPlugin) Plugin DebuggerModulesPlugin did not register a service handler for: interface ghidra.app.services.DebuggerAutoMappingService  
+2024-10-12 13:17:52 DEBUG (PackedDatabaseCache) Using cached packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib_64.gdt  
+2024-10-12 13:18:14 ERROR (ImporterUtilities) File is empty: File /home/ateschan/Reverse_Engineering/level1easycrack/level1easycrack.gpr is empty, nothing to import  
+2024-10-12 13:18:20 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-12 13:18:20 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-12 13:18:20 DEBUG (ElfHeader) Elf relocation table section .rela.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-12 13:18:20 DEBUG (ElfHeader) Elf relocation table section .rela.plt linked to symbol table section .dynsym affecting .got  
+2024-10-12 13:18:24 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-12 13:18:24 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-12 13:18:24 DEBUG (ElfHeader) Elf relocation table section .rela.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-12 13:18:24 DEBUG (ElfHeader) Elf relocation table section .rela.plt linked to symbol table section .dynsym affecting .got  
+2024-10-12 13:18:24 DEBUG (ElfProgramBuilder) Discarding 1-byte alignment/filler segment_4.2 at 00102057  
+2024-10-12 13:18:24 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_4.4 at 00102094  
+2024-10-12 13:18:24 DEBUG (ElfProgramBuilder) Discarding 5-byte alignment/filler segment_3.2 at 0010101b  
+2024-10-12 13:18:24 DEBUG (ElfProgramBuilder) Discarding 1-byte alignment/filler segment_3.7 at 0010129f  
+2024-10-12 13:18:24 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_2.3 at 00100334  
+2024-10-12 13:18:24 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_2.7 at 001003ac  
+2024-10-12 13:18:24 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_2.9 at 001003d4  
+2024-10-12 13:18:24 DEBUG (ElfProgramBuilder) Discarding 1-byte alignment/filler segment_2.12 at 0010050f  
+2024-10-12 13:18:24 DEBUG (ElfProgramBuilder) Discarding 2-byte alignment/filler segment_2.14 at 0010051e  
+2024-10-12 13:18:30 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-12 13:18:30 DEBUG (ToolTaskManager) Task Start: Auto Analysis  
+2024-10-12 13:18:30 INFO  (ImporterUtilities) Additional info:
+Loading file:///home/ateschan/Reverse_Engineering/level1easycrack/level1?MD5=e562e7861e2fe0c2606b3db705ee7ec3...
+Setting block .init_array to read-only
+Setting block .fini_array to read-only
+Setting block .dynamic to read-only
+Failed to markup ELF Note at 00100338: data conflict
+Failed to markup ELF Note at 00100368: data conflict
+Failed to markup ELF Note at 0010038c: data conflict
+------------------------------------------------
+
+Linking the External Programs of 'level1' to imported libraries...
+  [libc.so.6] -> not found in project
+------------------------------------------------
+
+Resolving External Symbols of [/level1a] - 3 unresolved symbols, no external libraries configured - skipping
+  
+2024-10-12 13:18:30 INFO  (ExternalDebugFileSectionProvider) DWARF external debug information found: ExternalDebugInfo [filename=null, crc=0, hash=f0190b3d3d83771c957d12644ee1798f0b68b2bb]  
+2024-10-12 13:18:30 INFO  (DWARFAnalyzer) Unable to find DWARF information, skipping DWARF analysis  
+2024-10-12 13:18:30 WARN  (DecompileCallback) Decompiling 001010c0, pcode error at 00105020: Unable to disassemble EXTERNAL block location: 00105020  
+2024-10-12 13:18:31 WARN  (DecompileCallback) Decompiling 00101090, pcode error at 00105008: Unable to disassemble EXTERNAL block location: 00105008  
+2024-10-12 13:18:31 INFO  (ApplyDataArchiveAnalyzer) Applied data type archive: generic_clib_64  
+2024-10-12 13:18:31 INFO  (ExternalSymbolResolverAnalyzer) Resolving External Symbols of [/level1a] - 6 unresolved symbols, no external libraries configured - skipping  
+2024-10-12 13:18:32 INFO  (AutoAnalysisManager) -----------------------------------------------------
+    ASCII Strings                              0.285 secs
+    Apply Data Archives                        0.277 secs
+    Call Convention ID                         0.253 secs
+    Call-Fixup Installer                       0.003 secs
+    Create Address Tables                      0.003 secs
+    Create Function                            0.001 secs
+    DWARF                                      0.011 secs
+    Data Reference                             0.003 secs
+    Decompiler Switch Analysis                 0.893 secs
+    Demangler GNU                              0.017 secs
+    Disassemble Entry Points                   0.141 secs
+    ELF Scalar Operand References              0.005 secs
+    Embedded Media                             0.024 secs
+    External Entry References                  0.001 secs
+    External Symbol Resolver                   0.001 secs
+    Function Start Search                      0.028 secs
+    Function Start Search After Code           0.001 secs
+    Function Start Search After Data           0.001 secs
+    GCC Exception Handlers                     0.060 secs
+    Non-Returning Functions - Discovered       0.003 secs
+    Non-Returning Functions - Known            0.010 secs
+    Reference                                  0.012 secs
+    Shared Return Calls                        0.012 secs
+    Stack                                      0.051 secs
+    Subroutine References                      0.005 secs
+    Subroutine References - One Time           0.000 secs
+    x86 Constant Reference Analyzer            0.053 secs
+-----------------------------------------------------
+     Total Time   2 secs
+-----------------------------------------------------
+  
+2024-10-12 13:18:32 DEBUG (ToolTaskManager) Start: Auto Analysis  
+2024-10-12 13:18:32 DEBUG (ToolTaskManager) Completed: Auto Analysis (0.0 secs)  
+2024-10-12 13:18:32 DEBUG (ToolTaskManager) Task Completed: Auto Analysis (2.272 secs)  
+2024-10-12 13:18:32 DEBUG (ToolTaskManager) Background processing complete (2.274 secs)  
+2024-10-12 13:18:51 INFO  (LocalFileSystem) /level1: file deleted (ateschan)  
+2024-10-12 13:18:51 INFO  (GhidraFileData) Deleted local file level1  
+2024-10-12 13:18:57 INFO  (ProjectDataRenameAction) Rename Not Allowed: Can't rename a file that is open!  
+2024-10-12 13:19:13 WARN  (DebuggerModulesPlugin) Plugin DebuggerModulesPlugin did not register a service handler for: interface ghidra.app.services.DebuggerAutoMappingService  
+2024-10-12 13:19:13 DEBUG (PackedDatabaseCache) Using cached packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib_64.gdt  
+2024-10-12 13:19:22 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-12 13:19:22 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-12 13:19:22 DEBUG (ElfHeader) Elf relocation table section .rela.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-12 13:19:22 DEBUG (ElfHeader) Elf relocation table section .rela.plt linked to symbol table section .dynsym affecting .got  
+2024-10-12 13:19:32 WARN  (DebuggerModulesPlugin) Plugin DebuggerModulesPlugin did not register a service handler for: interface ghidra.app.services.DebuggerAutoMappingService  
+2024-10-12 13:19:33 DEBUG (PackedDatabaseCache) Using cached packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib_64.gdt  
+2024-10-12 13:26:55 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-12 13:26:55 DEBUG (ToolTaskManager) Task Start: Auto Analysis  
+2024-10-12 13:26:55 DEBUG (ToolTaskManager) Task Completed: Auto Analysis (0.084 secs)  
+2024-10-12 13:26:55 DEBUG (ToolTaskManager) Background processing complete (0.084 secs)  
+2024-10-12 13:27:49 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-12 13:27:49 DEBUG (ToolTaskManager) Task Start: Auto Analysis  
+2024-10-12 13:27:50 DEBUG (ToolTaskManager) Task Completed: Auto Analysis (0.082 secs)  
+2024-10-12 13:27:50 DEBUG (ToolTaskManager) Background processing complete (0.082 secs)  
+2024-10-12 13:31:47 INFO  (RecoveryMgr) Sat Oct 12 13:31:47 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/level1easycrack/level1easycrack.rep/idata/00/~00000001.db/snapshotA.grf  
+2024-10-12 13:32:40 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-12 13:32:40 DEBUG (ToolTaskManager) Task Start: Auto Analysis  
+2024-10-12 13:32:40 DEBUG (ToolTaskManager) Task Completed: Auto Analysis (0.09 secs)  
+2024-10-12 13:32:40 DEBUG (ToolTaskManager) Background processing complete (0.092 secs)  
+2024-10-12 13:36:47 INFO  (RecoveryMgr) Sat Oct 12 13:36:47 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/level1easycrack/level1easycrack.rep/idata/00/~00000001.db/snapshotB.grf  
+2024-10-12 14:22:58 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-12 14:22:58 DEBUG (ToolTaskManager) Task Start: Set Return Data Type  
+2024-10-12 14:22:58 DEBUG (ToolTaskManager) Start: Auto Analysis  
+2024-10-12 14:22:58 DEBUG (ToolTaskManager) Completed: Auto Analysis (0.0 secs)  
+2024-10-12 14:22:59 DEBUG (ToolTaskManager) Task Completed: Set Return Data Type (0.139 secs)  
+2024-10-12 14:22:59 DEBUG (ToolTaskManager) Background processing complete (0.14 secs)  
+2024-10-12 14:26:47 INFO  (RecoveryMgr) Sat Oct 12 14:26:47 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/level1easycrack/level1easycrack.rep/idata/00/~00000001.db/snapshotA.grf  
+2024-10-12 14:34:31 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-12 14:34:31 DEBUG (ToolTaskManager) Task Start: Set Comments  
+2024-10-12 14:34:32 DEBUG (ToolTaskManager) Task Completed: Set Comments (0.111 secs)  
+2024-10-12 14:34:32 DEBUG (ToolTaskManager) Background processing complete (0.112 secs)  
+2024-10-12 14:36:47 INFO  (RecoveryMgr) Sat Oct 12 14:36:47 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/level1easycrack/level1easycrack.rep/idata/00/~00000001.db/snapshotB.grf  
+2024-10-12 14:52:51 DEBUG (UnixPty) New Pty: /dev/pts/1 at (190,202)  
+2024-10-12 14:52:51 INFO  (LocalProcessPtySession) local Pty session. PID = 26009  
+2024-10-12 14:52:51 ERROR (ThreadedTerminal) Console input closed unexpectedly: java.io.IOException: com.sun.jna.LastErrorException: [5] Input/output error  
+2024-10-12 14:56:47 INFO  (RecoveryMgr) Sat Oct 12 14:56:47 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/level1easycrack/level1easycrack.rep/idata/00/~00000001.db/snapshotA.grf  
+2024-10-12 15:31:09 INFO  (FileActionManager) Closed project: level1easycrack  
+2024-10-12 15:31:37 INFO  (DefaultProject) Creating project: /home/ateschan/Reverse_Engineering/level2easycrack/level2easycrack  
+2024-10-12 15:31:53 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-12 15:31:53 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-12 15:31:53 DEBUG (ElfHeader) Elf relocation table section .rela.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-12 15:31:53 DEBUG (ElfHeader) Elf relocation table section .rela.plt linked to symbol table section .dynsym affecting .got  
+2024-10-12 15:31:54 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-12 15:31:54 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-12 15:31:54 DEBUG (ElfHeader) Elf relocation table section .rela.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-12 15:31:54 DEBUG (ElfHeader) Elf relocation table section .rela.plt linked to symbol table section .dynsym affecting .got  
+2024-10-12 15:31:54 DEBUG (ElfProgramBuilder) Discarding 2-byte alignment/filler segment_4.2 at 00102042  
+2024-10-12 15:31:54 DEBUG (ElfProgramBuilder) Discarding 5-byte alignment/filler segment_3.2 at 0010101b  
+2024-10-12 15:31:54 DEBUG (ElfProgramBuilder) Discarding 2-byte alignment/filler segment_3.7 at 001011d2  
+2024-10-12 15:31:54 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_2.3 at 00100334  
+2024-10-12 15:31:54 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_2.7 at 001003ac  
+2024-10-12 15:31:54 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_2.9 at 001003d4  
+2024-10-12 15:31:54 DEBUG (ElfProgramBuilder) Discarding 2-byte alignment/filler segment_2.13 at 0010053e  
+2024-10-12 15:31:54 INFO  (ImporterUtilities) Additional info:
+Loading file:///home/ateschan/Reverse_Engineering/level2easycrack/level2?MD5=3b567833b514bcfcd58c420167847e61...
+Setting block .init_array to read-only
+Setting block .fini_array to read-only
+Setting block .dynamic to read-only
+Failed to markup ELF Note at 00100338: data conflict
+Failed to markup ELF Note at 00100368: data conflict
+Failed to markup ELF Note at 0010038c: data conflict
+------------------------------------------------
+
+Linking the External Programs of 'level2' to imported libraries...
+  [libc.so.6] -> not found in project
+------------------------------------------------
+
+Resolving External Symbols of [/level2] - 4 unresolved symbols, no external libraries configured - skipping
+  
+2024-10-12 15:31:59 WARN  (DebuggerModulesPlugin) Plugin DebuggerModulesPlugin did not register a service handler for: interface ghidra.app.services.DebuggerAutoMappingService  
+2024-10-12 15:32:00 DEBUG (PackedDatabaseCache) Using cached packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib_64.gdt  
+2024-10-12 15:32:13 WARN  (DebuggerModulesPlugin) Plugin DebuggerModulesPlugin did not register a service handler for: interface ghidra.app.services.DebuggerAutoMappingService  
+2024-10-12 15:32:14 DEBUG (PackedDatabaseCache) Using cached packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib_64.gdt  
+2024-10-12 15:32:34 WARN  (DebuggerModulesPlugin) Plugin DebuggerModulesPlugin did not register a service handler for: interface ghidra.app.services.DebuggerAutoMappingService  
+2024-10-12 15:32:34 DEBUG (PackedDatabaseCache) Using cached packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib_64.gdt  
+2024-10-12 15:32:40 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-12 15:32:40 DEBUG (ToolTaskManager) Task Start: Auto Analysis  
+2024-10-12 15:32:40 INFO  (ExternalDebugFileSectionProvider) DWARF external debug information found: ExternalDebugInfo [filename=null, crc=0, hash=ce8df6bec7257fafee49e104ee89d6f36ec5b8df]  
+2024-10-12 15:32:40 INFO  (DWARFAnalyzer) Unable to find DWARF information, skipping DWARF analysis  
+2024-10-12 15:32:40 WARN  (DecompileCallback) Decompiling 001010e0, pcode error at 00105028: Unable to disassemble EXTERNAL block location: 00105028  
+2024-10-12 15:32:41 WARN  (DecompileCallback) Decompiling 001010b0, pcode error at 00105008: Unable to disassemble EXTERNAL block location: 00105008  
+2024-10-12 15:32:41 INFO  (ApplyDataArchiveAnalyzer) Applied data type archive: generic_clib_64  
+2024-10-12 15:32:41 INFO  (ExternalSymbolResolverAnalyzer) Resolving External Symbols of [/level2] - 7 unresolved symbols, no external libraries configured - skipping  
+2024-10-12 15:32:41 INFO  (AutoAnalysisManager) -----------------------------------------------------
+    ASCII Strings                              0.004 secs
+    Apply Data Archives                        0.161 secs
+    Call Convention ID                         0.222 secs
+    Call-Fixup Installer                       0.000 secs
+    Create Address Tables                      0.002 secs
+    Create Function                            0.001 secs
+    DWARF                                      0.001 secs
+    Data Reference                             0.004 secs
+    Decompiler Switch Analysis                 0.686 secs
+    Demangler GNU                              0.003 secs
+    Disassemble Entry Points                   0.041 secs
+    ELF Scalar Operand References              0.002 secs
+    Embedded Media                             0.004 secs
+    External Entry References                  0.000 secs
+    External Symbol Resolver                   0.000 secs
+    Function Start Search                      0.019 secs
+    Function Start Search After Code           0.001 secs
+    Function Start Search After Data           0.000 secs
+    GCC Exception Handlers                     0.025 secs
+    Non-Returning Functions - Discovered       0.001 secs
+    Non-Returning Functions - Known            0.001 secs
+    Reference                                  0.012 secs
+    Shared Return Calls                        0.004 secs
+    Stack                                      0.013 secs
+    Subroutine References                      0.000 secs
+    Subroutine References - One Time           0.000 secs
+    x86 Constant Reference Analyzer            0.028 secs
+-----------------------------------------------------
+     Total Time   1 secs
+-----------------------------------------------------
+  
+2024-10-12 15:32:41 DEBUG (ToolTaskManager) Start: Auto Analysis  
+2024-10-12 15:32:41 DEBUG (ToolTaskManager) Completed: Auto Analysis (0.0 secs)  
+2024-10-12 15:32:41 DEBUG (ToolTaskManager) Task Completed: Auto Analysis (1.345 secs)  
+2024-10-12 15:32:41 DEBUG (ToolTaskManager) Background processing complete (1.355 secs)  
+2024-10-12 15:33:07 WARN  (DecompileCallback) Decompiling 00105018, pcode error at 00105018: Unable to disassemble EXTERNAL block location: 00105018  
+2024-10-12 15:36:37 INFO  (RecoveryMgr) Sat Oct 12 15:36:37 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/level2easycrack/level2easycrack.rep/idata/00/~00000000.db/snapshotA.grf  
+2024-10-12 15:36:44 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-12 15:36:44 DEBUG (ToolTaskManager) Task Start: Auto Analysis  
+2024-10-12 15:36:44 DEBUG (ToolTaskManager) Task Completed: Auto Analysis (0.03 secs)  
+2024-10-12 15:36:44 DEBUG (ToolTaskManager) Background processing complete (0.03 secs)  
+2024-10-12 15:41:37 INFO  (RecoveryMgr) Sat Oct 12 15:41:37 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/level2easycrack/level2easycrack.rep/idata/00/~00000000.db/snapshotB.grf  
+2024-10-12 16:00:34 INFO  (FileActionManager) Closed project: level2easycrack  
+2024-10-12 16:01:08 INFO  (DefaultProject) Creating project: /home/ateschan/Reverse_Engineering/guess_pin/guess_pin  
+2024-10-12 16:01:39 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-12 16:01:39 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-12 16:01:39 DEBUG (ElfHeader) Elf relocation table section .rela.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-12 16:01:39 DEBUG (ElfHeader) Elf relocation table section .rela.plt linked to symbol table section .dynsym affecting .got.plt  
+2024-10-12 16:01:40 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-12 16:01:40 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-12 16:01:40 DEBUG (ElfHeader) Elf relocation table section .rela.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-12 16:01:40 DEBUG (ElfHeader) Elf relocation table section .rela.plt linked to symbol table section .dynsym affecting .got.plt  
+2024-10-12 16:01:40 DEBUG (ElfProgramBuilder) Discarding 1-byte alignment/filler segment_4.2 at 0010206b  
+2024-10-12 16:01:40 DEBUG (ElfProgramBuilder) Discarding 9-byte alignment/filler segment_3.2 at 00101017  
+2024-10-12 16:01:40 DEBUG (ElfProgramBuilder) Discarding 8-byte alignment/filler segment_3.5 at 00101078  
+2024-10-12 16:01:40 DEBUG (ElfProgramBuilder) Discarding 3-byte alignment/filler segment_3.7 at 00101501  
+2024-10-12 16:01:40 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_2.6 at 0010032c  
+2024-10-12 16:01:40 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_2.10 at 001004cc  
+2024-10-12 16:01:40 INFO  (ImporterUtilities) Additional info:
+Loading file:///home/ateschan/Reverse_Engineering/guess_pin/authorize?MD5=1cc4beae66a1c5b24af382bd9619147c...
+Setting block .init_array to read-only
+Setting block .fini_array to read-only
+Setting block .dynamic to read-only
+Setting block segment_5.5 to read-only
+Failed to markup ELF Note at 001002c4: data conflict
+Failed to markup ELF Note at 001002e8: data conflict
+------------------------------------------------
+
+Linking the External Programs of 'authorize' to imported libraries...
+  [libc.so.6] -> not found in project
+------------------------------------------------
+
+Resolving External Symbols of [/authorize] - 6 unresolved symbols, no external libraries configured - skipping
+  
+2024-10-12 16:01:51 WARN  (DebuggerModulesPlugin) Plugin DebuggerModulesPlugin did not register a service handler for: interface ghidra.app.services.DebuggerAutoMappingService  
+2024-10-12 16:01:51 DEBUG (PackedDatabaseCache) Using cached packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib_64.gdt  
+2024-10-12 16:02:03 WARN  (DebuggerModulesPlugin) Plugin DebuggerModulesPlugin did not register a service handler for: interface ghidra.app.services.DebuggerAutoMappingService  
+2024-10-12 16:02:03 DEBUG (PackedDatabaseCache) Using cached packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib_64.gdt  
+2024-10-12 16:02:06 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-12 16:02:06 DEBUG (ToolTaskManager) Task Start: Auto Analysis  
+2024-10-12 16:02:06 INFO  (ExternalDebugFileSectionProvider) DWARF external debug information found: ExternalDebugInfo [filename=null, crc=0, hash=2858b00a6756ebffaadc2dc0cdd67765e530011c]  
+2024-10-12 16:02:06 INFO  (DWARFAnalyzer) Unable to find DWARF information, skipping DWARF analysis  
+2024-10-12 16:02:07 WARN  (DecompileCallback) Decompiling 001010b0, pcode error at 00105008: Unable to disassemble EXTERNAL block location: 00105008  
+2024-10-12 16:02:07 WARN  (DecompileCallback) Decompiling 001010e0, pcode error at 00105038: Unable to disassemble EXTERNAL block location: 00105038  
+2024-10-12 16:02:07 INFO  (ApplyDataArchiveAnalyzer) Applied data type archive: generic_clib_64  
+2024-10-12 16:02:08 INFO  (ExternalSymbolResolverAnalyzer) Resolving External Symbols of [/authorize] - 9 unresolved symbols, no external libraries configured - skipping  
+2024-10-12 16:02:08 INFO  (AutoAnalysisManager) -----------------------------------------------------
+    ASCII Strings                              0.005 secs
+    Apply Data Archives                        0.165 secs
+    Call Convention ID                         0.257 secs
+    Call-Fixup Installer                       0.000 secs
+    Create Address Tables                      0.005 secs
+    Create Function                            0.003 secs
+    DWARF                                      0.001 secs
+    Data Reference                             0.003 secs
+    Decompiler Switch Analysis                 0.791 secs
+    Demangler GNU                              0.003 secs
+    Disassemble Entry Points                   0.046 secs
+    ELF Scalar Operand References              0.007 secs
+    Embedded Media                             0.003 secs
+    External Entry References                  0.001 secs
+    External Symbol Resolver                   0.001 secs
+    Function Start Search                      0.021 secs
+    Function Start Search After Code           0.001 secs
+    Function Start Search After Data           0.001 secs
+    GCC Exception Handlers                     0.025 secs
+    Non-Returning Functions - Discovered       0.011 secs
+    Non-Returning Functions - Known            0.001 secs
+    Reference                                  0.009 secs
+    Shared Return Calls                        0.003 secs
+    Stack                                      0.037 secs
+    Subroutine References                      0.003 secs
+    Subroutine References - One Time           0.000 secs
+    x86 Constant Reference Analyzer            0.035 secs
+-----------------------------------------------------
+     Total Time   1 secs
+-----------------------------------------------------
+  
+2024-10-12 16:02:08 DEBUG (ToolTaskManager) Start: Auto Analysis  
+2024-10-12 16:02:08 DEBUG (ToolTaskManager) Completed: Auto Analysis (0.0 secs)  
+2024-10-12 16:02:08 DEBUG (ToolTaskManager) Task Completed: Auto Analysis (1.492 secs)  
+2024-10-12 16:02:08 DEBUG (ToolTaskManager) Background processing complete (1.492 secs)  
+2024-10-12 16:06:09 INFO  (RecoveryMgr) Sat Oct 12 16:06:09 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/guess_pin/guess_pin.rep/idata/00/~00000000.db/snapshotA.grf  
+2024-10-12 16:14:17 WARN  (AssemblerPlugin$1) Assembler Rating: This processor received a rating of GOLD during testing. You 
+should rarely encounter an error.  
+2024-10-12 19:19:26 INFO  (LoggingInitialization) Using log config file: jar:file:/usr/share/ghidra/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2024-10-12 19:19:26 INFO  (LoggingInitialization) Using log file: /home/ateschan/.config/ghidra/ghidra_11.2_DEV/application.log  
+2024-10-12 19:19:26 INFO  (Preferences) Loading user preferences: /home/ateschan/.config/ghidra/ghidra_11.2_DEV/preferences  
+2024-10-12 19:19:27 INFO  (ClassSearcher) Searching for classes...  
+2024-10-12 19:19:29 INFO  (ClassSearcher) Class search complete (1848 ms)  
+2024-10-12 19:19:29 INFO  (SSLContextInitializer) Initializing SSL Context  
+2024-10-12 19:19:29 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2024-10-12 19:19:29 INFO  (SecureRandomFactory) Random Number Generator initialization complete: NativePRNGNonBlocking  
+2024-10-12 19:19:29 INFO  (ApplicationTrustManagerFactory) Trust manager disabled, cacerts have not been set  
+2024-10-12 19:19:29 INFO  (GhidraRun) User ateschan started Ghidra.  
+2024-10-12 19:19:29 INFO  (GhidraRun) User settings directory: /home/ateschan/.config/ghidra/ghidra_11.2_DEV  
+2024-10-12 19:19:29 INFO  (GhidraRun) User temp directory: /tmp/ateschan-ghidra  
+2024-10-12 19:19:29 INFO  (GhidraRun) User cache directory: /var/tmp/ateschan-ghidra  
+2024-10-12 19:19:30 DEBUG (RecoverySnapshotMgrPlugin) Recovery snapshot timer set to 5 minute(s)  
+2024-10-12 19:19:30 INFO  (DefaultProject) Opening project: /home/ateschan/Reverse_Engineering/guess_pin/guess_pin  
+2024-10-12 19:19:30 INFO  (DefaultProjectData) Project Locked: Project is locked. You have another instance of Ghidra 
+already running with this project open (locally or remotely). 
+ 
+Project: /home/ateschan/Reverse_Engineering/guess_pin//guess_pin 
+ 
+Lock information:
+      Username:           ateschan
+      Hostname:
+      Timestamp:         10/12/24, 4:01 PM
+      OS Name:           Linux
+      OS Architecture:  amd64
+      OS Version:         6.6.35-gentoo-dist  
+2024-10-12 19:24:37 INFO  (GhidraRun) Ghidra startup complete (311844 ms)  
+2024-10-12 19:26:05 INFO  (DefaultProject) Creating project: /home/ateschan/Reverse_Engineering/NCL_GYM_HARD_RE32/NCL_GYM_HARD_RE32  
+2024-10-12 19:26:14 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-12 19:26:14 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-12 19:26:14 DEBUG (ElfHeader) Elf relocation table section .rel.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-12 19:26:14 DEBUG (ElfHeader) Elf relocation table section .rel.plt linked to symbol table section .dynsym affecting .plt  
+2024-10-12 19:26:18 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-12 19:26:18 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-12 19:26:18 DEBUG (ElfHeader) Elf relocation table section .rel.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-12 19:26:18 DEBUG (ElfHeader) Elf relocation table section .rel.plt linked to symbol table section .dynsym affecting .plt  
+2024-10-12 19:26:18 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_3.7 at 0804a03c  
+2024-10-12 19:26:18 DEBUG (ElfProgramBuilder) Discarding 1-byte alignment/filler segment_2.3 at 08048167  
+2024-10-12 19:26:18 DEBUG (ElfProgramBuilder) Discarding 2-byte alignment/filler segment_2.10 at 0804837e  
+2024-10-12 19:26:18 DEBUG (ElfProgramBuilder) Discarding 13-byte alignment/filler segment_2.15 at 08048443  
+2024-10-12 19:26:18 DEBUG (ElfProgramBuilder) Discarding 2-byte alignment/filler segment_2.18 at 08048962  
+2024-10-12 19:26:18 DEBUG (ElfProgramBuilder) Discarding 1-byte alignment/filler segment_2.21 at 080489f3  
+2024-10-12 19:26:19 INFO  (ImporterUtilities) Additional info:
+Loading file:///home/ateschan/Reverse_Engineering/NCL_GYM_HARD_RE32/RE2_32bit?MD5=b72988fb3c2a3912af1de75d676ef3ad...
+ELF Relocation Failure: R_386_COPY (5, 0x5) at 0804a0a0 (Symbol = stdout) - Runtime copy not supported (4-bytes)
+Setting block .init_array to read-only
+Setting block .fini_array to read-only
+Setting block .jcr to read-only
+Setting block .dynamic to read-only
+Failed to markup ELF Note at 08048168: data conflict
+Failed to markup ELF Note at 08048188: data conflict
+------------------------------------------------
+
+Linking the External Programs of 'RE2_32bit' to imported libraries...
+  [libc.so.6] -> not found in project
+------------------------------------------------
+
+Resolving External Symbols of [/RE2_32bit] - 11 unresolved symbols, no external libraries configured - skipping
+  
+2024-10-12 19:26:27 WARN  (DebuggerModulesPlugin) Plugin DebuggerModulesPlugin did not register a service handler for: interface ghidra.app.services.DebuggerAutoMappingService  
+2024-10-12 19:26:29 INFO  (PackedDatabaseCache) Packed database cache: /var/tmp/ateschan-ghidra/packed-db-cache  
+2024-10-12 19:26:29 DEBUG (PackedDatabaseCache) Using cached packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib_64.gdt  
+2024-10-12 19:26:56 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-12 19:26:56 DEBUG (ToolTaskManager) Task Start: Auto Analysis  
+2024-10-12 19:26:56 INFO  (ExternalDebugFileSectionProvider) DWARF external debug information found: ExternalDebugInfo [filename=null, crc=0, hash=3a3a28304b84ba2b8dc457bcac25cbe709b84bed]  
+2024-10-12 19:26:56 INFO  (DWARFAnalyzer) Unable to find DWARF information, skipping DWARF analysis  
+2024-10-12 19:26:56 INFO  (DecompilerSwitchAnalyzer) hit non-returning function, restarting decompiler switch analyzer later  
+2024-10-12 19:26:58 DEBUG (PackedDatabaseCache) Caching packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib.gdt  
+2024-10-12 19:26:58 DEBUG (PackedDatabase) Unpacking database /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib.gdt -> /var/tmp/ateschan-ghidra/packed-db-cache/pdbF5F77003/db.1.gbf  
+2024-10-12 19:26:58 DEBUG (PackedDatabaseCache) Cache update completed: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib.gdt  
+2024-10-12 19:26:58 INFO  (ApplyDataArchiveAnalyzer) Applied data type archive: generic_clib  
+2024-10-12 19:26:58 INFO  (ExternalSymbolResolverAnalyzer) Resolving External Symbols of [/RE2_32bit] - 12 unresolved symbols, no external libraries configured - skipping  
+2024-10-12 19:26:59 INFO  (AutoAnalysisManager) -----------------------------------------------------
+    ASCII Strings                              0.386 secs
+    Apply Data Archives                        0.350 secs
+    Call Convention ID                         0.250 secs
+    Call-Fixup Installer                       0.008 secs
+    Create Address Tables                      0.005 secs
+    Create Function                            0.018 secs
+    DWARF                                      0.013 secs
+    Data Reference                             0.005 secs
+    Decompiler Switch Analysis                 0.077 secs
+    Decompiler Switch Analysis - One Time      0.988 secs
+    Demangler GNU                              0.019 secs
+    Disassemble Entry Points                   0.168 secs
+    ELF Scalar Operand References              0.016 secs
+    Embedded Media                             0.042 secs
+    External Entry References                  0.002 secs
+    External Symbol Resolver                   0.002 secs
+    Function Start Search                      0.009 secs
+    Function Start Search After Code           0.002 secs
+    Function Start Search After Data           0.001 secs
+    GCC Exception Handlers                     0.085 secs
+    Non-Returning Functions - Discovered       0.005 secs
+    Non-Returning Functions - Known            0.013 secs
+    Reference                                  0.014 secs
+    Shared Return Calls                        0.014 secs
+    Stack                                      0.112 secs
+    Subroutine References                      0.011 secs
+    X86 Function Callee Purge                  0.004 secs
+    x86 Constant Reference Analyzer            0.146 secs
+-----------------------------------------------------
+     Total Time   2 secs
+-----------------------------------------------------
+  
+2024-10-12 19:26:59 DEBUG (ToolTaskManager) Start: Auto Analysis  
+2024-10-12 19:26:59 DEBUG (ToolTaskManager) Completed: Auto Analysis (0.0 secs)  
+2024-10-12 19:26:59 DEBUG (ToolTaskManager) Task Completed: Auto Analysis (3.138 secs)  
+2024-10-12 19:26:59 DEBUG (ToolTaskManager) Background processing complete (3.14 secs)  
+2024-10-12 19:28:05 DEBUG (UnixPty) New Pty: /dev/pts/0 at (202,204)  
+2024-10-12 19:28:05 DEBUG (UnixPty) New Pty: /dev/pts/2 at (205,206)  
+2024-10-12 19:28:05 INFO  (LocalProcessPtySession) local Pty session. PID = 11687  
+2024-10-12 19:28:05 ERROR (ThreadedTerminal) Console input closed unexpectedly: java.io.IOException: com.sun.jna.LastErrorException: [5] Input/output error  
+2024-10-12 19:28:05 ERROR (ThreadedTerminal) Console input closed unexpectedly: java.io.IOException: com.sun.jna.LastErrorException: [5] Input/output error  
+2024-10-12 19:28:27 DEBUG (UnixPty) New Pty: /dev/pts/0 at (202,204)  
+2024-10-12 19:28:27 DEBUG (UnixPty) New Pty: /dev/pts/2 at (205,206)  
+2024-10-12 19:28:27 INFO  (LocalProcessPtySession) local Pty session. PID = 11717  
+2024-10-12 19:28:27 ERROR (ThreadedTerminal) Console input closed unexpectedly: java.io.IOException: com.sun.jna.LastErrorException: [5] Input/output error  
+2024-10-12 19:28:27 ERROR (ThreadedTerminal) Console input closed unexpectedly: java.io.IOException: com.sun.jna.LastErrorException: [5] Input/output error  
+2024-10-12 19:28:27 ERROR (UnixPtyChild) Could not set terminal window size: com.sun.jna.LastErrorException: [9] Bad file descriptor  
+2024-10-12 19:28:27 ERROR (UnixPtyChild) Could not set terminal window size: com.sun.jna.LastErrorException: [9] Bad file descriptor  
+2024-10-12 19:29:37 DEBUG (UnixPty) New Pty: /dev/pts/0 at (202,204)  
+2024-10-12 19:29:37 DEBUG (UnixPty) New Pty: /dev/pts/3 at (205,206)  
+2024-10-12 19:29:37 INFO  (LocalProcessPtySession) local Pty session. PID = 12216  
+2024-10-12 19:29:37 ERROR (ThreadedTerminal) Console input closed unexpectedly: java.io.IOException: com.sun.jna.LastErrorException: [5] Input/output error  
+2024-10-12 19:29:37 ERROR (ThreadedTerminal) Console input closed unexpectedly: java.io.IOException: com.sun.jna.LastErrorException: [5] Input/output error  
+2024-10-12 19:29:56 DEBUG (UnixPty) New Pty: /dev/pts/0 at (202,204)  
+2024-10-12 19:29:56 DEBUG (UnixPty) New Pty: /dev/pts/3 at (205,206)  
+2024-10-12 19:29:56 INFO  (LocalProcessPtySession) local Pty session. PID = 12287  
+2024-10-12 19:29:57 ERROR (ThreadedTerminal) Console input closed unexpectedly: java.io.IOException: com.sun.jna.LastErrorException: [5] Input/output error  
+2024-10-12 19:29:57 ERROR (ThreadedTerminal) Console input closed unexpectedly: java.io.IOException: com.sun.jna.LastErrorException: [5] Input/output error  
+2024-10-12 19:31:05 INFO  (RecoveryMgr) Sat Oct 12 19:31:05 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/NCL_GYM_HARD_RE32/NCL_GYM_HARD_RE32.rep/idata/00/~00000000.db/snapshotA.grf  
+2024-10-12 19:36:05 INFO  (RecoveryMgr) Sat Oct 12 19:36:05 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/NCL_GYM_HARD_RE32/NCL_GYM_HARD_RE32.rep/idata/00/~00000000.db/snapshotB.grf  
+2024-10-12 19:36:11 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-12 19:36:11 DEBUG (ToolTaskManager) Task Start: Auto Analysis  
+2024-10-12 19:36:12 DEBUG (ToolTaskManager) Task Completed: Auto Analysis (0.451 secs)  
+2024-10-12 19:36:12 DEBUG (ToolTaskManager) Background processing complete (0.453 secs)  
+2024-10-12 19:40:21 DEBUG (UnixPty) New Pty: /dev/pts/0 at (202,204)  
+2024-10-12 19:40:21 DEBUG (UnixPty) New Pty: /dev/pts/1 at (205,206)  
+2024-10-12 19:40:21 INFO  (LocalProcessPtySession) local Pty session. PID = 28857  
+2024-10-12 19:41:05 INFO  (RecoveryMgr) Sat Oct 12 19:41:05 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/NCL_GYM_HARD_RE32/NCL_GYM_HARD_RE32.rep/idata/00/~00000000.db/snapshotA.grf  
+2024-10-12 19:43:56 DEBUG (UnixPty) New Pty: /dev/pts/3 at (207,208)  
+2024-10-12 19:43:56 INFO  (LocalProcessPtySession) local Pty session. PID = 29219  
+2024-10-12 19:44:12 ERROR (UnixShellScriptTraceRmiLaunchOffer) java.lang.InterruptedException  
+2024-10-12 19:44:12 ERROR (ThreadedTerminal) Console input closed unexpectedly: java.nio.channels.ClosedByInterruptException  
+2024-10-12 19:46:34 WARN  (DecompileCallback) Decompiling 0804b028, pcode error at 0804b028: Unable to disassemble EXTERNAL block location: 0804b028  
+2024-10-15 11:04:29 INFO  (LoggingInitialization) Using log config file: jar:file:/usr/share/ghidra/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2024-10-15 11:04:29 INFO  (LoggingInitialization) Using log file: /home/ateschan/.config/ghidra/ghidra_11.2_DEV/application.log  
+2024-10-15 11:04:29 INFO  (Preferences) Loading user preferences: /home/ateschan/.config/ghidra/ghidra_11.2_DEV/preferences  
+2024-10-15 11:04:30 INFO  (ClassSearcher) Searching for classes...  
+2024-10-15 11:04:31 INFO  (ClassSearcher) Class search complete (1598 ms)  
+2024-10-15 11:04:32 INFO  (SSLContextInitializer) Initializing SSL Context  
+2024-10-15 11:04:32 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2024-10-15 11:04:32 INFO  (SecureRandomFactory) Random Number Generator initialization complete: NativePRNGNonBlocking  
+2024-10-15 11:04:32 INFO  (ApplicationTrustManagerFactory) Trust manager disabled, cacerts have not been set  
+2024-10-15 11:04:32 INFO  (GhidraRun) User ateschan started Ghidra.  
+2024-10-15 11:04:32 INFO  (GhidraRun) User settings directory: /home/ateschan/.config/ghidra/ghidra_11.2_DEV  
+2024-10-15 11:04:32 INFO  (GhidraRun) User temp directory: /tmp/ateschan-ghidra  
+2024-10-15 11:04:32 INFO  (GhidraRun) User cache directory: /var/tmp/ateschan-ghidra  
+2024-10-15 11:04:33 DEBUG (RecoverySnapshotMgrPlugin) Recovery snapshot timer set to 5 minute(s)  
+2024-10-15 11:04:33 INFO  (DefaultProject) Opening project: /home/ateschan/Reverse_Engineering/NCL_GYM_HARD_RE32/NCL_GYM_HARD_RE32  
+2024-10-15 11:04:33 INFO  (DefaultProjectData) Project Locked: Project is locked. You have another instance of Ghidra 
+already running with this project open (locally or remotely). 
+ 
+Project: /home/ateschan/Reverse_Engineering/NCL_GYM_HARD_RE32//NCL_GYM_HARD_RE32 
+ 
+Lock information:
+      Username:           ateschan
+      Hostname:
+      Timestamp:         10/12/24, 7:26 PM
+      OS Name:           Linux
+      OS Architecture:  amd64
+      OS Version:         6.6.35-gentoo-dist  
+2024-10-15 11:04:36 INFO  (GhidraRun) Ghidra startup complete (7679 ms)  
+2024-10-15 11:07:45 INFO  (DefaultProject) Creating project: /home/ateschan/Reverse_Engineering/ncl-medium/ncl_medium  
+2024-10-15 11:07:55 INFO  (FileCacheMaintenanceDaemon) Starting cache cleanup: /var/tmp/ateschan-ghidra/fscache2  
+2024-10-15 11:07:55 INFO  (FileCacheMaintenanceDaemon) Finished cache cleanup, estimated storage used: 0  
+2024-10-15 11:07:59 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-15 11:07:59 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-15 11:07:59 DEBUG (ElfHeader) Elf relocation table section .rel.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-15 11:07:59 DEBUG (ElfHeader) Elf relocation table section .rel.plt linked to symbol table section .dynsym affecting .plt  
+2024-10-15 11:10:08 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-15 11:10:08 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-15 11:10:08 DEBUG (ElfHeader) Elf relocation table section .rel.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-15 11:10:08 DEBUG (ElfHeader) Elf relocation table section .rel.plt linked to symbol table section .dynsym affecting .plt  
+2024-10-15 11:10:08 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_3.7 at 0804a03c  
+2024-10-15 11:10:08 DEBUG (ElfProgramBuilder) Discarding 1-byte alignment/filler segment_2.3 at 08048167  
+2024-10-15 11:10:08 DEBUG (ElfProgramBuilder) Discarding 2-byte alignment/filler segment_2.10 at 0804837e  
+2024-10-15 11:10:08 DEBUG (ElfProgramBuilder) Discarding 13-byte alignment/filler segment_2.15 at 08048443  
+2024-10-15 11:10:08 DEBUG (ElfProgramBuilder) Discarding 2-byte alignment/filler segment_2.18 at 08048962  
+2024-10-15 11:10:08 DEBUG (ElfProgramBuilder) Discarding 1-byte alignment/filler segment_2.21 at 080489f3  
+2024-10-15 11:10:09 INFO  (ImporterUtilities) Additional info:
+Loading file:///home/ateschan/Reverse_Engineering/NCL_GYM_HARD_RE32/RE2_32bit?MD5=b72988fb3c2a3912af1de75d676ef3ad...
+ELF Relocation Failure: R_386_COPY (5, 0x5) at 0804a0a0 (Symbol = stdout) - Runtime copy not supported (4-bytes)
+Setting block .init_array to read-only
+Setting block .fini_array to read-only
+Setting block .jcr to read-only
+Setting block .dynamic to read-only
+Failed to markup ELF Note at 08048168: data conflict
+Failed to markup ELF Note at 08048188: data conflict
+------------------------------------------------
+
+Linking the External Programs of 'RE2_32bit' to imported libraries...
+  [libc.so.6] -> not found in project
+------------------------------------------------
+
+Resolving External Symbols of [/RE2_32bit] - 11 unresolved symbols, no external libraries configured - skipping
+  
+2024-10-15 11:10:20 WARN  (DebuggerModulesPlugin) Plugin DebuggerModulesPlugin did not register a service handler for: interface ghidra.app.services.DebuggerAutoMappingService  
+2024-10-15 11:10:21 INFO  (PackedDatabaseCache) Packed database cache: /var/tmp/ateschan-ghidra/packed-db-cache  
+2024-10-15 11:10:21 DEBUG (PackedDatabaseCache) Using cached packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib_64.gdt  
+2024-10-15 11:10:32 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-15 11:10:32 DEBUG (ToolTaskManager) Task Start: Auto Analysis  
+2024-10-15 11:10:32 INFO  (ExternalDebugFileSectionProvider) DWARF external debug information found: ExternalDebugInfo [filename=null, crc=0, hash=3a3a28304b84ba2b8dc457bcac25cbe709b84bed]  
+2024-10-15 11:10:32 INFO  (DWARFAnalyzer) Unable to find DWARF information, skipping DWARF analysis  
+2024-10-15 11:10:33 INFO  (DecompilerSwitchAnalyzer) hit non-returning function, restarting decompiler switch analyzer later  
+2024-10-15 11:10:34 DEBUG (PackedDatabaseCache) Using cached packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib.gdt  
+2024-10-15 11:10:34 INFO  (ApplyDataArchiveAnalyzer) Applied data type archive: generic_clib  
+2024-10-15 11:10:34 INFO  (ExternalSymbolResolverAnalyzer) Resolving External Symbols of [/RE2_32bit] - 12 unresolved symbols, no external libraries configured - skipping  
+2024-10-15 11:10:35 INFO  (AutoAnalysisManager) -----------------------------------------------------
+    ASCII Strings                              0.450 secs
+    Apply Data Archives                        0.226 secs
+    Call Convention ID                         0.237 secs
+    Call-Fixup Installer                       0.006 secs
+    Create Address Tables                      0.004 secs
+    Create Function                            0.013 secs
+    DWARF                                      0.010 secs
+    Data Reference                             0.005 secs
+    Decompiler Switch Analysis                 0.034 secs
+    Decompiler Switch Analysis - One Time      1.042 secs
+    Demangler GNU                              0.017 secs
+    Disassemble Entry Points                   0.085 secs
+    ELF Scalar Operand References              0.022 secs
+    Embedded Media                             0.031 secs
+    External Entry References                  0.001 secs
+    External Symbol Resolver                   0.001 secs
+    Function Start Search                      0.008 secs
+    Function Start Search After Code           0.002 secs
+    Function Start Search After Data           0.001 secs
+    GCC Exception Handlers                     0.054 secs
+    Non-Returning Functions - Discovered       0.003 secs
+    Non-Returning Functions - Known            0.011 secs
+    Reference                                  0.014 secs
+    Shared Return Calls                        0.007 secs
+    Stack                                      0.079 secs
+    Subroutine References                      0.006 secs
+    X86 Function Callee Purge                  0.004 secs
+    x86 Constant Reference Analyzer            0.084 secs
+-----------------------------------------------------
+     Total Time   2 secs
+-----------------------------------------------------
+  
+2024-10-15 11:10:35 DEBUG (ToolTaskManager) Start: Auto Analysis  
+2024-10-15 11:10:35 DEBUG (ToolTaskManager) Completed: Auto Analysis (0.0 secs)  
+2024-10-15 11:10:35 DEBUG (ToolTaskManager) Task Completed: Auto Analysis (2.845 secs)  
+2024-10-15 11:10:35 DEBUG (ToolTaskManager) Background processing complete (2.847 secs)  
+2024-10-15 11:12:46 INFO  (RecoveryMgr) Tue Oct 15 11:12:46 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/ncl-medium/ncl_medium.rep/idata/00/~00000000.db/snapshotA.grf  
+2024-10-15 11:12:47 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-15 11:12:47 DEBUG (ToolTaskManager) Task Start: Auto Analysis  
+2024-10-15 11:12:47 DEBUG (ToolTaskManager) Task Completed: Auto Analysis (0.067 secs)  
+2024-10-15 11:12:47 DEBUG (ToolTaskManager) Background processing complete (0.068 secs)  
+2024-10-15 11:13:37 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-15 11:13:37 DEBUG (ToolTaskManager) Task Start: Auto Analysis  
+2024-10-15 11:13:37 DEBUG (ToolTaskManager) Task Completed: Auto Analysis (0.315 secs)  
+2024-10-15 11:13:37 DEBUG (ToolTaskManager) Background processing complete (0.316 secs)  
+2024-10-15 11:13:50 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-15 11:13:50 DEBUG (ToolTaskManager) Task Start: Auto Analysis  
+2024-10-15 11:13:50 DEBUG (ToolTaskManager) Task Completed: Auto Analysis (0.031 secs)  
+2024-10-15 11:13:50 DEBUG (ToolTaskManager) Background processing complete (0.032 secs)  
+2024-10-15 11:16:40 WARN  (DecompileCallback) Decompiling 0804b028, pcode error at 0804b028: Unable to disassemble EXTERNAL block location: 0804b028  
+2024-10-15 11:17:46 INFO  (RecoveryMgr) Tue Oct 15 11:17:46 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/ncl-medium/ncl_medium.rep/idata/00/~00000000.db/snapshotB.grf  
+2024-10-15 11:18:34 DEBUG (UnixPty) New Pty: /dev/pts/3 at (202,204)  
+2024-10-15 11:18:34 INFO  (LocalProcessPtySession) local Pty session. PID = 8426  
+2024-10-15 11:18:46 ERROR (UnixShellScriptTraceRmiLaunchOffer) java.lang.InterruptedException  
+2024-10-15 11:18:46 ERROR (ThreadedTerminal) Console input closed unexpectedly: java.nio.channels.ClosedByInterruptException  
+2024-10-15 11:19:17 INFO  (LocalFileSystem) /RE2_32bit: file deleted (ateschan)  
+2024-10-15 11:19:17 INFO  (GhidraFileData) Deleted local file RE2_32bit  
+2024-10-15 11:19:17 INFO  (LocalFileSystem) /udf_ce91c60f700b: file deleted  
+2024-10-15 11:20:46 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-15 11:20:46 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-15 11:20:46 DEBUG (ElfHeader) Elf relocation table section .rela.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-15 11:20:46 DEBUG (ElfHeader) Elf relocation table section .rela.plt linked to symbol table section .dynsym affecting .plt  
+2024-10-15 11:21:06 DEBUG (ElfHeader) Elf symbol table section .dynsym linked to string table section .dynstr  
+2024-10-15 11:21:06 DEBUG (ElfHeader) Elf symbol table section .symtab linked to string table section .strtab  
+2024-10-15 11:21:06 DEBUG (ElfHeader) Elf relocation table section .rela.dyn linked to symbol table section .dynsym affecting PT_LOAD  
+2024-10-15 11:21:06 DEBUG (ElfHeader) Elf relocation table section .rela.plt linked to symbol table section .dynsym affecting .plt  
+2024-10-15 11:21:06 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_2.6 at 004002b4  
+2024-10-15 11:21:06 DEBUG (ElfProgramBuilder) Discarding 1-byte alignment/filler segment_2.9 at 0040040b  
+2024-10-15 11:21:06 DEBUG (ElfProgramBuilder) Discarding 6-byte alignment/filler segment_2.15 at 0040054a  
+2024-10-15 11:21:06 DEBUG (ElfProgramBuilder) Discarding 2-byte alignment/filler segment_2.18 at 00400982  
+2024-10-15 11:21:06 DEBUG (ElfProgramBuilder) Discarding 3-byte alignment/filler segment_2.20 at 0040098d  
+2024-10-15 11:21:06 DEBUG (ElfProgramBuilder) Discarding 4-byte alignment/filler segment_2.23 at 00400a14  
+2024-10-15 11:21:06 INFO  (ImporterUtilities) Additional info:
+Loading file:///home/ateschan/Reverse_Engineering/ncl-medium/RE1_64bit?MD5=81990fde56852128204a80fdbf44ee0f...
+Failed to properly markup GNU Hash table at 00400298: Insufficent memory at address 004002b4 (length: 36 bytes)
+Setting block .init_array to read-only
+Setting block .fini_array to read-only
+Setting block .jcr to read-only
+Setting block .dynamic to read-only
+Failed to markup ELF Note at 00400254: data conflict
+Failed to markup ELF Note at 00400274: data conflict
+------------------------------------------------
+
+Linking the External Programs of 'RE1_64bit' to imported libraries...
+  [libc.so.6] -> not found in project
+------------------------------------------------
+
+Resolving External Symbols of [/RE1_64bit] - 8 unresolved symbols, no external libraries configured - skipping
+  
+2024-10-15 11:21:16 WARN  (DebuggerModulesPlugin) Plugin DebuggerModulesPlugin did not register a service handler for: interface ghidra.app.services.DebuggerAutoMappingService  
+2024-10-15 11:21:17 DEBUG (PackedDatabaseCache) Using cached packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib_64.gdt  
+2024-10-15 11:21:21 DEBUG (ToolTaskManager) Background processing started...  
+2024-10-15 11:21:21 DEBUG (ToolTaskManager) Task Start: Auto Analysis  
+2024-10-15 11:21:21 INFO  (ExternalDebugFileSectionProvider) DWARF external debug information found: ExternalDebugInfo [filename=null, crc=0, hash=8616e4f2a4a3c325c2a1f32b8ebb8366694f7a03]  
+2024-10-15 11:21:21 INFO  (DWARFAnalyzer) Unable to find DWARF information, skipping DWARF analysis  
+2024-10-15 11:21:22 INFO  (ApplyDataArchiveAnalyzer) Applied data type archive: generic_clib_64  
+2024-10-15 11:21:22 INFO  (ExternalSymbolResolverAnalyzer) Resolving External Symbols of [/RE1_64bit] - 9 unresolved symbols, no external libraries configured - skipping  
+2024-10-15 11:21:23 INFO  (AutoAnalysisManager) -----------------------------------------------------
+    ASCII Strings                              0.005 secs
+    Apply Data Archives                        0.096 secs
+    Call Convention ID                         0.282 secs
+    Call-Fixup Installer                       0.002 secs
+    Create Address Tables                      0.002 secs
+    Create Function                            0.005 secs
+    DWARF                                      0.001 secs
+    Data Reference                             0.004 secs
+    Decompiler Switch Analysis                 0.701 secs
+    Demangler GNU                              0.005 secs
+    Disassemble Entry Points                   0.044 secs
+    ELF Scalar Operand References              0.003 secs
+    Embedded Media                             0.005 secs
+    External Entry References                  0.000 secs
+    External Symbol Resolver                   0.001 secs
+    Function Start Search                      0.040 secs
+    Function Start Search After Code           0.001 secs
+    Function Start Search After Data           0.002 secs
+    GCC Exception Handlers                     0.018 secs
+    Non-Returning Functions - Discovered       0.002 secs
+    Non-Returning Functions - Known            0.001 secs
+    Reference                                  0.005 secs
+    Shared Return Calls                        0.003 secs
+    Stack                                      0.043 secs
+    Subroutine References                      0.001 secs
+    x86 Constant Reference Analyzer            0.053 secs
+-----------------------------------------------------
+     Total Time   1 secs
+-----------------------------------------------------
+  
+2024-10-15 11:21:23 DEBUG (ToolTaskManager) Start: Auto Analysis  
+2024-10-15 11:21:23 DEBUG (ToolTaskManager) Completed: Auto Analysis (0.0 secs)  
+2024-10-15 11:21:23 DEBUG (ToolTaskManager) Task Completed: Auto Analysis (1.496 secs)  
+2024-10-15 11:21:23 DEBUG (ToolTaskManager) Background processing complete (1.496 secs)  
+2024-10-15 11:22:46 INFO  (RecoveryMgr) Tue Oct 15 11:22:46 CDT 2024 Recovery snapshot created: /home/ateschan/Reverse_Engineering/ncl-medium/ncl_medium.rep/idata/00/~00000001.db/snapshotA.grf  
+2024-10-15 11:25:43 WARN  (AssemblerPlugin$1) Assembler Rating: This processor received a rating of GOLD during testing. You 
+should rarely encounter an error.  
+2024-10-15 11:38:18 WARN  (DebuggerModulesPlugin) Plugin DebuggerModulesPlugin did not register a service handler for: interface ghidra.app.services.DebuggerAutoMappingService  
+2024-10-15 11:38:19 DEBUG (PackedDatabaseCache) Using cached packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib_64.gdt  
+2024-10-15 11:38:19 DEBUG (PackedDatabaseCache) Using cached packed database: /usr/share/ghidra/Ghidra/Features/Base/data/typeinfo/generic/generic_clib.gdt  

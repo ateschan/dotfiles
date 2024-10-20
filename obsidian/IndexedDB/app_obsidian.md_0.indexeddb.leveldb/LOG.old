@@ -1,0 +1,21 @@
+2024/09/08-09:05:46.800 142a Creating DB /home/ateschan/.config/obsidian/IndexedDB/app_obsidian.md_0.indexeddb.leveldb since it was missing.
+2024/09/08-09:05:46.803 142a Reusing MANIFEST /home/ateschan/.config/obsidian/IndexedDB/app_obsidian.md_0.indexeddb.leveldb/MANIFEST-000001
+2024/09/08-09:06:01.095 142e Level-0 table #5: started
+2024/09/08-09:06:01.133 142e Level-0 table #5: 986365 bytes OK
+2024/09/08-09:06:01.134 142e Delete type=0 #3
+2024/09/08-09:06:04.655 142c Level-0 table #7: started
+2024/09/08-09:06:04.679 142c Level-0 table #7: 968934 bytes OK
+2024/09/08-09:06:04.680 142c Delete type=0 #4
+2024/09/08-09:06:04.717 142c Compacting 1@1 + 1@2 files
+2024/09/08-09:06:04.741 142c Generated table #8@1: 12583 keys, 705622 bytes
+2024/09/08-09:06:04.742 142c Compacted 1@1 + 1@2 files => 705622 bytes
+2024/09/08-09:06:04.742 142c compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/09/08-09:06:06.379 142c Level-0 table #10: started
+2024/09/08-09:06:06.403 142c Level-0 table #10: 949012 bytes OK
+2024/09/08-09:06:06.403 142c Delete type=0 #6
+2024/09/08-09:06:06.403 142c Delete type=2 #7
+2024/09/08-09:06:06.403 142c Delete type=2 #5
+2024/09/08-09:06:06.421 142c Compacting 1@1 + 1@2 files
+2024/09/08-09:06:06.448 142c Generated table #11@1: 17397 keys, 1036764 bytes
+2024/09/08-09:06:06.448 142c Compacted 1@1 + 1@2 files => 1036764 bytes
+2024/09/08-09:06:06.448 142c compacted to: files[ 0 0 1 0 0 0 0 ]
