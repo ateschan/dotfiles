@@ -50,12 +50,6 @@
 }
 
 /* The whole bar */
-#waybar {
-    background-color: transparent;
-    color: white;
-    font-family: Cantarell, Noto Sans, sans-serif;
-    font-size: 13px;
-}
 
 /* Each module */
 #backlight,
@@ -73,9 +67,7 @@
 #tray {
     padding-left: 6px;
     padding-right: 6px;
-    border: solid #c61c16 2px;
-    margin: 2px;
-    background-color: rgba(128, 25, 25, .6);
+    background-color: rgba(100, 100, 100, 1);
 }
 
 
@@ -108,6 +100,7 @@
 }
 
 #clock {
+      padding-top: 4px;
 }
 
 #cpu {
@@ -139,10 +132,9 @@
 }
 
 #mode {
-    background: #64727D;
+    background:rgba(89, 40, 78, 0.63);
     border-top: 2px solid white;
     /* To compensate for the top border and still have vertical centering */
-    padding-bottom: 2px;
 }
 
 #network {
@@ -174,6 +166,7 @@
 }
 
 #tray {
+      background-color: rgba(128, 25, 25, .6);
     /* No styles */
 }
 
@@ -182,10 +175,9 @@
     padding-left: 10px;
     padding-right: 10px;
     color: white;
-    border: solid #c61c16 2px;
     margin: 2px;
 
-    background-color: rgba(128, 25, 25, .6);
+    background-color: rgba(100, 100, 100, 1.0);
 }
 
 #workspaces button {
@@ -195,24 +187,31 @@
     padding-left: 10px;
     padding-right: 10px;
     color: white;
-    border: solid #c61c16 2px;
     margin: 2px;
 
-    background-color: rgba(128, 25, 25, .6);
+    background-color: rgba(100, 100, 100, 1.0);
 }
 
 #workspaces button.active {
-    border-color: #873533;
+    border-color: rgba(60, 60, 60, 0.8);
     color: white;
-    background-color: #eb0000;
+    background-color: rgba(60, 60, 60, 0.63);
 }
 
 #workspaces button.urgent {
     border-color: #c9545d;
-    color: #bd2815;
+    background-color: rgba(107, 40, 145, 0.63);
 }
 
 *{
+  color: white;
   font-family: Terminus;
-  font-size: 15px;
+  font-size: 13px;
+}
+
+
+#waybar {
+    background-color: rgba(100, 100, 100, 1);
+    font-family: Cantarell, Noto Sans, sans-serif;
+    font-size: 11px;
 }

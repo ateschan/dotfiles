@@ -1,0 +1,326 @@
+00:00:00.000231 main     VirtualBox XPCOM Server 7.1.4_Gentoo r165100 linux.amd64 (Oct 22 2024 22:48:10) release log
+00:00:00.000234 main     Log opened 2024-10-23T04:44:02.150748000Z
+00:00:00.000234 main     Build Type: release
+00:00:00.000237 main     OS Product: Linux
+00:00:00.000238 main     OS Release: 6.11.4-gentoo-dist
+00:00:00.000239 main     OS Version: #1 SMP PREEMPT_DYNAMIC Thu Oct 17 15:00:34 -00 2024
+00:00:00.000263 main     DMI Product Name: 4177QKU
+00:00:00.000273 main     DMI Product Version: ThinkPad T420
+00:00:00.000280 main     Firmware type: BIOS
+00:00:00.000315 main     Host RAM: 15939MB (15.5GB) total, 15506MB (15.1GB) available
+00:00:00.000318 main     Executable: /usr/lib64/virtualbox/VBoxSVC
+00:00:00.000319 main     Process ID: 3305
+00:00:00.000319 main     Package type: LINUX_64BITS_GENERIC (OSE)
+00:00:00.001961 main     IPC socket path: /tmp/.vbox-ateschan-ipc/ipcd
+00:00:00.010559 DCon01   VirtualBox: object creation starts
+00:00:00.010636 DCon01   Home directory: '/home/ateschan/.config/VirtualBox'
+00:00:00.010758 DCon01   Loading settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:00:00.012565 DCon01   Successfully initialised host USB using sysfs
+00:00:00.020107 DCon01   NetIfAdpCtlOut: VBoxNetAdpCtl: Error while retrieving link speed for wlp1s0: VBoxNetAdpCtl: ioctl failed: Operation not supported
+00:00:00.021076 DCon01   HostDnsMonitor: initializing
+00:00:00.021520 DCon01   NAT: resolv.conf: nameserver 172.16.0.1
+00:00:00.021546 DCon01   NAT: resolv.conf: nameserver 209.18.47.63
+00:00:00.021555 DCon01   NAT: resolv.conf: nameserver 209.18.47.62
+00:00:00.021592 DCon01   HostDnsMonitor: updating information
+00:00:00.021620 DCon01   HostDnsMonitor: old information
+00:00:00.021626 DCon01     no server entries
+00:00:00.021630 DCon01     no domain set
+00:00:00.021634 DCon01     no search string entries
+00:00:00.021637 DCon01   HostDnsMonitor: new information
+00:00:00.021641 DCon01     server 1: 172.16.0.1
+00:00:00.021645 DCon01     server 2: 209.18.47.63
+00:00:00.021649 DCon01     server 3: 209.18.47.62
+00:00:00.021653 DCon01     no domain set
+00:00:00.021656 DCon01     no search string entries
+00:00:00.024519 DCon01   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:00:00.024790 DCon01   VD: VDInit finished with VINF_SUCCESS
+00:00:00.024972 DCon01   ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={925084b0-625f-422f-a67d-0ede1880a56c} aComponent={SystemPropertiesWrap} aText={Cannot determine default Guest Additions ISO location. Most likely they are not available}, preserve=false aResultDetail=0
+00:00:00.026603 DCon01   VirtualBox: object created
+00:03:57.685202 DCon06   ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={925084b0-625f-422f-a67d-0ede1880a56c} aComponent={SystemPropertiesWrap} aText={Cannot determine default Guest Additions ISO location. Most likely they are not available}, preserve=false aResultDetail=0
+00:04:01.613722 DCon10   ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={925084b0-625f-422f-a67d-0ede1880a56c} aComponent={SystemPropertiesWrap} aText={Cannot determine default Guest Additions ISO location. Most likely they are not available}, preserve=false aResultDetail=0
+00:04:15.107330 createBase Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:04:15.110396 createBase Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:04:15.117211 DCon12   Platform architecture set to 'x86'
+00:04:15.117402 DCon12   Platform architecture set to 'x86'
+00:04:15.117422 DCon12   Platform architecture set to 'x86'
+00:04:15.118136 DCon12   Platform architecture set to 'x86'
+00:04:15.122921 DCon12   Saving settings file "/home/ateschan/.VirtualBox/Machines/Pentoo/Pentoo.vbox" with version "1.19-linux"
+00:04:15.129468 DCon12   Finished saving settings file "/home/ateschan/.VirtualBox/Machines/Pentoo/Pentoo.vbox"
+00:04:15.129560 DCon12   Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:04:15.132243 DCon12   Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:04:15.133299 DCon06   Platform architecture set to 'x86'
+00:04:15.135190 DCon12   Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:04:15.137440 DCon12   Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:04:15.138394 DCon12   Saving settings file "/home/ateschan/.VirtualBox/Machines/Pentoo/Pentoo.vbox" with version "1.19-linux"
+00:04:15.140663 DCon12   Finished saving settings file "/home/ateschan/.VirtualBox/Machines/Pentoo/Pentoo.vbox"
+00:04:15.158724 DCon11   Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:04:15.161244 DCon11   Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:04:15.559787 DCon07   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:04:15.684983 DCon07   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is PoweredOff)}, preserve=false aResultDetail=0
+00:04:20.928156 DCon07   Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:04:20.930900 DCon07   Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:04:34.429591 DCon12   Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:04:34.433098 DCon12   Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:06:51.032269 DCon12   Platform architecture set to 'x86'
+00:06:51.036195 DCon07   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:06:51.036328 DCon07   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:06:51.036446 DCon07   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:06:51.052616 DCon07   NetIfAdpCtlOut: VBoxNetAdpCtl: Error while retrieving link speed for wlp1s0: VBoxNetAdpCtl: ioctl failed: Operation not supported
+00:06:51.063040 DCon07   NetIfAdpCtlOut: VBoxNetAdpCtl: Error while retrieving link speed for wlp1s0: VBoxNetAdpCtl: ioctl failed: Operation not supported
+00:06:51.258990 DCon15   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:06:51.427270 DCon15   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is PoweredOff)}, preserve=false aResultDetail=0
+00:07:02.324672 DCon07   Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:07:02.327331 DCon07   Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:07:02.327452 DCon07   Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:07:02.330737 DCon07   Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:07:02.331570 DCon07   Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:07:02.334610 DCon07   Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:07:02.337320 DCon07   Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:07:02.339657 DCon07   Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:38:10.777080 DCon80   ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={925084b0-625f-422f-a67d-0ede1880a56c} aComponent={SystemPropertiesWrap} aText={Cannot determine default Guest Additions ISO location. Most likely they are not available}, preserve=false aResultDetail=0
+00:38:55.890890 DCon80   Unattended: RTVfsQueryPathInfo(, '\OS2IMAGE/DISK_0/OS2LDR' (from OS2SE20.SRC),) -> VERR_PATH_NOT_FOUND, fMode=0x0
+00:38:55.902927 DCon80   Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:38:55.905977 DCon80   Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:38:55.910130 DCon87   Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:38:55.913057 DCon87   Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:39:50.782293 createBase Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:39:50.785365 createBase Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:39:50.792559 DCon88   Platform architecture set to 'x86'
+00:39:50.792647 DCon88   Platform architecture set to 'x86'
+00:39:50.792660 DCon88   Platform architecture set to 'x86'
+00:39:50.792936 DCon88   Platform architecture set to 'x86'
+00:39:50.793863 DCon88   Saving settings file "/home/ateschan/.VirtualBox/Machines/Pentoo-Template/Pentoo-Template.vbox" with version "1.19-linux"
+00:39:50.796292 DCon88   Finished saving settings file "/home/ateschan/.VirtualBox/Machines/Pentoo-Template/Pentoo-Template.vbox"
+00:39:50.796421 DCon88   Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:39:50.799297 DCon88   Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:39:50.800457 DCon87   Platform architecture set to 'x86'
+00:39:50.802309 DCon87   Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:39:50.804965 DCon87   Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:39:50.807202 DCon88   Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:39:50.810155 DCon88   Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:39:50.811682 DCon88   Saving settings file "/home/ateschan/.VirtualBox/Machines/Pentoo-Template/Pentoo-Template.vbox" with version "1.19-linux"
+00:39:50.814815 DCon88   Finished saving settings file "/home/ateschan/.VirtualBox/Machines/Pentoo-Template/Pentoo-Template.vbox"
+00:39:50.838515 DCon90   Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:39:50.840984 DCon90   Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:39:51.220128 DCon88   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:39:51.221798 DCon88   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:39:51.237341 DCon90   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is PoweredOff)}, preserve=false aResultDetail=0
+00:39:59.302951 DCon90   Launched VM: 3771629840 pid: 5093 (0x13e5) frontend: GUI/Qt name: Pentoo-Template
+00:39:59.337888 DCon88   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:39:59.339566 DCon88   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:39:59.348557 DCon88   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is PoweredOff)}, preserve=false aResultDetail=0
+00:39:59.590873 DCon91   Platform architecture set to 'x86'
+00:39:59.607751 DCon89   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:39:59.610185 DCon95   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:39:59.614317 DCon93   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is PoweredOff)}, preserve=false aResultDetail=0
+00:40:00.242235 DCon93   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={70401eef-c8e9-466b-9660-45cb3e9979e4} aComponent={ExtPackManagerWrap} aText={No extension pack by the name 'Oracle VirtualBox Extension Pack' was found}, preserve=false aResultDetail=0
+00:40:00.281568 DCon93   ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={bea3ef5c-de2f-4b74-aa3a-15d6249371a0} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:40:00.311957 DCon95   NetIfAdpCtlOut: VBoxNetAdpCtl: Error while retrieving link speed for wlp1s0: VBoxNetAdpCtl: ioctl failed: Operation not supported
+00:40:00.346255 DCon89   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:40:00.348803 DCon89   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:40:00.355259 DCon80   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:40:00.357098 DCon80   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is Starting)}, preserve=false aResultDetail=0
+00:40:00.404349 DCon89   ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={bea3ef5c-de2f-4b74-aa3a-15d6249371a0} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:40:00.550618 DCon89   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={7d510820-a678-4730-a862-818dcd3fbed0} aComponent={MediumWrap} aText={Property 'CRYPT/KeyId' does not exist}, preserve=false aResultDetail=0
+00:40:00.551700 DCon89   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={7d510820-a678-4730-a862-818dcd3fbed0} aComponent={MediumWrap} aText={Property 'CRYPT/KeyId' does not exist}, preserve=false aResultDetail=0
+00:40:00.552832 DCon89   HostDnsMonitorProxy::GetDomainName: no domain set
+00:40:00.552922 DCon89   HostDnsMonitorProxy::GetNameServers:
+00:40:00.552926 DCon89     name server 1: 172.16.0.1
+00:40:00.552928 DCon89     name server 2: 209.18.47.63
+00:40:00.552930 DCon89     name server 3: 209.18.47.62
+00:40:00.553030 DCon89   HostDnsMonitorProxy::GetSearchStrings:
+00:40:00.553034 DCon89     no search string entries
+00:40:00.587220 DCon88   ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={bea3ef5c-de2f-4b74-aa3a-15d6249371a0} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:40:00.597923 DCon88   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:40:00.600122 DCon88   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:40:00.630005 DCon95   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is Running)}, preserve=false aResultDetail=0
+00:40:00.733957 DCon88   Saving settings file "/home/ateschan/.VirtualBox/Machines/Pentoo-Template/Pentoo-Template.vbox" with version "1.19-linux"
+00:40:00.736558 DCon88   Finished saving settings file "/home/ateschan/.VirtualBox/Machines/Pentoo-Template/Pentoo-Template.vbox"
+00:40:00.745336 DCon89   Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:40:00.747922 DCon89   Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:40:00.752393 DCon92   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:40:00.753705 DCon92   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:40:00.765077 DCon92   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is Running)}, preserve=false aResultDetail=0
+00:40:17.815573 DCon87   Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:40:17.818127 DCon87   Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:40:25.164721 DCon89   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:40:25.166566 DCon89   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:40:25.175553 DCon96   ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={bea3ef5c-de2f-4b74-aa3a-15d6249371a0} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:40:25.176834 DCon89   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is Paused)}, preserve=false aResultDetail=0
+00:40:28.504342 DCon96   Saving settings file "/home/ateschan/.VirtualBox/Machines/Pentoo-Template/Pentoo-Template.vbox" with version "1.19-linux"
+00:40:28.507693 DCon96   Finished saving settings file "/home/ateschan/.VirtualBox/Machines/Pentoo-Template/Pentoo-Template.vbox"
+00:40:28.549189 DCon98   ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={bea3ef5c-de2f-4b74-aa3a-15d6249371a0} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:40:28.553962 DCon98   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={SessionMachine} aText={The machine is not mutable or saved (state is Stopping)}, preserve=false aResultDetail=0
+00:40:28.559095 DCon98   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:40:28.561324 DCon98   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:40:28.569766 DCon98   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is Stopping)}, preserve=false aResultDetail=0
+00:40:28.578755 DCon98   Saving settings file "/home/ateschan/.VirtualBox/Machines/Pentoo-Template/Pentoo-Template.vbox" with version "1.19-linux"
+00:40:28.581413 DCon98   Finished saving settings file "/home/ateschan/.VirtualBox/Machines/Pentoo-Template/Pentoo-Template.vbox"
+00:40:28.597340 DCon80   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:40:28.599053 DCon80   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:40:28.606547 DCon80   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is PoweredOff)}, preserve=false aResultDetail=0
+00:40:28.617489 DCon80   ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={bea3ef5c-de2f-4b74-aa3a-15d6249371a0} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:40:28.645693 DCon96   ERROR [COM]: aRC=NS_ERROR_INVALID_ARG (0x80070057) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={SessionMachine} aText={Properties with TRANSIENT or TRANSRESET flag cannot be set or modified if VM is not running}, preserve=false aResultDetail=0
+00:40:28.953507 DCon96   Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:40:28.956381 DCon96   Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:40:29.611210 DCon93   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:40:29.613138 DCon93   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:40:29.622136 DCon93   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is PoweredOff)}, preserve=false aResultDetail=0
+00:40:31.159286 DCon97   Launched VM: 3959442320 pid: 5165 (0x142d) frontend: GUI/Qt name: Pentoo-Template
+00:40:31.189408 DCon97   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:40:31.190861 DCon97   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:40:31.199250 DCon97   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is PoweredOff)}, preserve=false aResultDetail=0
+00:40:31.453586 DCon89   Platform architecture set to 'x86'
+00:40:31.468794 DCon80   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:40:31.470939 DCon80   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:40:31.474829 DCon80   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is PoweredOff)}, preserve=false aResultDetail=0
+00:40:32.125158 DCon92   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={70401eef-c8e9-466b-9660-45cb3e9979e4} aComponent={ExtPackManagerWrap} aText={No extension pack by the name 'Oracle VirtualBox Extension Pack' was found}, preserve=false aResultDetail=0
+00:40:32.166546 DCon92   ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={bea3ef5c-de2f-4b74-aa3a-15d6249371a0} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:40:32.196282 DCon92   NetIfAdpCtlOut: VBoxNetAdpCtl: Error while retrieving link speed for wlp1s0: VBoxNetAdpCtl: ioctl failed: Operation not supported
+00:40:32.233846 DCon89   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:40:32.240931 DCon96   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:40:32.242623 DCon96   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:40:32.249456 DCon96   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is Starting)}, preserve=false aResultDetail=0
+00:40:32.280860 DCon89   ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={bea3ef5c-de2f-4b74-aa3a-15d6249371a0} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:40:32.424333 DCon89   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={7d510820-a678-4730-a862-818dcd3fbed0} aComponent={MediumWrap} aText={Property 'CRYPT/KeyId' does not exist}, preserve=false aResultDetail=0
+00:40:32.425982 DCon89   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={7d510820-a678-4730-a862-818dcd3fbed0} aComponent={MediumWrap} aText={Property 'CRYPT/KeyId' does not exist}, preserve=false aResultDetail=0
+00:40:32.427295 DCon89   HostDnsMonitorProxy::GetDomainName: no domain set
+00:40:32.427391 DCon89   HostDnsMonitorProxy::GetNameServers:
+00:40:32.427395 DCon89     name server 1: 172.16.0.1
+00:40:32.427397 DCon89     name server 2: 209.18.47.63
+00:40:32.427399 DCon89     name server 3: 209.18.47.62
+00:40:32.427494 DCon89   HostDnsMonitorProxy::GetSearchStrings:
+00:40:32.427498 DCon89     no search string entries
+00:40:32.463690 DCon80   ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={bea3ef5c-de2f-4b74-aa3a-15d6249371a0} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:40:32.475640 DCon93   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:40:32.477673 DCon93   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:40:32.505982 DCon93   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is Running)}, preserve=false aResultDetail=0
+00:40:32.627384 DCon93   Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:40:32.630079 DCon93   Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:40:44.609412 DCon101  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:40:44.611054 DCon101  Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:40:44.621683 DCon92   ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={bea3ef5c-de2f-4b74-aa3a-15d6249371a0} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:40:44.622839 DCon101  ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is Paused)}, preserve=false aResultDetail=0
+00:40:46.706522 DCon100  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:40:46.708198 DCon100  Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:40:46.714811 DCon100  ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is Stopping)}, preserve=false aResultDetail=0
+00:40:46.718505 DCon100  ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={bea3ef5c-de2f-4b74-aa3a-15d6249371a0} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:40:46.722927 DCon93   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={SessionMachine} aText={The machine is not mutable or saved (state is Stopping)}, preserve=false aResultDetail=0
+00:40:46.766704 DCon93   Saving settings file "/home/ateschan/.VirtualBox/Machines/Pentoo-Template/Pentoo-Template.vbox" with version "1.19-linux"
+00:40:46.769590 DCon93   Finished saving settings file "/home/ateschan/.VirtualBox/Machines/Pentoo-Template/Pentoo-Template.vbox"
+00:40:46.787705 DCon100  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:40:46.789342 DCon100  Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:40:46.796281 DCon92   ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={bea3ef5c-de2f-4b74-aa3a-15d6249371a0} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:40:46.796734 DCon92   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is PoweredOff)}, preserve=false aResultDetail=0
+00:40:46.823695 DCon100  ERROR [COM]: aRC=NS_ERROR_INVALID_ARG (0x80070057) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={SessionMachine} aText={Properties with TRANSIENT or TRANSRESET flag cannot be set or modified if VM is not running}, preserve=false aResultDetail=0
+00:40:47.128717 DCon100  Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:40:47.131924 DCon100  Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:40:47.813934 DCon97   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:40:47.815372 DCon97   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:40:47.831698 DCon97   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is PoweredOff)}, preserve=false aResultDetail=0
+00:40:49.496665 DCon99   Platform architecture set to 'x86'
+00:40:49.500708 DCon97   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:40:49.501724 DCon97   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:40:49.501851 DCon97   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:40:49.501972 DCon97   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:40:49.521038 DCon97   NetIfAdpCtlOut: VBoxNetAdpCtl: Error while retrieving link speed for wlp1s0: VBoxNetAdpCtl: ioctl failed: Operation not supported
+00:40:49.530305 DCon80   NetIfAdpCtlOut: VBoxNetAdpCtl: Error while retrieving link speed for wlp1s0: VBoxNetAdpCtl: ioctl failed: Operation not supported
+00:40:49.801539 DCon80   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:40:49.802987 DCon80   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:40:49.842511 DCon80   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is PoweredOff)}, preserve=false aResultDetail=0
+00:41:16.136821 DCon99   Platform architecture set to 'x86'
+00:41:16.188373 DCon80   Saving settings file "/home/ateschan/.VirtualBox/Machines/Pentoo-Template/Pentoo-Template.vbox" with version "1.19-linux"
+00:41:16.191333 DCon80   Finished saving settings file "/home/ateschan/.VirtualBox/Machines/Pentoo-Template/Pentoo-Template.vbox"
+00:41:16.242756 DCon99   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:41:16.244243 DCon99   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:41:16.247195 DCon99   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is PoweredOff)}, preserve=false aResultDetail=0
+00:41:17.679971 DCon101  Launched VM: 3771726768 pid: 5239 (0x1477) frontend: GUI/Qt name: Pentoo-Template
+00:41:17.710258 DCon102  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:41:17.711797 DCon102  Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:41:17.723316 DCon102  ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is PoweredOff)}, preserve=false aResultDetail=0
+00:41:18.016691 DCon104  Platform architecture set to 'x86'
+00:41:18.032115 DCon101  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:41:18.034265 DCon106  Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:41:18.038083 DCon106  ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is PoweredOff)}, preserve=false aResultDetail=0
+00:41:18.674923 DCon106  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={70401eef-c8e9-466b-9660-45cb3e9979e4} aComponent={ExtPackManagerWrap} aText={No extension pack by the name 'Oracle VirtualBox Extension Pack' was found}, preserve=false aResultDetail=0
+00:41:18.721739 DCon106  ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={bea3ef5c-de2f-4b74-aa3a-15d6249371a0} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:41:18.753059 DCon106  NetIfAdpCtlOut: VBoxNetAdpCtl: Error while retrieving link speed for wlp1s0: VBoxNetAdpCtl: ioctl failed: Operation not supported
+00:41:18.785797 DCon80   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:41:18.791484 DCon104  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:41:18.793934 DCon80   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:41:18.801275 DCon104  ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is Starting)}, preserve=false aResultDetail=0
+00:41:18.835616 DCon101  ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={bea3ef5c-de2f-4b74-aa3a-15d6249371a0} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:41:18.934202 DCon101  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={7d510820-a678-4730-a862-818dcd3fbed0} aComponent={MediumWrap} aText={Property 'CRYPT/KeyId' does not exist}, preserve=false aResultDetail=0
+00:41:18.935409 DCon101  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={7d510820-a678-4730-a862-818dcd3fbed0} aComponent={MediumWrap} aText={Property 'CRYPT/KeyId' does not exist}, preserve=false aResultDetail=0
+00:41:18.936779 DCon101  HostDnsMonitorProxy::GetDomainName: no domain set
+00:41:18.936895 DCon101  HostDnsMonitorProxy::GetNameServers:
+00:41:18.936898 DCon101    name server 1: 172.16.0.1
+00:41:18.936901 DCon101    name server 2: 209.18.47.63
+00:41:18.936903 DCon101    name server 3: 209.18.47.62
+00:41:18.937010 DCon101  HostDnsMonitorProxy::GetSearchStrings:
+00:41:18.937014 DCon101    no search string entries
+00:41:18.975360 DCon105  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:41:18.976963 DCon105  Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:41:18.982455 DCon107  ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={bea3ef5c-de2f-4b74-aa3a-15d6249371a0} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:41:19.002490 DCon107  ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is Running)}, preserve=false aResultDetail=0
+00:41:19.211005 DCon99   Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:41:19.213920 DCon99   Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:41:48.118462 DCon107  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:41:48.119721 DCon107  Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:41:48.119937 DCon107  Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:41:48.120111 DCon107  Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:41:48.140378 DCon107  NetIfAdpCtlOut: VBoxNetAdpCtl: Error while retrieving link speed for wlp1s0: VBoxNetAdpCtl: ioctl failed: Operation not supported
+00:41:48.150708 DCon107  NetIfAdpCtlOut: VBoxNetAdpCtl: Error while retrieving link speed for wlp1s0: VBoxNetAdpCtl: ioctl failed: Operation not supported
+00:42:05.322220 DCon106  Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:42:05.325660 DCon106  Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:42:33.208593 DCon99   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:42:33.209713 DCon99   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:42:33.209881 DCon99   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:42:33.210029 DCon99   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:42:33.228254 DCon99   NetIfAdpCtlOut: VBoxNetAdpCtl: Error while retrieving link speed for wlp1s0: VBoxNetAdpCtl: ioctl failed: Operation not supported
+00:42:33.237260 DCon99   NetIfAdpCtlOut: VBoxNetAdpCtl: Error while retrieving link speed for wlp1s0: VBoxNetAdpCtl: ioctl failed: Operation not supported
+00:43:43.799597 DCon80   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:43:43.801305 DCon80   Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:43:43.815222 DCon80   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is Paused)}, preserve=false aResultDetail=0
+00:43:43.827550 DCon109  ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={bea3ef5c-de2f-4b74-aa3a-15d6249371a0} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:44:05.327297 DCon111  ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={bea3ef5c-de2f-4b74-aa3a-15d6249371a0} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:44:05.327844 DCon111  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:44:05.329681 DCon111  Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:44:05.347651 DCon99   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is Running)}, preserve=false aResultDetail=0
+00:45:14.401972 DCon107  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:45:14.403865 DCon107  Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:45:14.405247 DCon102  ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={bea3ef5c-de2f-4b74-aa3a-15d6249371a0} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:45:14.418882 DCon102  ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is Paused)}, preserve=false aResultDetail=0
+00:45:16.887558 DCon113  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:45:16.889447 DCon113  Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:45:16.896360 DCon113  ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is Stopping)}, preserve=false aResultDetail=0
+00:45:16.898685 DCon102  ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={bea3ef5c-de2f-4b74-aa3a-15d6249371a0} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:45:16.914687 DCon113  ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={SessionMachine} aText={The machine is not mutable or saved (state is Stopping)}, preserve=false aResultDetail=0
+00:45:16.932883 DCon102  Saving settings file "/home/ateschan/.VirtualBox/Machines/Pentoo-Template/Pentoo-Template.vbox" with version "1.19-linux"
+00:45:16.935586 DCon102  Finished saving settings file "/home/ateschan/.VirtualBox/Machines/Pentoo-Template/Pentoo-Template.vbox"
+00:45:16.949088 DCon102  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:45:16.950821 DCon114  Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:45:16.957117 DCon102  ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is PoweredOff)}, preserve=false aResultDetail=0
+00:45:16.973316 DCon114  ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={bea3ef5c-de2f-4b74-aa3a-15d6249371a0} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:45:17.028159 DCon109  ERROR [COM]: aRC=NS_ERROR_INVALID_ARG (0x80070057) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={SessionMachine} aText={Properties with TRANSIENT or TRANSRESET flag cannot be set or modified if VM is not running}, preserve=false aResultDetail=0
+00:45:17.956659 DCon111  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:45:17.958345 DCon111  Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:45:17.965558 DCon111  ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={MachineWrap} aText={The machine is not mutable, saved or running (state is PoweredOff)}, preserve=false aResultDetail=0
+00:45:24.269658 DCon113  Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:45:24.273258 DCon113  Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:45:24.273381 DCon113  Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:45:24.276592 DCon113  Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:45:24.283656 DeleteVM Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:45:24.286226 DeleteVM Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:45:24.289032 DCon107  Saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:45:24.291919 DCon107  Finished saving settings file "/home/ateschan/.config/VirtualBox/VirtualBox.xml"
+00:45:24.300960 DCon107  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={d644ad1e-c501-4fc7-9ab6-aa6d763bc540} aComponent={VirtualBoxWrap} aText={Could not find a registered machine with UUID {0c72d52f-a0bd-4f46-a27c-2c6b11c6aeea}}, preserve=false aResultDetail=0
+00:45:24.309452 DCon107  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={d644ad1e-c501-4fc7-9ab6-aa6d763bc540} aComponent={VirtualBoxWrap} aText={Could not find a registered machine with UUID {0c72d52f-a0bd-4f46-a27c-2c6b11c6aeea}}, preserve=false aResultDetail=0
+00:45:24.327686 DCon107  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:45:24.329315 DCon107  Failed to open "/dev/vboxdrvu", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:45:24.331945 DCon107  ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={bea3ef5c-de2f-4b74-aa3a-15d6249371a0} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:45:29.389244 main     VirtualBox: object deletion starts
+00:45:29.390157 main     HostDnsMonitor: shutting down ...
+00:45:29.403383 main     HostDnsMonitor: shut down
+00:45:29.428618 Watcher  ERROR [COM]: aRC=E_ACCESSDENIED (0x80070005) aIID={d644ad1e-c501-4fc7-9ab6-aa6d763bc540} aComponent={VirtualBoxWrap} aText={The object is not ready}, preserve=false aResultDetail=0
+00:45:29.428763 main     VirtualBox: object deleted

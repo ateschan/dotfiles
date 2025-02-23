@@ -7,7 +7,7 @@ lvim.builtin.treesitter.ensure_installed = {
 lsp_codelens = false
 
 vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "rust_analyzer" })
-
+lvim.lsp.automatic_configuration.skipped_servers = {"asm_lsp"}
 local mason_path = vim.fn.glob(vim.fn.stdpath "data" .. "/mason/")
 
 local codelldb_path = mason_path .. "bin/codelldb"
@@ -137,7 +137,6 @@ lvim.builtin.which_key.mappings["C"] = {
 }
 
 lvim.plugins = {
-
   "simrat39/rust-tools.nvim",
   {
     "saecki/crates.nvim",
@@ -251,6 +250,19 @@ lvim.plugins = {
 
     -- see below for full list of optional dependencies 👇
   },
+  {
+    'MeanderingProgrammer/render-markdown.nvim',
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
+    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
+    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
+    opts = {},
+  },
+  -- {
+  --   'laurelmay/riscv.vim',
+  --   lazy = false,
+  -- },
   config = function()
     require("obsidian").setup({
       workspaces = {
@@ -268,3 +280,9 @@ lvim.plugins = {
     })
   end,
 }
+
+-- lvim.lsp.automatic_configuration.skipped_servers = {"asm_lsp"}
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.opt.foldenable = false
+
