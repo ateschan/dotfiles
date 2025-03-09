@@ -1,2 +1,0 @@
-Erstellt einen Menüeintag "Strichcode einfügen" im Einfügen-Menü von LibreOffice.
-Nach der Installation ist ein Neustart erforderlich.
